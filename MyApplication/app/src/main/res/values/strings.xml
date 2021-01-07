@@ -7,7 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_cart">Add to cart</string>
     <string name="search">Search</string>
-
+    <string name="not_signed_in">Not Signed In</string>
+    <string name="email">Email Address</string>
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
