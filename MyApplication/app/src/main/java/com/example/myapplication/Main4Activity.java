@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.FrameLayout;
 
+import com.example.myapplication.ui.home.AllCategoriesFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,6 +25,8 @@ public class Main4Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    private FrameLayout frameLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +38,7 @@ public class Main4Activity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        navigationView.setNavigationItemSelectedListener(
+       /* navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -40,13 +46,20 @@ public class Main4Activity extends AppCompatActivity {
                         int id = menuItem.getItemId();
                         // TODO: Add more if else for all drawer items
                         if (id == R.id.all_categories) {
+                            setFragment(new AllCategoriesFragment());
                             return true;
                         }
+                        setFragment(new AllCategoriesFragment());
                         return true;
                     }
-                });
+                });*/
 
         navigationView.getMenu().getItem(0).setChecked(true);
+
+        frameLayout = findViewById(R.id.main_framelayout);
+
+        //setFragment(new AllCategoriesFragment());
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -86,6 +99,12 @@ public class Main4Activity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(frameLayout.getId(), fragment);
+        fragmentTransaction.commit();
     }
 
 
