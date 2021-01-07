@@ -45,12 +45,15 @@ public class Main4Activity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                         int id = menuItem.getItemId();
+                        // TODO: Add more if else for all drawer items
                         if (id == R.id.all_categories) {
                             return true;
                         }
                         return true;
                     }
                 });
+
+        navigationView.getMenu().getItem(0).setChecked(true);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
