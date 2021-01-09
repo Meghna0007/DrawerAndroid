@@ -22,7 +22,7 @@ public class CategoryModel {
         return categoryName;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
+  //  public void setCategoryName(String categoryName) {
+      //  this.categoryName = categoryName;
+
 }

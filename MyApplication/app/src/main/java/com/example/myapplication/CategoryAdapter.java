@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         String icon = categoryModelList.get(position).getCategoryIconLink();
         String name = categoryModelList.get(position).getCategoryName();
-        holder.setCategoryName(name);
+        holder.setCategoryName(name ,icon);
         //TODO changes for icon setting
         //holder.setCategoryIcon();
 
@@ -42,7 +43,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return categoryModelList.size();
     }
 
 
@@ -63,9 +64,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         }
 
-        private void setCategoryName(String text) {
-
-            categoryName.setText(text);
+        private void setCategoryName(String name, String text) {
+            categoryIcon.setImageIcon(Icon.createWithContentUri(text));
+            categoryName.setText(name);
         }
     }
 
