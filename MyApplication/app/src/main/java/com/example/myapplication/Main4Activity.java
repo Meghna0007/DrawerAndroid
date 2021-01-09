@@ -5,10 +5,12 @@ import android.view.MenuItem;
 
 import android.view.Menu;
 
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
+import com.example.myapplication.ui.home.AllCategoriesFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     private AppBarConfiguration mAppBarConfiguration;
     private RecyclerView recyclerView;
-    private RelativeLayout relativeLayout;
+    private FrameLayout frameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
                 drawer.setDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
        /* navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -70,9 +73,10 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
         navigationView.getMenu().getItem(0).setChecked(true);
 
-     relativeLayout = findViewById(R.id.main_relativelayout);
+     frameLayout = findViewById(R.id.main_framelayout);
 
-        //setFragment(new AllCategoriesFragment());
+
+        setFragment(new AllCategoriesFragment());
 
 
         // Passing each menu ID as a set of Ids because each
@@ -117,7 +121,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(relativeLayout.getId(), fragment);
+        fragmentTransaction.replace(frameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
 

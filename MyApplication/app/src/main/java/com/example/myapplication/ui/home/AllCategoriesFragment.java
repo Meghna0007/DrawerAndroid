@@ -49,15 +49,16 @@ public class AllCategoriesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         List<CategoryModel> categoryModelList = new ArrayList<CategoryModel>();
-        categoryModelList.add(new CategoryModel("link", "Oil"));
+        categoryModelList.add(new CategoryModel("link", "Foods"));
+        categoryModelList.add(new CategoryModel("link", "Biscuit"));
+        categoryModelList.add(new CategoryModel("link", "Namkin"));
+        categoryModelList.add(new CategoryModel("link", "Noodles and Pasta"));
+        categoryModelList.add(new CategoryModel("link", "Beverages"));
+        categoryModelList.add(new CategoryModel("link", "Dairy"));
+        categoryModelList.add(new CategoryModel("link", "Kitchen"));
+        categoryModelList.add(new CategoryModel("link", "Chocolate"));
+        categoryModelList.add(new CategoryModel("link", "PersonalCare"));
         categoryModelList.add(new CategoryModel("link", "Soap"));
-        categoryModelList.add(new CategoryModel("link", "Grocery"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
-        categoryModelList.add(new CategoryModel("link", "HOME"));
 
         categoryAdapter = new CategoryAdapter(categoryModelList);
         recyclerView.setAdapter(categoryAdapter);
