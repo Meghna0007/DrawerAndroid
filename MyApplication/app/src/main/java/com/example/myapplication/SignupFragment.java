@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -18,8 +19,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +60,8 @@ public class SignupFragment extends Fragment {
     private Button signUpBtn;
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
+    private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
 
     /**
      * Use this factory method to create a new instance of
@@ -93,7 +105,7 @@ public class SignupFragment extends Fragment {
         signUpBtn = view.findViewById(R.id.sign_up_btn);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
+        firebaseFirestore=FirebaseFirestore.getInstance();
         return view;
     }
     @Override
@@ -163,6 +175,7 @@ public class SignupFragment extends Fragment {
 
             }
 
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -174,6 +187,7 @@ public class SignupFragment extends Fragment {
            public void onClick(View v) {
 
 
+               checkEmailAndPassword();
 
            }
        });
@@ -192,7 +206,7 @@ public class SignupFragment extends Fragment {
 
         if (!TextUtils.isEmpty(email.getText())) {
             if (!TextUtils.isEmpty(password.getText()) && password.getText().length() >=6) {
-                if (!TextUtils.isEmpty(confirmPassword.getText())) {
+                if (!TextUtils.isEmpty(confirmPassword.getText()) && confirmPassword.getText().toString().equals(password.getText().toString())) {
                     signUpBtn.setEnabled(true);
                     signUpBtn.setTextColor(Color.BLACK);
                 }else{
@@ -209,4 +223,54 @@ public class SignupFragment extends Fragment {
         }
 
     }
-    }
+
+    private void checkEmailAndPassword() {
+
+        if (email.getText().toString().matches(emailPattern)) {
+            if (password.getText().toString().equals(confirmPassword.getText().toString())) {
+                signUpBtn.setEnabled(false);
+                signUpBtn.setTextColor(Color.BLACK);
+           firebaseAuth.createUserWithEmailAndPassword(email.getText().toString().toString(),password.getText().toString())
+           .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+               @Override
+               public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Map<Object,String>userdata=new HashMap<>();
+                    userdata.put("email",email.getText().toString());
+
+                    firebaseFirestore.collection("USERS")
+                            .add(userdata)
+                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                    if (task.isSuccessful()) {
+                                        Intent mainIntent = new Intent(getActivity(),OtpActivity.class);
+                                        startActivity(mainIntent);
+                                        getActivity().finish();
+                                    }else{
+                                        signUpBtn.setEnabled(true);
+                                        signUpBtn.setTextColor(Color.BLACK);
+                                        String error = task.getException().getMessage();
+                                        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+
+                }else{
+                    signUpBtn.setEnabled(true);
+                    signUpBtn.setTextColor(Color.BLACK);
+                    String error = task.getException().getMessage();
+                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                }
+               }
+           });
+            } else {
+                confirmPassword.setError("Password doesn't matched!");
+            }
+
+        }else{
+            email.setError("Invalid Email!");
+        }
+
+    }}
