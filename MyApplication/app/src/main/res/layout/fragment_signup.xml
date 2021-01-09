@@ -19,7 +19,7 @@
 
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress3"
+        android:id="@+id/sign_up_email"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
@@ -30,19 +30,19 @@
         android:inputType="textEmailAddress" />
 
     <EditText
-        android:id="@+id/editTextNumberPassword"
+        android:id="@+id/sign_up_password"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:autoSizeMaxTextSize="16dp"
         android:layout_marginStart="60dp"
-        android:hint="Password"
+        android:hint="Password (Atleast 6 digits)"
         android:layout_marginTop="25dp"
         android:inputType="numberPassword" />
 
 
     <EditText
-        android:id="@+id/retypePassword2"
+        android:id="@+id/sign_up_confirm_password"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -53,15 +53,15 @@
         android:inputType="numberPassword" />
 
     <Button
-        android:id="@+id/submit1"
+        android:id="@+id/sign_up_btn"
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="50dp"
-
-        android:background="#4267b2"
+        android:enabled="false"
+        android:background="@color/blue"
         android:text="Submit"
-        android:textColor="@color/white" />
+        android:textColor="@color/transparent_white_50" />
 <TextView
     android:id="@+id/alreadyHaveAnAccount"
     android:layout_width="wrap_content"
