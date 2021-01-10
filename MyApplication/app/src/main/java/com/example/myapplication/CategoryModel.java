@@ -4,9 +4,15 @@ public class CategoryModel {
 
     private String categoryIconLink;
     private String categoryName;
+    private int imageId;
 
     public CategoryModel(String categoryIconLink, String categoryName) {
         this.categoryIconLink = categoryIconLink;
+        this.categoryName = categoryName;
+    }
+
+    public CategoryModel(int imageId, String categoryName) {
+        this.imageId = imageId;
         this.categoryName = categoryName;
     }
 
@@ -22,7 +28,19 @@ public class CategoryModel {
         return categoryName;
     }
 
-  //  public void setCategoryName(String categoryName) {
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    //  public void setCategoryName(String categoryName) {
       //  this.categoryName = categoryName;
 
 }

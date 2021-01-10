@@ -49,16 +49,16 @@ public class AllCategoriesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         List<CategoryModel> categoryModelList = new ArrayList<CategoryModel>();
-        categoryModelList.add(new CategoryModel("link", "Foods"));
-        categoryModelList.add(new CategoryModel("link", "Biscuit"));
-        categoryModelList.add(new CategoryModel("link", "Namkin"));
-        categoryModelList.add(new CategoryModel("link", "Noodles and Pasta"));
-        categoryModelList.add(new CategoryModel("link", "Beverages"));
-        categoryModelList.add(new CategoryModel("link", "Dairy"));
-        categoryModelList.add(new CategoryModel("link", "Kitchen"));
-        categoryModelList.add(new CategoryModel("link", "Chocolate"));
-        categoryModelList.add(new CategoryModel("link", "PersonalCare"));
-        categoryModelList.add(new CategoryModel("link", "Soap"));
+        categoryModelList.add(new CategoryModel(R.drawable.logo, "Foods"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Biscuit"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Namkin"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Noodles and Pasta"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Beverages"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Dairy"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Kitchen"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Chocolate"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "PersonalCare"));
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Soap"));
 
         categoryAdapter = new CategoryAdapter(categoryModelList);
         recyclerView.setAdapter(categoryAdapter);
