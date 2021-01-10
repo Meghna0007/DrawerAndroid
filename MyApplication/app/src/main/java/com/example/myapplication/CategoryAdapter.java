@@ -34,9 +34,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         String icon = categoryModelList.get(position).getCategoryIconLink();
         String name = categoryModelList.get(position).getCategoryName();
-        holder.setCategoryName(name ,icon);
+        holder.setCategoryName(name);
         //TODO changes for icon setting
-        //holder.setCategoryIcon();
+        holder.setCategoryIcon(null);
 
 
     }
@@ -59,13 +59,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
 
         private void setCategoryIcon(ImageView imageView) {
-            categoryIcon = imageView;
+            //categoryIcon = imageView;
+            categoryIcon = itemView.findViewById(R.id.category_icon);
             //todo set category icons
 
         }
 
-        private void setCategoryName(String name, String text) {
-            categoryIcon.setImageIcon(Icon.createWithContentUri(text));
+        private void setCategoryName(String name) {
+            //categoryIcon.setImageIcon(Icon.createWithContentUri(text));
             categoryName.setText(name);
         }
     }

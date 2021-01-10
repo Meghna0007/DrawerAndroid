@@ -8,6 +8,7 @@
     tools:context=".ui.home.AllCategoriesFragment">
 
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_categories_recyclerview"
         android:background="@color/white"
