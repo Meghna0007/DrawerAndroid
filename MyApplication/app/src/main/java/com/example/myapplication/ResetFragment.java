@@ -146,8 +146,10 @@ progressBar=view.findViewById(R.id.forget_passsword_progressBar);
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                  // Toast.makeText(getActivity(),"Email sent successfully",Toast.LENGTH_LONG).show();
-                                    ScaleAnimation scaleAnimation = new ScaleAnimation(1,0,1,0,emailIcon.getWidth()/2,emailIcon.getHeight()/2);
+                                   //Toast.makeText(getActivity(),"Email sent successfully",Toast.LENGTH_LONG).show();
+                                    emailIconText.setText("Recovery email sent successfully ! check your inbox");
+                                    emailIconText.setVisibility(View.VISIBLE);
+                                   ScaleAnimation scaleAnimation = new ScaleAnimation(1,0,1,0,emailIcon.getWidth()/2,emailIcon.getHeight()/2);
                                     scaleAnimation.setDuration(100);
                                     scaleAnimation.setInterpolator(new AccelerateInterpolator());
                                     scaleAnimation.setRepeatMode(Animation.REVERSE);

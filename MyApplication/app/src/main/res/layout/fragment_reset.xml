@@ -67,12 +67,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
+
         <Button
             android:id="@+id/forget_password_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="164dp"
             android:layout_marginEnd="16dp"
             android:background="@color/blue"
             android:enabled="false"
@@ -84,7 +85,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forget_password_email" />
-
 
         <TextView
             android:id="@+id/tv_forget_password_goback"
@@ -102,8 +102,8 @@
 
         <LinearLayout
             android:id="@+id/forget_password_email_icon_container"
-            android:layout_width="385dp"
-            android:layout_height="73dp"
+            android:layout_width="381dp"
+            android:layout_height="137dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
@@ -121,19 +121,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="150dp"
-                android:src="@drawable/email" />
+                android:layout_marginStart="50dp"
+                android:src="@drawable/email"
+                android:visibility="gone"/>
 
 
             <TextView
                 android:id="@+id/forget_password_email_iconText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="12dp"
+                android:layout_height="80dp"
+
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="64dp"
-                android:layout_marginEnd="16dp"
-                android:text="Recover email sent successfully! Check your Inbox."
+                android:visibility="gone"
+                android:text="Recover email sent successfully."
                 android:textColor="@color/successGreen">
 
             </TextView>
