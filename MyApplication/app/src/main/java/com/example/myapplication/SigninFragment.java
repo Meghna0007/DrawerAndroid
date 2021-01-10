@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static com.example.myapplication.RegisterActivity.onResetPasswordFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +54,7 @@ public class SigninFragment extends Fragment {
     private Button dontHaveAnAccount;
     private FrameLayout parentFrameLayout;
     private EditText email;
+    private ImageView forgetPassword;
     private EditText password;
     private FirebaseAuth firebaseAuth;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
@@ -89,6 +93,7 @@ public class SigninFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_signin, container, false);
         View view = inflater.inflate(R.layout.fragment_signin,container,false);
         dontHaveAnAccount=view.findViewById(R.id.signUp);
+        forgetPassword=view.findViewById(R.id.logo12);
         parentFrameLayout=getActivity().findViewById(R.id.register_framelayout);
         email=view.findViewById(R.id.signin_email);
         password=view.findViewById(R.id.signin_password);
@@ -107,6 +112,13 @@ public class SigninFragment extends Fragment {
                 setFragment(new SignupFragment());
             }
 
+        });
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onResetPasswordFragment =true;
+                setFragment(new ResetFragment());
+            }
         });
         email.addTextChangedListener(new TextWatcher() {
             @Override

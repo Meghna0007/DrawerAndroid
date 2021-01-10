@@ -11,9 +11,9 @@
     <color name="transparent_white_50">#50ffffff</color>
     <color name="red">#D81D1D</color>
     <color name="blue">#4267b2</color>
-
+    <color name="green_2">#9f0000</color>
     <color name="green">#A5DF00</color>
-    <color name="light_green">#00FF00</color>
+    <color name="successGreen">#11A10C</color>
     <color name="Light">#00BFFF</color>
 
 </resources>
