@@ -189,7 +189,7 @@ public class SigninFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
-                                Intent mainIntent = new Intent(getActivity(),MainActivity.class);
+                                Intent mainIntent = new Intent(getActivity(),Main4Activity.class);
                                 startActivity(mainIntent);
                                 getActivity().finish();
                             }else{
