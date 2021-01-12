@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.CategoryAdapter;
 import com.example.myapplication.CategoryModel;
+import com.example.myapplication.GridProductViewAdapter;
 import com.example.myapplication.HorizonantleProductScrollModel;
 import com.example.myapplication.HorizontalProductScrollAdapter;
 import com.example.myapplication.R;
@@ -195,6 +197,17 @@ public class AllCategoriesFragment extends Fragment {
        horizontalProductScrollAdapter.notifyDataSetChanged();
 
      ////////////////horizon
+
+
+        //////grid product layout
+        TextView gridLayoutTitle =root.findViewById(R.id.grid_product_layout_title);
+        Button gridLayoutButton =root.findViewById(R.id.grid_product_layout_Button);
+        GridView gridView =root.findViewById(R.id.grid_product_layout_gridView);
+
+        gridView.setAdapter(new GridProductViewAdapter(horizonantleProductScrollModelList));
+
+
+        //////grid product layout
         return root;
     }
     ////////Banner
