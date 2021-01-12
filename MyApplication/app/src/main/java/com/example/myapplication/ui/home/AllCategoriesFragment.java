@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +20,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.CategoryAdapter;
 import com.example.myapplication.CategoryModel;
+import com.example.myapplication.HorizonantleProductScrollModel;
+import com.example.myapplication.HorizontalProductScrollAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.SliderAdapter;
 import com.example.myapplication.SliderModel;
@@ -50,10 +51,15 @@ public class AllCategoriesFragment extends Fragment {
     private ConstraintLayout stripAdContainer;
     //////StripSlider
 
+    ///////Horizontal_Scroll_Layout
+    private TextView horizontalLayoutTitle;
+    private Button horizontalViewAllButton;
+    private RecyclerView horizontalRecylerView;
+
+    //////Horizontal_Scroll_Layout
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
-        allCategoriesViewModel =
-                new ViewModelProvider(this).get(AllCategoriesViewModel.class);
+        allCategoriesViewModel = new ViewModelProvider(this).get(AllCategoriesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_all_categories, container, false);
 
 
@@ -164,6 +170,31 @@ public class AllCategoriesFragment extends Fragment {
         stripAdContainer.setBackgroundColor(Color.BLACK);
         //////////StripSlider
 
+        //////Horizontal_Scroll_Layout
+
+        horizontalLayoutTitle=root.findViewById(R.id.horizon_scroll_layout_title);
+        horizontalViewAllButton=root.findViewById(R.id.horizon_viewall_layout_Button);
+        horizontalRecylerView=root.findViewById(R.id.horizon_scroll_layout_RecylerView);
+
+        List<HorizonantleProductScrollModel> horizonantleProductScrollModelList=new ArrayList<>();
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
+
+       HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizonantleProductScrollModelList);
+       LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+       linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+       horizontalRecylerView.setLayoutManager(linearLayoutManager);
+
+       horizontalRecylerView.setAdapter(horizontalProductScrollAdapter);
+       horizontalProductScrollAdapter.notifyDataSetChanged();
+
+     ////////////////horizon
         return root;
     }
     ////////Banner
