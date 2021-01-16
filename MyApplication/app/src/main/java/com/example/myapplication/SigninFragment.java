@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,14 +52,16 @@ public class SigninFragment extends Fragment {
         // Required empty public constructor
     }
 
+    private ImageButton signinCloseButton;
     private Button dontHaveAnAccount;
     private FrameLayout parentFrameLayout;
     private EditText email;
-    private ImageView forgetPassword;
+    private TextView forgetPassword;
     private EditText password;
     private FirebaseAuth firebaseAuth;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     private Button signInBtn;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -91,21 +94,22 @@ public class SigninFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_signin, container, false);
-        View view = inflater.inflate(R.layout.fragment_signin,container,false);
-        dontHaveAnAccount=view.findViewById(R.id.signUp);
-        forgetPassword=view.findViewById(R.id.logo12);
-        parentFrameLayout=getActivity().findViewById(R.id.register_framelayout);
-        email=view.findViewById(R.id.signin_email);
-        password=view.findViewById(R.id.signin_password);
-        firebaseAuth= FirebaseAuth.getInstance();
-        signInBtn=view.findViewById(R.id.login);
+        View view = inflater.inflate(R.layout.fragment_signin, container, false);
+        dontHaveAnAccount = view.findViewById(R.id.signUp);
+        forgetPassword = view.findViewById(R.id.logo12);
+        parentFrameLayout = getActivity().findViewById(R.id.register_framelayout);
+        email = view.findViewById(R.id.signin_email);
+        password = view.findViewById(R.id.signin_password);
+        firebaseAuth = FirebaseAuth.getInstance();
+        signInBtn = view.findViewById(R.id.login);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dontHaveAnAccount.setOnClickListener(new View.OnClickListener(){
+        dontHaveAnAccount.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -116,7 +120,7 @@ public class SigninFragment extends Fragment {
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onResetPasswordFragment =true;
+                onResetPasswordFragment = true;
                 setFragment(new ResetFragment());
             }
         });
@@ -131,6 +135,7 @@ public class SigninFragment extends Fragment {
                 checkInputs();
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -144,7 +149,7 @@ public class SigninFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-             checkInputs();
+                checkInputs();
             }
 
             @Override
@@ -158,55 +163,64 @@ public class SigninFragment extends Fragment {
                 checkEmailAndPassword();
             }
         });
+
     }
-    private void setFragment(Fragment fragment){
-        FragmentTransaction fragmentTransaction=getActivity().getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(parentFrameLayout.getId(),fragment);
+
+    private void setFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(parentFrameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
-    private void checkInputs(){
-        if(!TextUtils.isEmpty(email.getText())){
-            if(!TextUtils.isEmpty(password.getText())){
+
+    private void checkInputs() {
+        if (!TextUtils.isEmpty(email.getText())) {
+            if (!TextUtils.isEmpty(password.getText())) {
                 signInBtn.setEnabled(true);
-                signInBtn.setTextColor(Color.BLUE);
-            }else{
+                signInBtn.setTextColor(Color.WHITE);
+            } else {
                 signInBtn.setEnabled(false);
                 signInBtn.setTextColor(Color.WHITE);
             }
-        }else {
+        } else {
             signInBtn.setEnabled(false);
             signInBtn.setTextColor(Color.WHITE);
         }
     }
-    private void checkEmailAndPassword(){
+
+    private void checkEmailAndPassword() {
         if (email.getText().toString().matches(emailPattern)) {
-        if(password.length()>=6){
+            if (password.length() >= 6) {
 
-           signInBtn.setEnabled(false);
-           signInBtn.setTextColor(Color.BLACK);
-            firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                Intent mainIntent = new Intent(getActivity(),Main4Activity.class);
-                                startActivity(mainIntent);
-                                getActivity().finish();
-                            }else{
-                               signInBtn.setEnabled(true);
-                                signInBtn.setTextColor(Color.BLUE);
-                                String error =task.getException().getMessage();
-                                Toast.makeText(getActivity(),error,Toast.LENGTH_SHORT).show();
+                signInBtn.setEnabled(false);
+                signInBtn.setTextColor(Color.BLACK);
+                firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    mainIntent();
+                                } else {
+                                    signInBtn.setEnabled(true);
+                                    signInBtn.setTextColor(Color.BLUE);
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                    });
-        }else{
-            Toast.makeText(getActivity(),"Incorrect email or password!",Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                Toast.makeText(getActivity(), "Incorrect email or password!", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getActivity(), "Incorrect email or password!", Toast.LENGTH_SHORT).show();
         }
-    }else{
-        Toast.makeText(getActivity(),"Incorrect email or password!",Toast.LENGTH_SHORT).show();
-    }
-    }
-    }
 
 
+    }
+
+    private void mainIntent() {
+        Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
+        startActivity(mainIntent);
+        getActivity().finish();
+    }
+
+}

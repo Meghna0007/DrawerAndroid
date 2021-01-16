@@ -21,6 +21,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplication.CategoryAdapter;
 import com.example.myapplication.CategoryModel;
+import com.example.myapplication.CategoryPageAdapter;
+import com.example.myapplication.CategoryPageModel;
 import com.example.myapplication.GridProductViewAdapter;
 import com.example.myapplication.HorizonantleProductScrollModel;
 import com.example.myapplication.HorizontalProductScrollAdapter;
@@ -35,33 +37,13 @@ import java.util.TimerTask;
 
 public class AllCategoriesFragment extends Fragment {
 
-    private AllCategoriesViewModel allCategoriesViewModel;
-    private RecyclerView recyclerView;
+
+    private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
-    /////////////Banner Slider
-    private ViewPager bannerSliderViewPager;
-    private List<SliderModel>sliderModelList;
-    private int currentPage =2;
-    private Timer timer;
-    final  private long DELAY_TIME=3000;
-    final  private long PERIOD_TIME=3000;
+    private RecyclerView testing;
 
-    ///////////Banner Slider
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-    //////////StripSlider
-    private ImageView stripAdImage;
-    private ConstraintLayout stripAdContainer;
-    //////StripSlider
-
-    ///////Horizontal_Scroll_Layout
-    private TextView horizontalLayoutTitle;
-    private Button horizontalViewAllButton;
-    private RecyclerView horizontalRecylerView;
-
-    //////Horizontal_Scroll_Layout
-    public View onCreateView(@NonNull LayoutInflater inflater,
-            ViewGroup container, Bundle savedInstanceState) {
-        allCategoriesViewModel = new ViewModelProvider(this).get(AllCategoriesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_all_categories, container, false);
 
 
@@ -75,10 +57,10 @@ public class AllCategoriesFragment extends Fragment {
         });*/
 
 
-        recyclerView = root.findViewById(R.id.all_categories_recyclerview);
+        categoryRecyclerView = root.findViewById(R.id.all_categories_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(layoutManager);
+        categoryRecyclerView.setLayoutManager(layoutManager);
 
         List<CategoryModel> categoryModelList = new ArrayList<CategoryModel>();
         categoryModelList.add(new CategoryModel(R.drawable.logo, "Foods"));
@@ -93,90 +75,34 @@ public class AllCategoriesFragment extends Fragment {
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Soap"));
 
         categoryAdapter = new CategoryAdapter(categoryModelList);
-        recyclerView.setAdapter(categoryAdapter);
+        categoryRecyclerView.setAdapter(categoryAdapter);
         categoryAdapter.notifyDataSetChanged();
         ///////////Baner Slider
-        bannerSliderViewPager=root.findViewById(R.id.bannerSlider_view_pager);
-        sliderModelList =new ArrayList<SliderModel>();
 
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"green"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher_round,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.grocery,"green"));
+        List<SliderModel>sliderModelList =new ArrayList<SliderModel>();
 
-
+        sliderModelList.add(new SliderModel(R.drawable.g1,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g2,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g1,"black"));
 
 
-        sliderModelList.add(new SliderModel(R.drawable.gst,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.g2,"green"));
+
+
+        sliderModelList.add(new SliderModel(R.drawable.g2,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g3,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g4,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.grocery,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g1,"black"));
+        sliderModelList.add(new SliderModel(R.drawable.g3,"black"));
+
+
+
+        sliderModelList.add(new SliderModel(R.drawable.g4,"green"));
         sliderModelList.add(new SliderModel(R.drawable.g3,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.aad,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.g1,"green"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher,"green"));
+        sliderModelList.add(new SliderModel(R.drawable.g4,"green"));
 
+        ////////////////horizon
 
-
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher_round,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.grocery,"green"));
-        sliderModelList.add(new SliderModel(R.drawable.gst,"green"));
-
-
-        SliderAdapter sliderAdapter=new SliderAdapter(sliderModelList);
-        bannerSliderViewPager.setAdapter(sliderAdapter);
-        bannerSliderViewPager.setClipToPadding(false);
-        bannerSliderViewPager.setPageMargin(20);
-        bannerSliderViewPager.setCurrentItem(currentPage);
-
-        ViewPager.OnPageChangeListener onPageChangeListener= new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-                currentPage=i;
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-                if(i == ViewPager.SCROLL_STATE_IDLE){
-                    pageLooper();
-                }
-
-            }
-        };
-        bannerSliderViewPager.addOnPageChangeListener(onPageChangeListener);
-
-        startBannerSlideShow();
-        bannerSliderViewPager.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                pageLooper();
-                stopBannerSlideShow();
-             //   startBannerSlideShow();
-                if(event.getAction()==MotionEvent.ACTION_UP){
-                    startBannerSlideShow();
-                }
-                return false;
-            }
-        });
-    ////////Banner Slider
-
-        //////////StripSlider
-        stripAdImage = root.findViewById(R.id.strip_add_image);
-        stripAdContainer=root.findViewById(R.id.strip_ad_container);
-
-        stripAdImage.setImageResource(R.drawable.g4);
-        stripAdContainer.setBackgroundColor(Color.BLACK);
-        //////////StripSlider
-
-        //////Horizontal_Scroll_Layout
-
-        horizontalLayoutTitle=root.findViewById(R.id.horizon_scroll_layout_title);
-        horizontalViewAllButton=root.findViewById(R.id.horizon_viewall_layout_Button);
-        horizontalRecylerView=root.findViewById(R.id.horizon_scroll_layout_RecylerView);
 
         List<HorizonantleProductScrollModel> horizonantleProductScrollModelList=new ArrayList<>();
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
@@ -188,64 +114,39 @@ public class AllCategoriesFragment extends Fragment {
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product,"MariaLite","Healthy_Wealthy","Rs.30/-"));
 
-       HorizontalProductScrollAdapter horizontalProductScrollAdapter = new HorizontalProductScrollAdapter(horizonantleProductScrollModelList);
-       LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
-       linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-       horizontalRecylerView.setLayoutManager(linearLayoutManager);
 
-       horizontalRecylerView.setAdapter(horizontalProductScrollAdapter);
-       horizontalProductScrollAdapter.notifyDataSetChanged();
 
      ////////////////horizon
 
 
-        //////grid product layout
-        TextView gridLayoutTitle =root.findViewById(R.id.grid_product_layout_title);
-        Button gridLayoutButton =root.findViewById(R.id.grid_product_layout_Button);
-        GridView gridView =root.findViewById(R.id.grid_product_layout_gridView);
 
-        gridView.setAdapter(new GridProductViewAdapter(horizonantleProductScrollModelList));
+        ////////////////////////////////////////////
+        testing = root.findViewById(R.id.home_page_recylerView);
+        LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
+        testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        testing.setLayoutManager(testingLayoutManager);
+        List<CategoryPageModel>categoryPageModelList = new ArrayList<>();
+        categoryPageModelList.add(new CategoryPageModel(0,sliderModelList));
+        categoryPageModelList.add(new CategoryPageModel(1,R.drawable.g4,"#000000"));
+        categoryPageModelList.add(new CategoryPageModel(2,"Deals of the day",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Biscuit",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Namkin",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Noodles&Pasta",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Beverges",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Dairy",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Choclate",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Personal Care",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Soaps",horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(3,"Foods",horizonantleProductScrollModelList));
+        CategoryPageAdapter adapter=new CategoryPageAdapter(categoryPageModelList);
+        testing.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
-        //////grid product layout
+        ////////////////////////////////////////
+
+
         return root;
     }
-    ////////Banner
-    private void pageLooper(){
-      if(currentPage==sliderModelList.size() -2){
-          currentPage=2;
-          bannerSliderViewPager.setCurrentItem(currentPage,false);
-      }else{
 
-          }if(currentPage==1){
-            currentPage=sliderModelList.size() -3;
-            bannerSliderViewPager.setCurrentItem(currentPage,false);
-        }
-
-    }
-
-    private void startBannerSlideShow(){
-        Handler handler=new Handler();
-        Runnable update=new Runnable() {
-            @Override
-            public void run() {
-                if(currentPage >=sliderModelList.size()){
-                    currentPage=1;
-                }
-                bannerSliderViewPager.setCurrentItem(currentPage++,true);
-            }
-        };
-        timer=new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-             handler.post(update);
-            }
-        } ,DELAY_TIME,PERIOD_TIME
-        );
-    }
-    private void stopBannerSlideShow(){
-        timer.cancel();
-    }
-    ///////Banner
 }

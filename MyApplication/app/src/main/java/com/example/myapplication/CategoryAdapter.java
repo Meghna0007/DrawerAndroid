@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +36,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         String icon = categoryModelList.get(position).getCategoryIconLink();
         int iconImageId = categoryModelList.get(position).getImageId();
         String name = categoryModelList.get(position).getCategoryName();
-        holder.setCategoryName(name);
+        holder.setCategory(name);
         //TODO changes for icon setting
 
         holder.setCategoryIcon(iconImageId);
@@ -63,14 +64,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         private void setCategoryIcon(int id) {
             //categoryIcon = imageView;
             //categoryIcon = itemView.findViewById(R.id.category_icon);
-            categoryIcon.setImageResource(id);
+           // categoryIcon.setImageResource(id);
             //todo set category icons
 
         }
 
-        private void setCategoryName(String name) {
+        private void setCategory(final String name) {
             //categoryIcon.setImageIcon(Icon.createWithContentUri(text));
             categoryName.setText(name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent categoryIntent = new Intent(itemView.getContext(),CategoryActivity.class);
+                    categoryIntent.putExtra("CategoryName",name);
+                    itemView.getContext().startActivity(categoryIntent);
+                }
+            });
         }
     }
 

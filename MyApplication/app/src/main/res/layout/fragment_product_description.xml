@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductDescriptionFragment">
+
+    <TextView
+        android:id="@+id/tv_product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="com.kksworld.jsonparsing.MainActivity$JSONTask.onPostExecute(MainActivity.java:48), and work your way backward from there if you can't figure it out.
+
+One assumes that your json parse failed somehow or another."
+
+        android:textColor="@color/black" />
+
+</FrameLayout>

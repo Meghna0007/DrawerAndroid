@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,14 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
     @Override
     public int getItemCount() {
-        return horizonantleProductScrollModelList.size();
-    }
+        if (horizonantleProductScrollModelList.size() > 8) {
+            return 8;
+        } else {
 
+
+            return horizonantleProductScrollModelList.size();
+        }
+    }
     public class ViewHolder extends RecyclerView.ViewHolder {
       private ImageView productImage;
       private TextView productTitle;
@@ -68,6 +74,14 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
             productTitle=itemView.findViewById(R.id.hS_product_title);
             productDescription=itemView.findViewById(R.id.hS_product_Description);
             productPrice=itemView.findViewById(R.id.hS_product_Price);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent productDetailsIntent =new Intent(itemView.getContext(),ProductDetailsActivity.class);
+                    itemView.getContext().startActivity(productDetailsIntent);
+                }
+            });
 
         }
 
