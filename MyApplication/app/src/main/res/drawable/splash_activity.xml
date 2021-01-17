@@ -8,15 +8,9 @@
         </shape>
     </item>
 
-
 <item>
-    <bitmap android:src="@drawable/finall"
-
-        android:gravity="center"/>
-    <shape android:shape="ring">
-               <stroke android:color="@color/blue"
-            android:width="1dp"/>
-        <corners android:radius="5dp"/>
-    </shape>
+   <bitmap android:gravity="center"
+       android:src="@drawable/opm"/>
 </item>
+
 </layer-list>

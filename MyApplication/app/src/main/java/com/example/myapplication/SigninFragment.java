@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import static com.example.myapplication.RegisterActivity.onResetPasswordFragment;
+import static com.example.myapplication.RegisterActivity.onSignUpFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,6 +114,7 @@ public class SigninFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+                onSignUpFragment = true;
                 setFragment(new SignupFragment());
             }
 

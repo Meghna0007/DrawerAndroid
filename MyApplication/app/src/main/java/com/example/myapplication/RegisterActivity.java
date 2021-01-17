@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 public class RegisterActivity extends AppCompatActivity {
 private FrameLayout frameLayout;
 public  static boolean onResetPasswordFragment = false;
+    public  static boolean onSignUpFragment = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,12 @@ public  static boolean onResetPasswordFragment = false;
             setFragment((new SigninFragment()));
            return  false;
         }
+
+            if(onSignUpFragment){
+                onSignUpFragment=false;
+                setFragment((new SigninFragment()));
+                return  false;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
