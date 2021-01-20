@@ -19,9 +19,8 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/rewards_gradient"/>
-
+            android:layout_height="50dp"
+            android:background="@drawable/rewards_gradient" />
 
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,8 +28,8 @@
 
     <ScrollView
         android:id="@+id/scrollView2"
-        android:layout_width="404dp"
-        android:layout_height="679dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +50,8 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/b2"
-                android:elevation="3dp">
+                android:elevation="3dp"
+                android:id="@+id/biscuitBackground">
 
                 <TextView
                     android:layout_width="wrap_content"

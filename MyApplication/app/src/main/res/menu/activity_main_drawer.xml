@@ -12,6 +12,10 @@
             android:id="@+id/my_account"
             android:icon="@drawable/account"
             android:title="My Account" />
+        <item
+            android:id="@+id/my_wishlist"
+            android:icon="@drawable/wishlist"
+            android:title="My Wishlist" />
 
         <item
             android:id="@+id/my_orders"

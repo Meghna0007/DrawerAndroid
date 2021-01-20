@@ -4,8 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 public class FMCGActivity extends AppCompatActivity {
 
@@ -19,6 +22,18 @@ public class FMCGActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("FMCG");
+
+        RelativeLayout biscuitLayout = findViewById(R.id.biscuitBackground);
+        biscuitLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
+                startActivity(categoryIntent);
+                finish();
+            }
+        });
+
+
     }
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

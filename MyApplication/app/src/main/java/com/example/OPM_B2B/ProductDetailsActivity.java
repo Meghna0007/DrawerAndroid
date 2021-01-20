@@ -1,6 +1,8 @@
 package com.example.OPM_B2B;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -20,7 +23,8 @@ import java.util.List;
 public class ProductDetailsActivity extends AppCompatActivity {
     private ViewPager ProductImageViewPager;
     private TabLayout viewpagerIndicate;
-
+   private FloatingActionButton addtoWishlistBtn;
+   private  static  boolean ALREADY_ADDED_TO_WISHLIST =false;
     private ViewPager productDetailsViewPager;
     private TabLayout productDetailsTabLayout;
 
@@ -37,6 +41,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 buyNowBtn=findViewById(R.id.buy_now_button);
         ProductImageViewPager = findViewById(R.id.product_images_lviewpager);
         viewpagerIndicate = findViewById(R.id.viewPager_indicater);
+        addtoWishlistBtn=findViewById(R.id.wishlistt);
         productDetailsViewPager = findViewById(R.id.product_details_viewPager);
         productDetailsTabLayout = findViewById(R.id.product_details_tablayout);
         List<Integer> productImages = new ArrayList<>();
@@ -52,6 +57,18 @@ buyNowBtn=findViewById(R.id.buy_now_button);
 
 
         viewpagerIndicate.setupWithViewPager(ProductImageViewPager, true);
+        addtoWishlistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              if(ALREADY_ADDED_TO_WISHLIST){
+                  ALREADY_ADDED_TO_WISHLIST =false;
+                 addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
+              }else{
+                  ALREADY_ADDED_TO_WISHLIST =true;
+                addtoWishlistBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
+              }
+            }
+        });
 
         productDetailsViewPager.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(), productDetailsTabLayout.getTabCount()));
         productDetailsViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(productDetailsTabLayout));
