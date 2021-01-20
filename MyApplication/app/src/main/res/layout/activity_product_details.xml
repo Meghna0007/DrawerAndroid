@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-  >
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -56,7 +55,8 @@
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" >
+        app:layout_constraintStart_toStartOf="parent">
+
         <LinearLayout
             android:id="@+id/AddToCart"
             android:layout_width="match_parent"
@@ -65,19 +65,21 @@
             android:layout_weight="1"
             android:gravity="center"
             android:background="@color/white">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="ADD TO CART"
-            android:drawableEnd="@drawable/cart"
-            android:drawablePadding="8dp"
-            android:gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="ADD TO CART"
+                android:drawableEnd="@drawable/cart"
+                android:drawablePadding="8dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
         </LinearLayout>
+
         <Button
-          android:id="@+id/buy_now_button"
+            android:id="@+id/buy_now_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="buy now"
@@ -86,7 +88,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:layout_weight="1"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 

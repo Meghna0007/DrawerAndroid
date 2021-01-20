@@ -8,6 +8,10 @@
             android:id="@+id/all_categories"
             android:icon="@drawable/category"
             android:title="All Categories" />
+        <item
+            android:id="@+id/my_account"
+            android:icon="@drawable/account"
+            android:title="My Account" />
 
         <item
             android:id="@+id/my_orders"

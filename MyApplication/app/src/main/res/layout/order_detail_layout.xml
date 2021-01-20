@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:elevation="3dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/product_Image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/product" />
+
+    <TextView
+        android:id="@+id/product_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Pixal XL 2"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/product_Pricee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="Rs.600/-"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/product_Image"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/product_Quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border_background"
+        android:padding="3dp"
+        android:text="Qty: 1"
+
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/product_Image"
+        app:layout_constraintEnd_toStartOf="@+id/product_Image" />
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/product_Image" />
+
+    <ImageView
+        android:id="@+id/Ordered_indicator"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider6"
+        app:srcCompat="@drawable/selected_dot"
+        app:tint="@color/RecylerView" />
+
+    <ProgressBar
+        android:id="@+id/Order_Packed_Progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:progress="0"
+        android:backgroundTint="@color/RecylerView"
+        android:progressTint="@color/successGreen"
+        android:rotation="90"
+        android:transformPivotX="0dp"
+        app:layout_constraintStart_toStartOf="@+id/Ordered_indicator"
+        app:layout_constraintTop_toTopOf="@+id/Ordered_indicator" />
+
+    <ImageView
+        android:id="@+id/Packed_Indicator"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="53dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Ordered_indicator"
+        app:srcCompat="@drawable/selected_dot"
+        app:tint="@color/RecylerView" />
+
+    <ProgressBar
+        android:id="@+id/Packed_ShippingProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:progress="0"
+        android:backgroundTint="@color/RecylerView"
+        android:progressTint="@color/successGreen"
+        android:rotation="90"
+        android:transformPivotX="0dp"
+        app:layout_constraintStart_toStartOf="@+id/Packed_Indicator"
+        app:layout_constraintTop_toTopOf="@+id/Packed_Indicator" />
+
+    <ImageView
+        android:id="@+id/Shipping_Indicator"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
+        app:tint="@color/RecylerView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Packed_Indicator"
+        app:srcCompat="@drawable/selected_dot" />
+
+    <ProgressBar
+        android:id="@+id/Shiping_Delivered_Progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:progress="0"
+        android:backgroundTint="@color/RecylerView"
+        android:progressTint="@color/successGreen"
+        android:rotation="90"
+        android:transformPivotX="0dp"
+        app:layout_constraintStart_toStartOf="@+id/Shipping_Indicator"
+        app:layout_constraintTop_toTopOf="@+id/Shipping_Indicator" />
+
+    <ImageView
+        android:id="@+id/delivered_Indictor"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="51dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Shipping_Indicator"
+        app:srcCompat="@drawable/selected_dot"
+        app:tint="@color/RecylerView" />
+
+    <TextView
+        android:id="@+id/Ordered_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Ordered"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Ordered_indicator"
+        app:layout_constraintStart_toEndOf="@+id/Ordered_indicator"
+        app:layout_constraintTop_toTopOf="@+id/Ordered_indicator" />
+
+    <TextView
+        android:id="@+id/Packed_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Packed"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+
+
+        app:layout_constraintBottom_toBottomOf="@+id/Packed_Indicator"
+        app:layout_constraintStart_toEndOf="@+id/Packed_Indicator"
+        app:layout_constraintTop_toTopOf="@+id/Packed_Indicator" />
+
+    <TextView
+        android:id="@+id/Shipping_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Shipped"
+        app:layout_constraintStart_toEndOf="@+id/Shipping_Indicator"
+        app:layout_constraintTop_toTopOf="@+id/Shipping_Indicator" />
+
+    <TextView
+        android:id="@+id/DeliveredTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Delivered"
+        app:layout_constraintStart_toEndOf="@+id/delivered_Indictor"
+        app:layout_constraintTop_toTopOf="@+id/delivered_Indictor" />
+
+    <TextView
+        android:id="@+id/Ordered_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon ,12 JAN"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Order_Packed_Progress"
+        app:layout_constraintStart_toEndOf="@+id/Order_Packed_Progress"
+        app:layout_constraintTop_toTopOf="@+id/Order_Packed_Progress" />
+
+    <TextView
+        android:id="@+id/Ordered_Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:text="Your Order has been placed"
+        app:layout_constraintStart_toStartOf="@id/Order_Packed_Progress"
+        app:layout_constraintTop_toBottomOf="@id/Order_Packed_Progress" />
+
+    <TextView
+        android:id="@+id/Packed_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Mon ,12 JAN"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/Packed_Title"
+        app:layout_constraintStart_toEndOf="@+id/Packed_Title"
+        app:layout_constraintTop_toTopOf="@+id/Packed_Title" />
+
+    <TextView
+        android:id="@+id/Packed_Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:text="Your Order has been placed"
+        app:layout_constraintStart_toStartOf="@id/Packed_Title"
+        app:layout_constraintTop_toBottomOf="@id/Packed_Title" />
+    <TextView
+        android:id="@+id/Shipping_Date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon ,12 JAN"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Shipping_Title"
+        app:layout_constraintStart_toEndOf="@+id/Shipping_Title"
+        app:layout_constraintTop_toTopOf="@+id/Shipping_Title" />
+
+    <TextView
+        android:id="@+id/Shipping_Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:text="Your Order has been shipped"
+        app:layout_constraintStart_toStartOf="@id/Shipping_Title"
+        app:layout_constraintTop_toBottomOf="@id/Shipping_Title" />
+    <TextView
+        android:id="@+id/DeliveredDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mon ,12 JAN"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/DeliveredTitle"
+        app:layout_constraintStart_toEndOf="@+id/DeliveredTitle"
+        app:layout_constraintTop_toTopOf="@+id/DeliveredTitle" />
+
+    <TextView
+        android:id="@+id/DeliveredBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:text="Your Order has been delivered"
+        app:layout_constraintStart_toStartOf="@+id/DeliveredTitle"
+        app:layout_constraintTop_toBottomOf="@+id/DeliveredTitle" />
+
+    <View
+        android:id="@+id/divider10"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="40dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintTop_toBottomOf="@+id/DeliveredBody"
+        tools:layout_editor_absoluteX="0dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

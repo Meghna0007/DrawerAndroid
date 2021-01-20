@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Your current order status"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:background="@drawable/b2"
+        android:elevation="3dp"
+        android:padding="5dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/current_OrderImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:elevation="3dp"
+        android:src="@drawable/g1"
+        app:civ_border_color="#916398"
+        app:civ_border_width="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/tvcurrent_OrderStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="OUT FOR DELIVERY"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:background="@drawable/b2"
+        android:textColor="@color/white"
+        android:padding="16dp"
+        android:elevation="3dp"
+        android:backgroundTint="@color/purple_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_OrderImage" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/b2"
+        android:elevation="3dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvcurrent_OrderStatus">
+        <ImageView
+            android:id="@+id/Order_Indicator"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:translationX="12dp"
+            android:src="@drawable/selected_dot"
+            app:tint="@color/RecylerView"/>
+        <ProgressBar
+            android:id="@+id/order_packed_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/successGreen"
+            android:progress="0"
+            android:progressBackgroundTint="@color/RecylerView"
+            android:translationX="8dp"
+            android:layout_weight="1"/>
+        <ImageView
+            app:tint="@color/RecylerView"
+            android:id="@+id/Packed_indictor"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/selected_dot"
+            android:translationX="4dp"/>
+        <ProgressBar
+            android:id="@+id/order_shipped_progress"
+            android:progressBackgroundTint="@color/RecylerView"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/successGreen"
+            android:progress="0"
+            android:layout_weight="1"/>
+        <ImageView
+            app:tint="@color/RecylerView"
+            android:id="@+id/shipped_indicator"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:translationX="-4dp"
+            android:src="@drawable/selected_dot"/>
+        <ProgressBar
+            android:id="@+id/shipped_delivered_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationX="-8dp"
+            android:progressTint="@color/successGreen"
+            android:progress="0"
+            android:progressBackgroundTint="@color/RecylerView"
+            android:layout_weight="1"/>
+        <ImageView
+            app:tint="@color/RecylerView"
+            android:id="@+id/delivered_indicator"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:translationX="-12dp"
+            android:src="@drawable/selected_dot"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

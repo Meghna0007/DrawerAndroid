@@ -2,15 +2,17 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
-            <gradient android:endColor="#2196F3"
+            <gradient
+                android:endColor="#2196F3"
                 android:startColor="#54F4D4"
-                android:angle="45"/>
+                android:angle="45" />
         </shape>
     </item>
 
-<item>
-   <bitmap android:gravity="center"
-       android:src="@drawable/opm"/>
-</item>
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/opm" />
+    </item>
 
 </layer-list>

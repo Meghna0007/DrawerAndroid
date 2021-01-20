@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,7 +32,9 @@
         android:hint="Email Address or Phone Number"
         android:inputType="textPersonName"
         android:textColorHighlight="#70ffffff" />
-    <EditText android:layout_height="50dp"
+
+    <EditText
+        android:layout_height="50dp"
         android:layout_width="300dp"
         android:layout_marginStart="25dp"
         android:id="@+id/signin_password"
@@ -41,7 +42,8 @@
         android:textSize="24sp"
 
         android:inputType="textPassword"
-        android:hint="Password"/>
+        android:hint="Password" />
+
     <Button
         android:id="@+id/login"
         android:layout_width="300dp"
@@ -61,9 +63,7 @@
         android:layout_marginTop="350dp"
         android:text="Forget Password"
         android:gravity="center"
-        android:textColor="@color/blue"/>
-
-
+        android:textColor="@color/blue" />
 
 
     <TextView
@@ -74,8 +74,7 @@
         android:layout_marginBottom="8dp"
         android:id="@+id/imgView"
         android:textColor="@color/white"
-        android:text="or"
-        />
+        android:text="or" />
 
     <Button
         android:id="@+id/signUp"
@@ -86,7 +85,6 @@
         android:background="#42b72a"
         android:text="Create New User"
         android:textColor="@color/white" />
-
 
 
     <View

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="100dp"
-    android:layout_height="80dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/category_icon"
@@ -14,7 +14,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="ECLAIR"
-        app:srcCompat="@drawable/grocery" />
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/foods" />
 
     <TextView
         android:id="@+id/category_name"
@@ -26,6 +27,7 @@
         android:layout_marginBottom="4dp"
         android:text="FMCG"
         android:tooltipText="@string/menu_home"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

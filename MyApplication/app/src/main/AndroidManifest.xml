@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication">
+    package="com.example.OPM_B2B">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,19 +11,19 @@
         android:roundIcon="@drawable/finall"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication.NoActionBar">
+        <activity android:name=".AddAddressActivity" android:theme="@style/RedProgressBar"></activity>
+        <activity android:name=".DeliveryActivity" />
+        <activity android:name=".FMCGActivity" />
+        <activity android:name=".OrderDetailsActivity" />
         <activity android:name=".ProductDetailsActivity" />
         <activity android:name=".CategoryActivity" />
         <activity android:name=".OtpActivity" />
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait"
-
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
