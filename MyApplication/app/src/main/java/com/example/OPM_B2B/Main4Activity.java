@@ -53,8 +53,9 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         actionBarLogo = findViewById(R.id.actionbar_logo);
         setSupportActionBar(toolbar);
+     //   getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+       // getSupportActionBar().setTitle("OPM  B2B");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -123,6 +124,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         // Inflate the menu; this adds items to the action bar if it is present.
         if (currentFragment == ALLCATEGORY_FRAGMENT) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            //getSupportActionBar().setTitle("OPM  B2B");
             getMenuInflater().inflate(R.menu.main4, menu);
 
         }

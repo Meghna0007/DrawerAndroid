@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ffinallogo">
+                android:src="@drawable/logo">
 
             </ImageView>
 

@@ -26,6 +26,7 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:text="FMCG"
+        android:inputType="textMultiLine"
         android:tooltipText="@string/menu_home"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"

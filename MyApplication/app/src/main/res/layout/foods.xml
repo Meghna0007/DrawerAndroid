@@ -19,7 +19,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:background="@drawable/rewards_gradient" />
 
 
@@ -29,8 +29,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -46,12 +45,11 @@
 
 
             <RelativeLayout
+                android:id="@+id/biscuitBackground"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/b2"
-                android:elevation="3dp"
-                android:id="@+id/biscuitBackground">
+                android:layout_marginTop="2dp"
+                android:elevation="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -59,10 +57,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="33dp"
+                    android:layout_marginTop="14dp"
                     android:layout_marginEnd="82dp"
-                    android:layout_marginBottom="31dp"
+                    android:layout_marginBottom="45dp"
                     android:padding="25dp"
                     android:text=" Biscuits and Rusk"
                     android:textColor="@color/black"
@@ -71,19 +69,33 @@
 
                 <ImageView
                     android:layout_width="120dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="107dp"
                     android:layout_alignParentRight="true"
+                    android:layout_marginStart="82dp"
                     android:layout_marginRight="0dp"
                     android:layout_marginBottom="0dp"
                     android:src="@drawable/biscuit" />
+
+                <View
+                    android:id="@+id/divider11"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="28dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/fmcg2"
                 android:layout_width="match_parent"
+
                 android:layout_height="150dp"
-                android:background="@drawable/b2"
-                android:elevation="3dp"
-                android:id="@+id/fmcg2">
+                android:elevation="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,10 +103,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="57dp"
+                    android:layout_marginTop="-2dp"
                     android:layout_marginEnd="82dp"
-                    android:layout_marginBottom="31dp"
+                    android:layout_marginBottom="61dp"
                     android:padding="25dp"
                     android:text="Namkeen"
                     android:textColor="@color/black"
@@ -103,16 +115,26 @@
 
                 <ImageView
                     android:layout_width="120dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="107dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="4dp"
                     android:src="@drawable/namkeen" />
+
+                <View
+                    android:id="@+id/divider12"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@drawable/b2"
+
                 android:elevation="3dp">
 
                 <TextView
@@ -121,10 +143,10 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="2dp"
                     android:layout_marginEnd="82dp"
-                    android:layout_marginBottom="31dp"
+                    android:layout_marginBottom="57dp"
                     android:padding="25dp"
                     android:text="Drinks and Juices"
                     android:textColor="@color/black"
@@ -133,15 +155,24 @@
 
                 <ImageView
                     android:layout_width="120dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="107dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/foods" />
+                    android:src="@drawable/beverges" />
+
+                <View
+                    android:id="@+id/divider13"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="154dp"
-                android:background="@drawable/b2"
+
                 android:elevation="3dp">
 
                 <TextView
@@ -150,22 +181,32 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginStart="57dp"
+                    android:layout_marginTop="-2dp"
                     android:layout_marginEnd="82dp"
-                    android:layout_marginBottom="31dp"
+                    android:layout_marginBottom="61dp"
                     android:padding="25dp"
-                    android:text="Noodles"
+                    android:text="Noodles and Pasta"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="120dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="107dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="7dp"
-                    android:src="@drawable/foods" />
+                    android:src="@drawable/noodles" />
+
+                <View
+                    android:id="@+id/divider14"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="44dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
             </RelativeLayout>
 
         </LinearLayout>

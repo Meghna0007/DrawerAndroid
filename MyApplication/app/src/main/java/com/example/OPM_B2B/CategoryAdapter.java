@@ -67,13 +67,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             //categoryIcon = imageView;
             //categoryIcon = itemView.findViewById(R.id.category_icon);
             // categoryIcon.setImageResource(id);
-            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.mipmap.opm_launcher)).into(categoryIcon);
+            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.ffinallogo)).into(categoryIcon);
 
         }
 
-        private void setCategory(final String name) {
+        private void setCategory(final String categoryNameValue) {
             //categoryIcon.setImageIcon(Icon.createWithContentUri(text));
+            String name = categoryNameValue.replace("\\n", "\n");
             categoryName.setText(name);
+            String nameWithoutNewLine = name.replaceAll("\n", "");
             Class nextClass;
             if (name.equals("FMCG")) {
                 nextClass = FMCGActivity.class;
@@ -85,8 +87,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 public void onClick(View v) {
                     //Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
                     Intent categoryIntent = new Intent(itemView.getContext(), nextClass);
-                    categoryIntent.putExtra("CategoryName", name);
-                    categoryIntent.putExtra("collectionName", name);
+                    categoryIntent.putExtra("CategoryName", nameWithoutNewLine);
+                    categoryIntent.putExtra("collectionName", nameWithoutNewLine);
                     itemView.getContext().startActivity(categoryIntent);
                 }
             });

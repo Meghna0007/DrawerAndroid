@@ -28,7 +28,7 @@ public class FMCGActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
-                categoryIntent.putExtra("collectionName" , "FMCG");
+                categoryIntent.putExtra("collectionName" , "Biscuits and Rusk");
                 startActivity(categoryIntent);
                 finish();
             }
@@ -39,7 +39,7 @@ public class FMCGActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
-                categoryIntent.putExtra("collectionName" , "FMCG2");
+                categoryIntent.putExtra("collectionName" , "Namkeen");
                 startActivity(categoryIntent);
                 finish();
             }

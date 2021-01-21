@@ -33,11 +33,13 @@ public class ViewAllActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
+        Intent intent = getIntent();
+        String collectionName = intent.getStringExtra("collectionName");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle("Deals of the Day");
+        getSupportActionBar().setTitle(collectionName);
 
         recyclerView = findViewById(R.id.recycler_view);
        // gridView=findViewById(R.id.grid_view);
@@ -59,8 +61,6 @@ public class ViewAllActivity extends AppCompatActivity {
 
 */
 
-        Intent intent = getIntent();
-     String collectionName = intent.getStringExtra("collectionName");
 
         wishlistAdapter = new WishlistAdapter(wishlistModelList, false);
         populateListFromFirebase(wishlistModelList, collectionName);
