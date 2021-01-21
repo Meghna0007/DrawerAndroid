@@ -1,13 +1,13 @@
 package com.example.OPM_B2B;
 
 public class WishlistModel {
-    private int productImage;
+    private String productImage;
     private String productTitle;
     private String productPrice;
     private String cuttedPrice;
     private String paymentMethod;
 
-    public WishlistModel(int productImage, String productTitle, String productPrice, String cuttedPrice, String paymentMethod) {
+    public WishlistModel(String productImage, String productTitle, String productPrice, String cuttedPrice, String paymentMethod) {
         this.productImage = productImage;
         this.productTitle = productTitle;
         this.productPrice = productPrice;
@@ -15,11 +15,11 @@ public class WishlistModel {
         this.paymentMethod = paymentMethod;
     }
 
-    public int getProductImage() {
+    public String getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(int productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 

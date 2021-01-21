@@ -74,12 +74,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         private void setCategory(final String name) {
             //categoryIcon.setImageIcon(Icon.createWithContentUri(text));
             categoryName.setText(name);
+            Class nextClass;
+            if (name.equals("FMCG")) {
+                nextClass = FMCGActivity.class;
+            } else {
+                nextClass = ViewAllActivity.class;
+            }
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
-                    Intent categoryIntent = new Intent(itemView.getContext(), FMCGActivity.class);
+                    Intent categoryIntent = new Intent(itemView.getContext(), nextClass);
                     categoryIntent.putExtra("CategoryName", name);
+                    categoryIntent.putExtra("collectionName", name);
                     itemView.getContext().startActivity(categoryIntent);
                 }
             });

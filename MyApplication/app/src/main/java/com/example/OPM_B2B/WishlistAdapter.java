@@ -11,6 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
@@ -34,7 +37,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        int resource = wishlistModelList.get(position).getProductImage();
+        String resource = wishlistModelList.get(position).getProductImage();
         String title = wishlistModelList.get(position).getProductTitle();
         String productPrice = wishlistModelList.get(position).getProductPrice();
         String cuttedPrice = wishlistModelList.get(position).getCuttedPrice();
@@ -71,12 +74,22 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
 
-        private void setData(int resource, String title, String price, String cuttedPriceValue, String paymentMethodValue) {
-            productImage.setImageResource(resource);
+        private void setCategoryIcon(String iconUrl) {
+            //categoryIcon = imageView;
+            //categoryIcon = itemView.findViewById(R.id.category_icon);
+            // categoryIcon.setImageResource(id);
+            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.mipmap.opm_launcher)).into(productImage);
+
+        }
+
+        private void setData(String resource, String title, String price, String cuttedPriceValue, String paymentMethodValue) {
+            //productImage.setImageResource(resource);
+            setCategoryIcon(resource);
             productTitle.setText(title);
             productPrice.setText(price);
             cuttedPrice.setText(cuttedPriceValue);
             paymentMethod.setText(paymentMethodValue);
+
             if (wishlist) {
                 deleteBtn.setVisibility(View.VISIBLE);
             } else {

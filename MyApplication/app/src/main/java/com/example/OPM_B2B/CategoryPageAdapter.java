@@ -1,5 +1,6 @@
 package com.example.OPM_B2B;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -254,6 +255,15 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             horizontalLayoutTitle.setText(title);
             if (horizonantleProductScrollModelList.size() > 8) {
                 horizontalViewAllButton.setVisibility(View.VISIBLE);
+
+                horizontalViewAllButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent viewAllIntent=new Intent(itemView.getContext(),ViewAllActivity.class);
+                        viewAllIntent.putExtra("layout_code",0);
+                        itemView.getContext().startActivity(viewAllIntent);
+                    }
+                });
             } else {
                 horizontalViewAllButton.setVisibility(View.INVISIBLE);
             }
@@ -286,6 +296,14 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
         private void setGridProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title) {
             gridLayoutTitle.setText(title);
             gridView.setAdapter(new GridProductViewAdapter(horizonantleProductScrollModelList));
+            gridLayoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent viewAllIntent=new Intent(itemView.getContext(),ViewAllActivity.class);
+                    viewAllIntent.putExtra("layout_code",1);
+                    itemView.getContext().startActivity(viewAllIntent);
+                }
+            });
         }
     }
 }

@@ -82,7 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@drawable/b2"
-                android:elevation="3dp">
+                android:elevation="3dp"
+                android:id="@+id/fmcg2">
 
                 <TextView
                     android:layout_width="wrap_content"

@@ -28,6 +28,18 @@ public class FMCGActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
+                categoryIntent.putExtra("collectionName" , "FMCG");
+                startActivity(categoryIntent);
+                finish();
+            }
+        });
+
+        RelativeLayout fmcg2 = findViewById(R.id.fmcg2);
+        fmcg2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
+                categoryIntent.putExtra("collectionName" , "FMCG2");
                 startActivity(categoryIntent);
                 finish();
             }

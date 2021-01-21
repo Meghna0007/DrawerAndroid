@@ -30,7 +30,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private static final int CART_FRAGMENT = 1;
     private static final int ORDERS_FRAGMENT = 2;
     private static final int ACCOUNT_FRAGMENT=3;
-
+    private static final int WISHLIST_FRAGMENT=4;
     private AppBarConfiguration mAppBarConfiguration;
     private RecyclerView recyclerView;
     private FrameLayout frameLayout;
@@ -188,6 +188,10 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
         } else if (id == R.id.my_account) {
             gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
+        } else if (id == R.id.my_wishlist) {
+            gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
+
+
         } else if (id == R.id.policies) {
 
         } else if (id == R.id.about_us) {
@@ -222,5 +226,23 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (currentFragment == ALLCATEGORY_FRAGMENT) {
+                super.onBackPressed();
+            } else {
+                actionBarLogo.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+                navigationView.getMenu().getItem(0).setChecked(true);
+            }
+
+        }
     }
 }
