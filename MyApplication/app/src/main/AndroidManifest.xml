@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.OPM_B2B">
 
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,7 +11,9 @@
         android:roundIcon="@drawable/finall"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication.NoActionBar">
-        <activity android:name=".ViewAllActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".MyAddressesActivity" />
+        <activity android:name=".ViewAllActivity" />
         <activity
             android:name=".AddAddressActivity"
             android:theme="@style/RedProgressBar" />

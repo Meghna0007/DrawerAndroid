@@ -27,62 +27,66 @@ public class ViewAllActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
-   // private GridView gridView;
+    private GridView gridView;
     private WishlistAdapter wishlistAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_all);
         Intent intent = getIntent();
-        String collectionName = intent.getStringExtra("collectionName");
+        // String collectionName = intent.getStringExtra("collectionName");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(collectionName);
+        getSupportActionBar().setTitle("Deals of the day");
 
         recyclerView = findViewById(R.id.recycler_view);
-       // gridView=findViewById(R.id.grid_view);
+        gridView = findViewById(R.id.grid_view);
 
-        int layout_code= getIntent().getIntExtra("layout_code",-1);
+        int layout_code = getIntent().getIntExtra("layout_code", -1);
 
-     //   if(layout_code==0)
-        recyclerView.setVisibility(View.VISIBLE);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        if (layout_code == 0) {
+            recyclerView.setVisibility(View.VISIBLE);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
-        recyclerView.setLayoutManager(layoutManager);
-        List<WishlistModel> wishlistModelList = new ArrayList<>();
-
-
-     /*   wishlistModelList.add(new WishlistModel(R.drawable.product, "Maggi", "12", "11", "Cash On Delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.product, "Noodles", "13", "11", "Cash On Delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.product, "Pasta", "14", "11", "Cash On Delivery"));
-
-*/
+            recyclerView.setLayoutManager(layoutManager);
+            List<WishlistModel> wishlistModelList = new ArrayList<>();
 
 
-        wishlistAdapter = new WishlistAdapter(wishlistModelList, false);
-        populateListFromFirebase(wishlistModelList, collectionName);
-        recyclerView.setAdapter(wishlistAdapter);
-        wishlistAdapter.notifyDataSetChanged();
+            wishlistModelList.add(new WishlistModel(R.drawable.product, "Maggi", "12", "11", "Cash On Delivery"));
+            wishlistModelList.add(new WishlistModel(R.drawable.product, "Noodles", "13", "11", "Cash On Delivery"));
+            wishlistModelList.add(new WishlistModel(R.drawable.product, "Pasta", "14", "11", "Cash On Delivery"));
 
 
+            wishlistAdapter = new WishlistAdapter(wishlistModelList, false);
+            //populateListFromFirebase(wishlistModelList, collectionName);
+            recyclerView.setAdapter(wishlistAdapter);
+            wishlistAdapter.notifyDataSetChanged();
 
-       /* gridView.setVisibility(View.VISIBLE);
-        List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        } else if (layout_code == 1) {
 
-        GridProductViewAdapter gridProductViewAdapter=new GridProductViewAdapter(horizonantleProductScrollModelList);
-        gridView.setAdapter(gridProductViewAdapter);
-*/
+            gridView.setVisibility(View.VISIBLE);
+            List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+
+            horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+
+            GridProductViewAdapter gridProductViewAdapter = new GridProductViewAdapter(horizonantleProductScrollModelList);
+            gridView.setAdapter(gridProductViewAdapter);
+        }
     }
 
     @Override
@@ -94,7 +98,7 @@ public class ViewAllActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
 
-    private void populateListFromFirebase(List<WishlistModel> wishlistModels, String collectionName) {
+   /* private void populateListFromFirebase(List<WishlistModel> wishlistModels, String collectionName) {
 
         firebaseFirestore= FirebaseFirestore.getInstance();
         firebaseFirestore.collection(collectionName).orderBy("index")
@@ -115,7 +119,7 @@ public class ViewAllActivity extends AppCompatActivity {
             }
         });
 
-    }
+    }*/
 
 
 }

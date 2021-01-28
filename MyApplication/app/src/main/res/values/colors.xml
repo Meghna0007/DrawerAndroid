@@ -15,6 +15,6 @@
     <color name="green">#A5DF00</color>
     <color name="successGreen">#11A10C</color>
     <color name="Light">#00BFFF</color>
-    <color name="RecylerView"> #E1D6D6</color>
+    <color name="RecylerView">#FAF2F2</color>
 
 </resources>

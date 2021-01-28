@@ -20,6 +20,8 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.OPM_B2B.Main4Activity.showCart;
+
 public class ProductDetailsActivity extends AppCompatActivity {
     private ViewPager ProductImageViewPager;
     private TabLayout viewpagerIndicate;
@@ -120,8 +122,10 @@ buyNowBtn=findViewById(R.id.buy_now_button);
 
             return true;
         }
-        if (id == R.id.my_cart) {
-
+        if (id == R.id.action_settings) {
+            Intent cartIntent=new Intent(ProductDetailsActivity.this,Main4Activity.class);
+            showCart=true;
+            startActivity(cartIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -60,7 +60,7 @@ public class AllCategoriesFragment extends Fragment {
         categoryAdapter = new CategoryAdapter(categoryModelList);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-        firebaseFirestore=FirebaseFirestore.getInstance();
+     /*   firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseFirestore.collection("CATEGORIES").orderBy("index")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -76,12 +76,12 @@ public class AllCategoriesFragment extends Fragment {
                     Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
 
 
 
-      /*  categoryModelList.add(new CategoryModel(R.drawable.logo, "Foods"));
+       categoryModelList.add(new CategoryModel(R.drawable.logo, "Foods"));
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Biscuit"));
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Namkin"));
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Noodles and Pasta"));
@@ -90,7 +90,7 @@ public class AllCategoriesFragment extends Fragment {
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Kitchen"));
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "Chocolate"));
         categoryModelList.add(new CategoryModel(R.drawable.grocery, "PersonalCare"));
-        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Soap"));*/
+        categoryModelList.add(new CategoryModel(R.drawable.grocery, "Soap"));
 
 
         ///////////Baner Slider
@@ -99,18 +99,18 @@ public class AllCategoriesFragment extends Fragment {
 
         sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g2, "black"));
+
+
         sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
-
-
         sliderModelList.add(new SliderModel(R.drawable.g2, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g3, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g4, "black"));
         sliderModelList.add(new SliderModel(R.drawable.grocery, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g3, "black"));
-
-
         sliderModelList.add(new SliderModel(R.drawable.g4, "green"));
+
+
         sliderModelList.add(new SliderModel(R.drawable.g3, "green"));
         sliderModelList.add(new SliderModel(R.drawable.g4, "green"));
 
@@ -126,6 +126,15 @@ public class AllCategoriesFragment extends Fragment {
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+
 
 
         ////////////////horizon

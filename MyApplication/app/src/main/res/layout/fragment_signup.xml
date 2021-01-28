@@ -27,7 +27,7 @@
         android:layout_marginTop="55dp"
         android:ems="10"
         android:autoSizeMaxTextSize="16dp"
-        android:hint="Email or Phone Number"
+        android:hint="Enter Email here...."
         android:inputType="textEmailAddress" />
 
     <EditText
@@ -72,5 +72,6 @@
         android:layout_marginStart="100dp"
         android:textColor="@color/blue"
         android:layout_marginTop="60dp" />
+
 
 </LinearLayout>

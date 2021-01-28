@@ -1,10 +1,14 @@
 package com.example.OPM_B2B;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -25,17 +29,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.OPM_B2B.ui.home.AllCategoriesFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import static com.example.OPM_B2B.RegisterActivity.setSignUpFragment;
+
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int ALLCATEGORY_FRAGMENT = 0;
     private static final int CART_FRAGMENT = 1;
     private static final int ORDERS_FRAGMENT = 2;
     private static final int ACCOUNT_FRAGMENT=3;
     private static final int WISHLIST_FRAGMENT=4;
+    public static Boolean showCart=false;
+
     private AppBarConfiguration mAppBarConfiguration;
     private RecyclerView recyclerView;
     private FrameLayout frameLayout;
     private ImageView actionBarLogo;
-    private static int currentFragment = -1;
+    private int currentFragment = -1;
     private NavigationView navigationView;
 
     //public static boolean isCartFragmentOpened = false;
@@ -58,9 +66,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
        // getSupportActionBar().setTitle("OPM  B2B");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
@@ -84,10 +90,19 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
         frameLayout = findViewById(R.id.main_framelayout);
 
+    if(showCart){
+    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    gotoFragment("My Cart",new MyCartFragment(),-2);
 
-        setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+}else {
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer.addDrawerListener(toggle);
+    toggle.syncState();
+    setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
 
-
+}
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
        /* mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -138,11 +153,48 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.action_cart) {
             //isCartFragmentOpened = true;
-            gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+           // gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+
+
+            Dialog signinDialog=new Dialog(Main4Activity.this);
+            signinDialog.setContentView(R.layout.signin_dialog);
+            signinDialog.setCancelable(true);
+            signinDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            Button dialogCompleteProfileBtn=signinDialog.findViewById(R.id.CompleteYourProfile_button);
+            Button dialogSignup=signinDialog.findViewById(R.id.Signup_button);
+
+            Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
+
+
+            dialogCompleteProfileBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signinDialog.dismiss();
+                    setSignUpFragment=false;
+                    startActivity(registerIntent);
+                }
+            });
+            dialogSignup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signinDialog.dismiss();
+                    setSignUpFragment=true;
+                    startActivity(registerIntent);
+                }
+            });
+            signinDialog.show();
             return true;
+
         } else if (id == R.id.main_search_icon) {
             //todo: search
             return true;
+        }else if(id== android.R.id.home){
+            if(showCart){
+                showCart=false;
+                finish();
+                return true;
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -237,14 +289,20 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             if (currentFragment == ALLCATEGORY_FRAGMENT) {
+                currentFragment= -1;
                 super.onBackPressed();
             } else {
-                actionBarLogo.setVisibility(View.VISIBLE);
-                invalidateOptionsMenu();
-                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
-                navigationView.getMenu().getItem(0).setChecked(true);
-            }
+                if (showCart) {
+                    showCart=false;
+                    finish();
 
+                } else {
+                    actionBarLogo.setVisibility(View.VISIBLE);
+                    invalidateOptionsMenu();
+                    setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+                    navigationView.getMenu().getItem(0).setChecked(true);
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.OPM_B2B;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        String resource = wishlistModelList.get(position).getProductImage();
+        int resource = wishlistModelList.get(position).getProductImage();
         String title = wishlistModelList.get(position).getProductTitle();
         String productPrice = wishlistModelList.get(position).getProductPrice();
         String cuttedPrice = wishlistModelList.get(position).getCuttedPrice();
@@ -74,7 +75,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
 
-        private void setCategoryIcon(String iconUrl) {
+        private void setCategoryIcon(int iconUrl) {
             //categoryIcon = imageView;
             //categoryIcon = itemView.findViewById(R.id.category_icon);
             // categoryIcon.setImageResource(id);
@@ -82,7 +83,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
 
-        private void setData(String resource, String title, String price, String cuttedPriceValue, String paymentMethodValue) {
+        private void setData(int resource, String title, String price, String cuttedPriceValue, String paymentMethodValue) {
             //productImage.setImageResource(resource);
             setCategoryIcon(resource);
             productTitle.setText(title);
@@ -101,6 +102,13 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                         Toast.makeText(itemView.getContext(), "Delete", Toast.LENGTH_SHORT).show();
                     }
                 });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent ProductDetailsIntent=new Intent(itemView.getContext(),ProductDetailsActivity.class);
+                    itemView.getContext().startActivity(ProductDetailsIntent);
+                }
+            });
         }
     }
 

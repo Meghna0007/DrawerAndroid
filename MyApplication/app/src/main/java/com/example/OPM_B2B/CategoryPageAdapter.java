@@ -8,16 +8,18 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.gridlayout.widget.GridLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,9 +27,11 @@ import java.util.TimerTask;
 public class CategoryPageAdapter extends RecyclerView.Adapter {
 
     private List<CategoryPageModel> categoryPageModelList;
+    private RecyclerView.RecycledViewPool recycledViewPool;
 
     public CategoryPageAdapter(List<CategoryPageModel> categoryPageModelList) {
         this.categoryPageModelList = categoryPageModelList;
+        recycledViewPool=new RecyclerView.RecycledViewPool();
     }
 
     @Override
@@ -54,10 +58,11 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
     public class BannersliderViewholder extends RecyclerView.ViewHolder {
 
         private ViewPager bannerSliderViewPager;
-        private int currentPage = 2;
+        private int currentPage ;
         private Timer timer;
         final private long DELAY_TIME = 3000;
         final private long PERIOD_TIME = 3000;
+        private  List<SliderModel> arrangeList;
 
         public BannersliderViewholder(@NonNull View itemView) {
             super(itemView);
@@ -67,7 +72,19 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
         }
 
         private void setBannerSliderViewPager(List<SliderModel> sliderModelList) {
-            SliderAdapter sliderAdapter = new SliderAdapter(sliderModelList);
+            currentPage=2;
+            if(timer!=null){
+                timer.cancel();
+            }
+            arrangeList=new ArrayList<>();
+            for(int x=0;x<sliderModelList.size();x++){
+                arrangeList.add(x,sliderModelList.get(x));
+            }
+            arrangeList.add(0,sliderModelList.get(sliderModelList.size() -2));
+            arrangeList.add(1,sliderModelList.get(sliderModelList.size() -1));
+            arrangeList.add(sliderModelList.get(0));
+            arrangeList.add(sliderModelList.get(1));
+            SliderAdapter sliderAdapter = new SliderAdapter(arrangeList);
             bannerSliderViewPager.setAdapter(sliderAdapter);
             bannerSliderViewPager.setClipToPadding(false);
             bannerSliderViewPager.setPageMargin(20);
@@ -88,23 +105,23 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onPageScrollStateChanged(int i) {
                     if (i == ViewPager.SCROLL_STATE_IDLE) {
-                        pageLooper(sliderModelList);
+                        pageLooper(arrangeList);
                     }
 
                 }
             };
             bannerSliderViewPager.addOnPageChangeListener(onPageChangeListener);
 
-            startBannerSlideShow(sliderModelList);
+            startBannerSlideShow(arrangeList);
             bannerSliderViewPager.setOnTouchListener(new View.OnTouchListener() {
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    pageLooper(sliderModelList);
+                    pageLooper(arrangeList);
                     stopBannerSlideShow();
                     //   startBannerSlideShow();
                     if (event.getAction() == MotionEvent.ACTION_UP) {
-                        startBannerSlideShow(sliderModelList);
+                        startBannerSlideShow(arrangeList);
                     }
                     return false;
                 }
@@ -172,8 +189,8 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                 View horizontalProductView = LayoutInflater.from(parent.getContext()).inflate(R.layout.horizontal_scroll_layout, parent, false);
                 return new HorizontalProductViewholder(horizontalProductView);
             case CategoryPageModel.GRID_PRODUCT_VIEW:
-                View gridProductView = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_product_layout, parent, false);
-                return new GridProductViewholder(gridProductView);
+                View grid_ProductView = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_product_layout, parent, false);
+                return new GridProductViewholder(grid_ProductView);
 
             default:
                 return null;
@@ -199,9 +216,9 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                 ((HorizontalProductViewholder) holder).setHorizontalProductLayout(horizonantleProductScrollModelList, horizontallayouttitle);
                 break;
             case CategoryPageModel.GRID_PRODUCT_VIEW:
-                String gridlayouttitle = categoryPageModelList.get(position).getTitle();
+                String grid_layouttitle = categoryPageModelList.get(position).getTitle();
                 List<HorizonantleProductScrollModel> gridProductScrollModelList = categoryPageModelList.get(position).getHorizonantleProductScrollModelList();
-                ((GridProductViewholder) holder).setGridProductLayout(gridProductScrollModelList, gridlayouttitle);
+                ((GridProductViewholder) holder).setGridProductLayout(gridProductScrollModelList, grid_layouttitle);
                 break;
             default:
                 return;
@@ -249,6 +266,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             horizontalLayoutTitle = itemView.findViewById(R.id.horizon_scroll_layout_title);
             horizontalViewAllButton = itemView.findViewById(R.id.horizon_viewall_layout_Button);
             horizontalRecylerView = itemView.findViewById(R.id.horizon_scroll_layout_RecylerView);
+            horizontalRecylerView.setRecycledViewPool(recycledViewPool);
         }
 
         private void setHorizontalProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title) {
@@ -283,19 +301,42 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
     public class GridProductViewholder extends RecyclerView.ViewHolder {
         private TextView gridLayoutTitle;
         private Button gridLayoutButton;
-        private GridView gridView;
+       private GridLayout gridProductLayout;
 
         public GridProductViewholder(@NonNull View itemView) {
 
             super(itemView);
             gridLayoutTitle = itemView.findViewById(R.id.grid_product_layout_title);
             gridLayoutButton = itemView.findViewById(R.id.grid_product_layout_Button);
-            gridView = itemView.findViewById(R.id.grid_product_layout_gridView);
+            gridProductLayout=itemView.findViewById(R.id.gridLayout);
+
         }
 
         private void setGridProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title) {
             gridLayoutTitle.setText(title);
-            gridView.setAdapter(new GridProductViewAdapter(horizonantleProductScrollModelList));
+
+            for(int x=0;x<4;x++){
+                ImageView productImage= gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Image);
+                TextView productTitle=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_title);
+                TextView productDescription=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Description);
+                TextView productPrice=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Price);
+
+                productImage.setImageResource(horizonantleProductScrollModelList.get(x).getProductImage());
+                productTitle.setText(horizonantleProductScrollModelList.get(x).getProductTitle());
+                productDescription.setText(horizonantleProductScrollModelList.get(x).getProductdescription());
+                productPrice.setText(horizonantleProductScrollModelList.get(x).getProductprice());
+
+                gridProductLayout.getChildAt(x).setBackgroundColor(Color.parseColor("#ffffff"));
+
+                gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                     public void onClick(View v) {
+                        Intent productDetailsIntent=new Intent(itemView.getContext(),ProductDetailsActivity.class);
+                        itemView.getContext().startActivity(productDetailsIntent);
+                    }
+                });
+            }
+
             gridLayoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
