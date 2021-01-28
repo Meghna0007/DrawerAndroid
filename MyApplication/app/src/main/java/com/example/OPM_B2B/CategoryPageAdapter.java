@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -206,7 +209,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                 ((BannersliderViewholder) holder).setBannerSliderViewPager(sliderModelLists);
                 break;
             case CategoryPageModel.STRIP_AD_BANNER:
-                int resource = categoryPageModelList.get(position).getResource();
+                String resource = categoryPageModelList.get(position).getResource();
                 String color = categoryPageModelList.get(position).getBackgroundColor();
                 ((StripAdBannerViewholder) holder).setStripAd(resource, color);
                 break;
@@ -242,8 +245,9 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             stripAdContainer = itemView.findViewById(R.id.strip_ad_container);
         }
 
-        private void setStripAd(int resource, String color) {
-            stripAdImage.setImageResource(resource);
+        private void setStripAd(String resource, String color) {
+           // stripAdImage.setImageResource(resource);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.mj)).into(stripAdImage);
             System.out.println("color " + color);
             try {
                 stripAdContainer.setBackgroundColor(Color.parseColor(color));

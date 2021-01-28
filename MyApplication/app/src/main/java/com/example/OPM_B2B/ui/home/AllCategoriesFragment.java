@@ -32,7 +32,8 @@ public class AllCategoriesFragment extends Fragment {
 
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
-    private RecyclerView testing;
+    private RecyclerView homePageRecyclerView;
+    private  CategoryPageAdapter adapter;
     private List<CategoryModel> categoryModelList;
     private FirebaseFirestore firebaseFirestore;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class AllCategoriesFragment extends Fragment {
         categoryAdapter = new CategoryAdapter(categoryModelList);
         categoryRecyclerView.setAdapter(categoryAdapter);
 
-     /*   firebaseFirestore=FirebaseFirestore.getInstance();
+        firebaseFirestore=FirebaseFirestore.getInstance();
         firebaseFirestore.collection("CATEGORIES").orderBy("index")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -76,7 +77,7 @@ public class AllCategoriesFragment extends Fragment {
                     Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
                 }
             }
-        });*/
+        });
 
 
 
@@ -95,7 +96,7 @@ public class AllCategoriesFragment extends Fragment {
 
         ///////////Baner Slider
 
-        List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
+       /* List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
 
         sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
         sliderModelList.add(new SliderModel(R.drawable.g2, "black"));
@@ -112,12 +113,12 @@ public class AllCategoriesFragment extends Fragment {
 
 
         sliderModelList.add(new SliderModel(R.drawable.g3, "green"));
-        sliderModelList.add(new SliderModel(R.drawable.g4, "green"));
+        sliderModelList.add(new SliderModel(R.drawable.g4, "green"));*/
 
         ////////////////horizon
 
 
-        List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
+      /*  List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
@@ -135,18 +136,25 @@ public class AllCategoriesFragment extends Fragment {
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
 
-
+*/
 
         ////////////////horizon
 
 
         ////////////////////////////////////////////
-        testing = root.findViewById(R.id.home_page_recylerView);
+
+
+
+
+        homePageRecyclerView = root.findViewById(R.id.home_page_recylerView);
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        testing.setLayoutManager(testingLayoutManager);
+        homePageRecyclerView.setLayoutManager(testingLayoutManager);
         List<CategoryPageModel> categoryPageModelList = new ArrayList<>();
-        categoryPageModelList.add(new CategoryPageModel(0, sliderModelList));
+         adapter = new CategoryPageAdapter(categoryPageModelList);
+
+        homePageRecyclerView.setAdapter(adapter);
+      /*  categoryPageModelList.add(new CategoryPageModel(0, sliderModelList));
         categoryPageModelList.add(new CategoryPageModel(1, R.drawable.g4, "#000000"));
         categoryPageModelList.add(new CategoryPageModel(2, "Deals of the day", horizonantleProductScrollModelList));
         categoryPageModelList.add(new CategoryPageModel(3, "Biscuit", horizonantleProductScrollModelList));
@@ -158,9 +166,44 @@ public class AllCategoriesFragment extends Fragment {
         categoryPageModelList.add(new CategoryPageModel(3, "Personal Care", horizonantleProductScrollModelList));
         categoryPageModelList.add(new CategoryPageModel(3, "Soaps", horizonantleProductScrollModelList));
         categoryPageModelList.add(new CategoryPageModel(3, "Foods", horizonantleProductScrollModelList));
-        CategoryPageAdapter adapter = new CategoryPageAdapter(categoryPageModelList);
-        testing.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+       */
+        firebaseFirestore.collection("CATEGORIES").document("FMCG").collection("TOP_DEALS").orderBy("index").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for(QueryDocumentSnapshot documentSnapshot :task.getResult()) {
+                        // categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(),documentSnapshot.get("categoryName").toString()));
+                        if ((long) documentSnapshot.get("view_type") == 0) {
+                            List<SliderModel> sliderModelList = new ArrayList<>();
+                           long no_of_banners = (long) documentSnapshot.get("no_of_banners");
+                            for (long x = 1; x < no_of_banners+1; x++) {
+                                sliderModelList.add(new SliderModel(documentSnapshot.get("banner_" + x).toString(), documentSnapshot.get("banner_" + x + "_bg").toString()));
+                            }
+                            categoryPageModelList.add(new CategoryPageModel(0, sliderModelList));
+
+                        } else if ((long) documentSnapshot.get("view_type") == 1) {
+                            categoryPageModelList.add(new CategoryPageModel(1, documentSnapshot.get("strip_ad_banner").toString(), documentSnapshot.get("background").toString()));
+
+
+                        } else if ((long) documentSnapshot.get("view_type") == 2) {
+
+                        } else if ((long) documentSnapshot.get("view_type") == 3) {
+
+                        }
+
+
+                    }
+                    adapter.notifyDataSetChanged();
+
+                } else {
+                    String error=task.getException().getMessage();
+                    Toast.makeText(getContext(),error,Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
 
 
         ////////////////////////////////////////
