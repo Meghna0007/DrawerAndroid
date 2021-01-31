@@ -37,8 +37,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         String icon = categoryModelList.get(position).getCategoryIconLink();
         int iconImageId = categoryModelList.get(position).getImageId();
-        String name = categoryModelList.get(position).getCategoryName();
-        holder.setCategory(name);
+        String displayName = categoryModelList.get(position).getDisplayName();
+        String collectionName = categoryModelList.get(position).getCategoryName();
+
+        holder.setCategory(displayName, collectionName );
         //TODO changes for icon setting
 
         holder.setCategoryIcon(icon);
@@ -56,6 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         private ImageView categoryIcon;
         private TextView categoryName;
+        private String collectionName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,13 +74,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         }
 
-        private void setCategory(final String categoryNameValue) {
+        private void setCategory(final String displayName, String collectionName) {
             //categoryIcon.setImageIcon(Icon.createWithContentUri(text));
-            String name = categoryNameValue.replace("\\n", "\n");
-            categoryName.setText(name);
-            String nameWithoutNewLine = name.replaceAll("\n", "");
+            //String name = categoryNameValue.replace("\\n", "\n");
+            categoryName.setText(displayName);
+            //String nameWithoutNewLine = name.replaceAll("\n", "");
             Class nextClass;
-            if (name.equals("FMCG")) {
+            if (collectionName.equals("FMCG")) {
                 nextClass = FMCGActivity.class;
             } else {
                 nextClass = ViewAllActivity.class;
@@ -87,8 +90,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 public void onClick(View v) {
                     //Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
                     Intent categoryIntent = new Intent(itemView.getContext(), nextClass);
-                    categoryIntent.putExtra("CategoryName", nameWithoutNewLine);
-                    categoryIntent.putExtra("collectionName", nameWithoutNewLine);
+                    categoryIntent.putExtra("displayName", displayName);
+                    categoryIntent.putExtra("collectionName", collectionName);
                     itemView.getContext().startActivity(categoryIntent);
                 }
             });

@@ -67,7 +67,8 @@ public class AllCategoriesFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                   for(QueryDocumentSnapshot documentSnapshot :task.getResult()){
-                      categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(),documentSnapshot.get("categoryName").toString()));
+                      categoryModelList.add(new CategoryModel(documentSnapshot.get("icon").toString(),documentSnapshot.get("categoryName").toString(),
+                              documentSnapshot.get("displayName").toString()));
                   }
                     categoryAdapter.notifyDataSetChanged();
 

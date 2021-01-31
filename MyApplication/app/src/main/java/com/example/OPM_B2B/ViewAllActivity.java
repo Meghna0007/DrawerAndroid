@@ -35,11 +35,12 @@ public class ViewAllActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_all);
         Intent intent = getIntent();
         String collectionName = intent.getStringExtra("collectionName");
+        String displayName = intent.getStringExtra("displayName");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setTitle(collectionName);
+        getSupportActionBar().setTitle(displayName);
 
         recyclerView = findViewById(R.id.recycler_view);
        // gridView=findViewById(R.id.grid_view);
