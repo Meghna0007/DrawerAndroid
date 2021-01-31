@@ -3,6 +3,7 @@ package com.example.OPM_B2B;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,8 +42,11 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String title = wishlistModelList.get(position).getProductTitle();
         String productPrice = wishlistModelList.get(position).getProductPrice();
         String cuttedPrice = wishlistModelList.get(position).getCuttedPrice();
-        String paymentMethod = wishlistModelList.get(position).getPaymentMethod();
-        holder.setData(resource, title, productPrice, cuttedPrice, paymentMethod);
+        String ProductsetofPiece=wishlistModelList.get(position).getSetOfPiece();
+        String ProductWeight=wishlistModelList.get(position).getProductWeight();
+        String ProductperPiece=wishlistModelList.get(position).getPerPiece();
+
+        holder.setData(resource, title, productPrice, cuttedPrice,ProductperPiece,ProductsetofPiece ,ProductWeight);
 
 
 
@@ -59,18 +63,24 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         private TextView productTitle;
         private TextView productPrice;
         private TextView cuttedPrice;
-        private TextView paymentMethod;
-        private View priceCutDivider;
+        //private View priceCutDivider;
         private ImageButton deleteBtn;
+        private TextView product_quantity;
+        private TextView productWeight;
+        private TextView setOfPiece;
+        private TextView perPiece;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.ProductImage);
             productTitle = itemView.findViewById(R.id.Wishlist_Title2);
             productPrice = itemView.findViewById(R.id.product_Price_wishlist);
             cuttedPrice = itemView.findViewById(R.id.product_cutted_price_wishlist);
-            paymentMethod = itemView.findViewById(R.id.paymentMethod);
-            priceCutDivider = itemView.findViewById(R.id.priceCutDivider);
+            productWeight=itemView.findViewById(R.id.productWeight);
+            setOfPiece=itemView.findViewById(R.id.setOfPiece);
+            perPiece=itemView.findViewById(R.id.perPiece);
+            //priceCutDivider = itemView.findViewById(R.id.priceCutDivider);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
+            product_quantity = itemView.findViewById(R.id.product_quantity);
 
         }
 
@@ -82,18 +92,20 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
 
-        private void setData(String resource, String title, String price, String cuttedPriceValue, String paymentMethodValue) {
+        private void setData(String resource, String title, String price, String cuttedPriceValue, String ProductperPiece,String ProductsetofPiece ,String ProductWeight) {
             //productImage.setImageResource(resource);
             setCategoryIcon(resource);
             productTitle.setText(title);
             productPrice.setText(price);
             cuttedPrice.setText(cuttedPriceValue);
-            paymentMethod.setText(paymentMethodValue);
-
+            perPiece.setText(ProductperPiece);
+            setOfPiece.setText(ProductsetofPiece);
+            productWeight.setText(ProductWeight);
             if (wishlist) {
                 deleteBtn.setVisibility(View.VISIBLE);
             } else {
                 deleteBtn.setVisibility(View.GONE);
+                product_quantity.setVisibility(View.VISIBLE);
             }
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -101,6 +113,13 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                         Toast.makeText(itemView.getContext(), "Delete", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+            product_quantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(itemView.getContext(), "Add To Cart", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

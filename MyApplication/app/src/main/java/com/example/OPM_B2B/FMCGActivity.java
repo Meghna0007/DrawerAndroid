@@ -23,8 +23,8 @@ public class FMCGActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("FMCG");
 
-        RelativeLayout biscuitLayout = findViewById(R.id.biscuitBackground);
-        biscuitLayout.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout fmcg1 = findViewById(R.id.fmcg1);
+        fmcg1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
@@ -40,6 +40,28 @@ public class FMCGActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
                 categoryIntent.putExtra("collectionName" , "Namkeen");
+                startActivity(categoryIntent);
+                finish();
+            }
+        });
+
+        RelativeLayout fmcg3 = findViewById(R.id.fmcg3);
+        fmcg3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
+                categoryIntent.putExtra("collectionName" , "Drinks and Juices");
+                startActivity(categoryIntent);
+                finish();
+            }
+        });
+
+        RelativeLayout fmcg4 = findViewById(R.id.fmcg4);
+        fmcg4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
+                categoryIntent.putExtra("collectionName" , "Noodles and Pasta");
                 startActivity(categoryIntent);
                 finish();
             }

@@ -21,8 +21,8 @@
                 android:id="@+id/actionbar_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:adjustViewBounds="true"
-                android:src="@drawable/logo">
+                android:adjustViewBounds="false"
+                android:src="@drawable/mj">
 
             </ImageView>
 

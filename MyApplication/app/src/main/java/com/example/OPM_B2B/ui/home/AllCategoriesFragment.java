@@ -97,28 +97,31 @@ public class AllCategoriesFragment extends Fragment {
 
         List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
 
-        sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g2, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide2, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
 
 
-        sliderModelList.add(new SliderModel(R.drawable.g2, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g3, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g4, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.grocery, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g1, "black"));
-        sliderModelList.add(new SliderModel(R.drawable.g3, "black"));
+
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide2, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
+
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide2, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
 
 
-        sliderModelList.add(new SliderModel(R.drawable.g4, "green"));
-        sliderModelList.add(new SliderModel(R.drawable.g3, "green"));
-        sliderModelList.add(new SliderModel(R.drawable.g4, "green"));
+
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide2, "black"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "black"));
 
         ////////////////horizon
 
 
         List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
-        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
+      horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
         horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(R.drawable.product, "MariaLite", "Healthy_Wealthy", "Rs.30/-"));
@@ -138,17 +141,19 @@ public class AllCategoriesFragment extends Fragment {
         testing.setLayoutManager(testingLayoutManager);
         List<CategoryPageModel> categoryPageModelList = new ArrayList<>();
         categoryPageModelList.add(new CategoryPageModel(0, sliderModelList));
-        categoryPageModelList.add(new CategoryPageModel(1, R.drawable.g4, "#000000"));
-        categoryPageModelList.add(new CategoryPageModel(2, "Deals of the day", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Biscuit", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Namkin", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Noodles&Pasta", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Beverges", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Dairy", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Choclate", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Personal Care", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Soaps", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Foods", horizonantleProductScrollModelList));
+        categoryPageModelList.add(new CategoryPageModel(1, R.drawable.order2, "#FFFFFFFF"));
+
+
+       // categoryPageModelList.add(new CategoryPageModel(2, "Deals of the day", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Biscuit", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Namkin", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Noodles&Pasta", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Beverges", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Dairy", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Choclate", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Personal Care", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Soaps", horizonantleProductScrollModelList));
+        //categoryPageModelList.add(new CategoryPageModel(3, "Foods", horizonantleProductScrollModelList));
         CategoryPageAdapter adapter = new CategoryPageAdapter(categoryPageModelList);
         testing.setAdapter(adapter);
         adapter.notifyDataSetChanged();

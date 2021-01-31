@@ -34,8 +34,8 @@ public class CategoryActivity extends AppCompatActivity {
 
         List<SliderModel> sliderModelList = new ArrayList<SliderModel>();
 
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher, "green"));
-        sliderModelList.add(new SliderModel(R.mipmap.ic_launcher_round, "green"));
+        sliderModelList.add(new SliderModel(R.drawable.slide1, "green"));
+        sliderModelList.add(new SliderModel(R.drawable.slide2, "green"));
         sliderModelList.add(new SliderModel(R.drawable.grocery, "green"));
 
 

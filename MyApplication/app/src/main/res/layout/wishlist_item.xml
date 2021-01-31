@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
-    android:layout_marginBottom="1dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/ProductImage"
@@ -24,67 +23,70 @@
         android:id="@+id/Wishlist_Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
         android:text="TideBar"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/ProductImage"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/ProductImage" />
 
     <TextView
         android:id="@+id/product_Price_wishlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="39dp"
         android:text="Rs.49999"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/ProductImage"
-        app:layout_constraintStart_toEndOf="@+id/ProductImage"
-        app:layout_constraintTop_toBottomOf="@+id/Wishlist_Title2"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintStart_toEndOf="@+id/ProductImage" />
 
     <TextView
         android:id="@+id/product_cutted_price_wishlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="Rs.69999"
-        android:textSize="12sp"
 
-        app:layout_constraintBottom_toBottomOf="@+id/product_Price_wishlist"
-        app:layout_constraintStart_toEndOf="@+id/product_Price_wishlist" />
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/Wishlist_Title2" />
 
     <TextView
-        android:id="@+id/paymentMethod"
+        android:id="@+id/product_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Cash on delivery available"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="46dp"
+        android:background="@drawable/b2"
+        android:backgroundTint="@color/transparent_white"
+        android:drawableEnd="@drawable/drop_down"
+        android:drawablePadding="3dp"
+        android:padding="3dp"
+        android:text="Qty: 1"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/product_cutted_price_wishlist"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/product_Price_wishlist"
-        app:layout_constraintTop_toBottomOf="@+id/product_Price_wishlist" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageButton
         android:id="@+id/deleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/white"
         android:layout_marginEnd="8dp"
-        android:padding="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@color/white"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 
-    <View
+    <!--<View
         android:id="@+id/priceCutDivider"
         android:layout_width="0dp"
         android:layout_height="1dp"
@@ -93,5 +95,88 @@
         app:layout_constraintBottom_toBottomOf="@+id/product_cutted_price_wishlist"
         app:layout_constraintEnd_toEndOf="@+id/product_cutted_price_wishlist"
         app:layout_constraintStart_toStartOf="@+id/product_cutted_price_wishlist"
-        app:layout_constraintTop_toTopOf="@+id/product_cutted_price_wishlist" />
+        app:layout_constraintTop_toTopOf="@+id/product_cutted_price_wishlist" />-->
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="MRP "
+        android:textColor="@color/black"
+        android:textSize="12sp"
+
+        app:layout_constraintStart_toEndOf="@+id/ProductImage"
+        app:layout_constraintTop_toBottomOf="@+id/Wishlist_Title2" />
+
+    <View
+        android:id="@+id/divider15"
+        android:layout_width="1dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
+        app:layout_constraintEnd_toStartOf="@+id/productWeight"
+        app:layout_constraintStart_toEndOf="@+id/product_cutted_price_wishlist" />
+
+    <TextView
+        android:id="@+id/productWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="4dp"
+        android:text="576 gms"
+        android:textColor="@color/black"
+
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/product_cutted_price_wishlist"
+        app:layout_constraintStart_toEndOf="@+id/divider15"
+        app:layout_constraintTop_toBottomOf="@+id/Wishlist_Title2" />
+
+    <View
+        android:id="@+id/divider16"
+        android:layout_width="1dp"
+        android:layout_height="15dp"
+
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/productWeight"
+        app:layout_constraintEnd_toStartOf="@+id/setOfPiece"
+        app:layout_constraintStart_toEndOf="@+id/productWeight" />
+
+    <TextView
+        android:id="@+id/setOfPiece"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="set of 12"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/productWeight"
+        app:layout_constraintStart_toEndOf="@+id/divider16" />
+
+    <View
+        android:id="@+id/divider17"
+        android:layout_width="1dp"
+        android:layout_height="20dp"
+
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/product_Price_wishlist"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintStart_toEndOf="@+id/product_Price_wishlist" />
+
+    <TextView
+        android:id="@+id/perPiece"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:text="11"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/divider17"
+        app:layout_constraintStart_toEndOf="@+id/divider17" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

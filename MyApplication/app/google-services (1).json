@@ -1,24 +1,23 @@
 {
   "project_info": {
     "project_number": "311112229498",
-
     "project_id": "opm-b2b",
     "storage_bucket": "opm-b2b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:311112229498:android:2d62ad2e031a6e7f89d1c3",
+        "mobilesdk_app_id": "1:311112229498:android:ad1be98bfbe03da889d1c3",
         "android_client_info": {
-          "package_name": "com.opm.b2b"
+          "package_name": "com.example.OPM_B2B"
         }
       },
       "oauth_client": [
         {
-          "client_id": "311112229498-rh1nsmrvc8p9l2hatc8567alfjvg6nah.apps.googleusercontent.com",
+          "client_id": "311112229498-05n4o6hr6am8gmhkcpapf72slotbf8b0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.opm.b2b",
+            "package_name": "com.example.OPM_B2B",
             "certificate_hash": "31db1c8cd251fae73240828d2b0ae48d31d5c266"
           }
         },
