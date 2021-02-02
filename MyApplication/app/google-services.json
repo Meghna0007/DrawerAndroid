@@ -1,7 +1,6 @@
 {
   "project_info": {
     "project_number": "311112229498",
-
     "project_id": "opm-b2b",
     "storage_bucket": "opm-b2b.appspot.com"
   },
@@ -15,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "311112229498-rh1nsmrvc8p9l2hatc8567alfjvg6nah.apps.googleusercontent.com",
+          "client_id": "311112229498-10r7nkatfpgt1tguuo935djbohko15m5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.opm.b2b",

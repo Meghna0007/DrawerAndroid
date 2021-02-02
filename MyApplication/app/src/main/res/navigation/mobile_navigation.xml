@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/all_categories"
-        android:name="com.example.OPM_B2B.ui.home.AllCategoriesFragment"
+        android:name="com.opm.b2b.ui.home.AllCategoriesFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_all_categories" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.OPM_B2B.ui.gallery.MyOrdersFragment"
+        android:name="com.opm.b2b.ui.gallery.MyOrdersFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_my_orders" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.OPM_B2B.ui.slideshow.PoliciesFragment"
+        android:name="com.opm.b2b.ui.slideshow.PoliciesFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_policies" />
 </navigation>

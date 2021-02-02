@@ -10,7 +10,6 @@
     tools:context=".Main4Activity"
     tools:showIn="@layout/app_bar_main">
 
-
 </FrameLayout>
 
 
