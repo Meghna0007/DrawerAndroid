@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.opm.b2b.CategoryAdapter;;
@@ -30,18 +31,23 @@ import static com.opm.b2b.DBqueries.loadFragmentData;
 import static com.opm.b2b.DBqueries.loadedCategoriesNames;
 
 public class AllCategoriesFragment extends Fragment {
+   public static SwipeRefreshLayout swipeRefreshLayout;
     private CategoryPageAdapter adapter;
     private RecyclerView categoryRecyclerView;
     private CategoryAdapter categoryAdapter;
     private RecyclerView homePageRecyclerView;
     private ImageView noInternetConnection;
+    private ConnectivityManager connectivityManager;
+    private NetworkInfo networkInfo;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_all_categories, container, false);
+        swipeRefreshLayout=root.findViewById(R.id.refresh_layout);
         noInternetConnection=root.findViewById(R.id.no_internet_connection);
-        ConnectivityManager connectivityManager=(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+         connectivityManager=(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo=connectivityManager.getActiveNetworkInfo();
+
         if(networkInfo !=null && networkInfo.isConnected()==true){
             noInternetConnection.setVisibility(View.GONE);
             categoryRecyclerView = root.findViewById(R.id.all_categories_recyclerview);
@@ -76,6 +82,31 @@ public class AllCategoriesFragment extends Fragment {
             Glide.with(this).load(R.drawable.no__conn).into(noInternetConnection);
             noInternetConnection.setVisibility(View.VISIBLE);
         }
+////////////////////////////////refresh
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                categoryModelList.clear();
+                lists.clear();
+                loadedCategoriesNames.clear();
+                if(networkInfo !=null && networkInfo.isConnected()==true) {
+                    noInternetConnection.setVisibility(View.GONE);
+
+
+                    loadCategories(categoryAdapter,getContext());
+
+                    loadedCategoriesNames.add("FMCG");
+                    lists.add(new ArrayList<CategoryPageModel>());
+                    loadFragmentData(adapter,getContext(),0,"Fmcg");
+
+                }else {
+                    Glide.with(getContext()).load(R.drawable.no__conn).into(noInternetConnection);
+                    noInternetConnection.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         return root;
     }

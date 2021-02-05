@@ -2,11 +2,15 @@ package com.opm.b2b;
 import android.content.Context;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.opm.b2b.ui.home.AllCategoriesFragment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +38,7 @@ import java.util.List;
                 }else{ String error=task.getException().getMessage();
                     Toast.makeText(context,error,Toast.LENGTH_SHORT).show();}}});}
 
-    public static void loadFragmentData(CategoryPageAdapter adapter,Context context, final int index,String categoryName){
+    public static void loadFragmentData(final CategoryPageAdapter adapter, Context context, final int index, String categoryName){
         firebaseFirestore.collection("CATEGORIES")
                 .document(categoryName.toUpperCase())
                 .collection("TOP_DEALS")
@@ -103,6 +107,7 @@ import java.util.List;
                         }
                     }
                     adapter.notifyDataSetChanged();
+                    AllCategoriesFragment.swipeRefreshLayout.setRefreshing(false);
                 }else {
                     String error=task.getException().getMessage();
                     Toast.makeText(context,error,Toast.LENGTH_SHORT).show(); }}});}}
