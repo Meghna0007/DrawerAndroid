@@ -4,7 +4,8 @@
     android:background="#FFFBFB"
     android:elevation="3dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/product_details_tabs_container">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/product_details_tablayout"

@@ -217,8 +217,9 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             case CategoryPageModel.HORIZONTAL_PRODUCT_VIEW:
                 String layoutcolor =categoryPageModelList.get(position).getBackgroundColor();
                 String horizontallayouttitle = categoryPageModelList.get(position).getTitle();
+                List<WishlistModel>viewAllProductList=categoryPageModelList.get(position).getViewAllProductList();
                 List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = categoryPageModelList.get(position).getHorizonantleProductScrollModelList();
-                ((HorizontalProductViewholder) holder).setHorizontalProductLayout(horizonantleProductScrollModelList, horizontallayouttitle,layoutcolor);
+                ((HorizontalProductViewholder) holder).setHorizontalProductLayout(horizonantleProductScrollModelList, horizontallayouttitle,layoutcolor,viewAllProductList);
                 break;
             case CategoryPageModel.GRID_PRODUCT_VIEW:
                 String gridLayoutColor=categoryPageModelList.get(position).getBackgroundColor();
@@ -277,7 +278,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             horizontalRecylerView.setRecycledViewPool(recycledViewPool);
         }
 
-        private void setHorizontalProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title,String color) {
+        private void setHorizontalProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title,String color,List<WishlistModel>viewAllProductList) {
             container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             horizontalLayoutTitle.setText(title);
             if (horizonantleProductScrollModelList.size() > 8) {
@@ -286,8 +287,10 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                 horizontalViewAllButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ViewAllActivity.wishlistModelList=viewAllProductList;
                         Intent viewAllIntent=new Intent(itemView.getContext(),ViewAllActivity.class);
                         viewAllIntent.putExtra("layout_code",0);
+                        viewAllIntent.putExtra("displayName",title);
                         itemView.getContext().startActivity(viewAllIntent);
                     }
                 });

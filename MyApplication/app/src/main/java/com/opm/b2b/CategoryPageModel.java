@@ -63,16 +63,37 @@ public class CategoryPageModel {
     }
 
     //////////StripSlider
-    //////////////////Horizon @Grid_Product_layout
+
     private String title;
     private List<HorizonantleProductScrollModel> horizonantleProductScrollModelList;
+    //////////////////Horizon @Grid_Product_layout
+    private List<WishlistModel>viewAllProductList;
 
-    public CategoryPageModel(int type, String title,String backgroundColor, List<HorizonantleProductScrollModel> horizonantleProductScrollModelList) {
+    public CategoryPageModel(int type, String title,String backgroundColor, List<HorizonantleProductScrollModel> horizonantleProductScrollModelList,List<WishlistModel>viewAllProductList) {
+        this.type = type;
+        this.title = title;
+        this.backgroundColor=backgroundColor;
+        this.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
+        this.viewAllProductList=viewAllProductList;
+    }
+
+    public List<WishlistModel> getViewAllProductList() {
+        return viewAllProductList;
+    }
+
+    public void setViewAllProductList(List<WishlistModel> viewAllProductList) {
+        this.viewAllProductList = viewAllProductList;
+    }
+    ////////////////Horizon
+
+    ////////////////Grid Product Layout
+    public CategoryPageModel(int type, String title, String backgroundColor, List<HorizonantleProductScrollModel> horizonantleProductScrollModelList) {
         this.type = type;
         this.title = title;
         this.backgroundColor=backgroundColor;
         this.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
     }
+    ////////////////Grid Product Layout
 
     public String getTitle() {
         return title;
@@ -89,5 +110,5 @@ public class CategoryPageModel {
     public void setHorizonantleProductScrollModelList(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList) {
         this.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
     }
-////////////////Horizon
+
 }

@@ -13,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.opm.b2b.DBqueries.lists;
+import static com.opm.b2b.DBqueries.loadFragmentData;
+import static com.opm.b2b.DBqueries.loadedCategoriesNames;
+
 public class CategoryActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerView;
+    CategoryPageAdapter adapter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +78,27 @@ public class CategoryActivity extends AppCompatActivity {
         LinearLayoutManager testingLayoutManager = new LinearLayoutManager(this);
         testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         categoryRecyclerView.setLayoutManager(testingLayoutManager);
-        List<CategoryPageModel> categoryPageModelList = new ArrayList<>();
-        //   categoryPageModelList.add(new CategoryPageModel(0,sliderModelList));
-        //   categoryPageModelList.add(new CategoryPageModel(1,R.drawable.g4,"#000000"));
-        //  categoryPageModelList.add(new CategoryPageModel(2,"Deals of the day",horizonantleProductScrollModelList));
-        /*categoryPageModelList.add(new CategoryPageModel(3, "Biscuitttt", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Namkin", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Noodles&Pasta", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Beverges", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Dairy", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Choclate", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Personal Care", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Soaps", horizonantleProductScrollModelList));
-        categoryPageModelList.add(new CategoryPageModel(3, "Foods", horizonantleProductScrollModelList));
-        */
-        CategoryPageAdapter adapter = new CategoryPageAdapter(categoryPageModelList);
+
+        int listPosition=0;
+        for(int x=0;x< loadedCategoriesNames.size();x++){
+
+            if(loadedCategoriesNames.get(x).equals(title.toUpperCase())){
+              listPosition=x;
+            }
+
+        }
+        if (listPosition == 0) {
+
+            loadedCategoriesNames.add(title.toUpperCase());
+            lists.add(new ArrayList<CategoryPageModel>());
+            adapter = new CategoryPageAdapter(lists.get(loadedCategoriesNames.size()-1));
+            loadFragmentData(adapter,this,loadedCategoriesNames.size()-1,title);
+
+        }else {
+            adapter = new CategoryPageAdapter(lists.get(listPosition));
+        }
+
+
         categoryRecyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

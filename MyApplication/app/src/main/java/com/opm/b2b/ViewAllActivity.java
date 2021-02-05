@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.CollectionUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ViewAllActivity extends AppCompatActivity {
@@ -27,6 +29,7 @@ public class ViewAllActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
    private GridView gridView;
+   public  static List<WishlistModel>wishlistModelList;
    public  static List<HorizonantleProductScrollModel> horizonantleProductScrollModelList;
     private WishlistAdapter wishlistAdapter;
     @Override
@@ -51,7 +54,19 @@ public class ViewAllActivity extends AppCompatActivity {
             gridView.setVisibility(View.VISIBLE);
             GridProductViewAdapter gridProductViewAdapter = new GridProductViewAdapter(horizonantleProductScrollModelList);
             gridView.setAdapter(gridProductViewAdapter);
-        } else {
+        } else if (collectionName== null && !CollectionUtils.isEmpty(wishlistModelList)) {
+             recyclerView.setVisibility(View.VISIBLE);
+             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+             recyclerView.setLayoutManager(layoutManager);
+             //List<WishlistModel> wishlistModelList = new ArrayList<>();
+             wishlistAdapter = new WishlistAdapter(wishlistModelList, false);
+             //populateListFromFirebase(wishlistModelList, collectionName);
+             recyclerView.setAdapter(wishlistAdapter);
+             wishlistAdapter.notifyDataSetChanged();
+         }
+         else {
 
                  recyclerView.setVisibility(View.VISIBLE);
                  LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -97,6 +112,7 @@ public class ViewAllActivity extends AppCompatActivity {
             }
         });
 
-    }}
+    }
+}
 
 

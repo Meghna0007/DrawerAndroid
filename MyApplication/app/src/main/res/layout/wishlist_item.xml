@@ -23,11 +23,13 @@
         android:id="@+id/Wishlist_Title2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="TideBar"
         android:textColor="@color/black"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/product_cutted_price_wishlist"
         app:layout_constraintStart_toEndOf="@+id/ProductImage"
-        app:layout_constraintTop_toTopOf="@+id/ProductImage" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/product_Price_wishlist"

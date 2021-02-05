@@ -17,12 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.opm.b2b.CategoryAdapter;;
 import com.opm.b2b.CategoryPageAdapter;
+import com.opm.b2b.CategoryPageModel;
 import com.opm.b2b.R;
 
+import java.util.ArrayList;
+
 import static com.opm.b2b.DBqueries.categoryModelList;
-import static com.opm.b2b.DBqueries.categoryPageModelList;
+
+import static com.opm.b2b.DBqueries.lists;
 import static com.opm.b2b.DBqueries.loadCategories;
 import static com.opm.b2b.DBqueries.loadFragmentData;
+import static com.opm.b2b.DBqueries.loadedCategoriesNames;
 
 public class AllCategoriesFragment extends Fragment {
     private CategoryPageAdapter adapter;
@@ -54,16 +59,21 @@ public class AllCategoriesFragment extends Fragment {
             LinearLayoutManager testingLayoutManager = new LinearLayoutManager(getContext());
             testingLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             homePageRecyclerView.setLayoutManager(testingLayoutManager);
-            adapter = new CategoryPageAdapter(categoryPageModelList);
-            homePageRecyclerView.setAdapter(adapter);
-            if(categoryPageModelList.size()==0){
-                loadFragmentData(adapter,getContext());
+
+            if(lists.size()==0){
+                loadedCategoriesNames.add("FMCG");
+                lists.add(new ArrayList<CategoryPageModel>());
+                adapter = new CategoryPageAdapter(lists.get(0));
+                loadFragmentData(adapter,getContext(),0,"Fmcg");
             }else {
-                categoryAdapter.notifyDataSetChanged();
+                adapter = new CategoryPageAdapter(lists.get(0));
+                adapter.notifyDataSetChanged();
             }
 
+            homePageRecyclerView.setAdapter(adapter);
+
         }else {
-            Glide.with(this).load(R.drawable.no_connection).into(noInternetConnection);
+            Glide.with(this).load(R.drawable.no__conn).into(noInternetConnection);
             noInternetConnection.setVisibility(View.VISIBLE);
         }
 

@@ -33,6 +33,7 @@ public class ProductSpecificationFragment extends Fragment {
     }
 
     private RecyclerView productSpecificationRecyclerView;
+    public List<ProductSpecificationModel>productSpecificationModelList;
 
     /**
      * Use this factory method to create a new instance of
@@ -71,8 +72,9 @@ public class ProductSpecificationFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         productSpecificationRecyclerView.setLayoutManager(linearLayoutManager);
-        List<ProductSpecificationModel> productSpecificationModelList = new ArrayList<>();
-        productSpecificationModelList.add(new ProductSpecificationModel(0, "General"));
+
+
+       /* productSpecificationModelList.add(new ProductSpecificationModel(0, "General"));
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
@@ -95,7 +97,7 @@ public class ProductSpecificationFragment extends Fragment {
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
-        productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));
+        productSpecificationModelList.add(new ProductSpecificationModel(1, "RAM", "4GB"));*/
 
         ProductSpecificationAdapter productSpecificationAdapter = new ProductSpecificationAdapter(productSpecificationModelList);
         productSpecificationRecyclerView.setAdapter(productSpecificationAdapter);
