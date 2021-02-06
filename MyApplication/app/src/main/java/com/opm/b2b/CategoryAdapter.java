@@ -67,10 +67,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         }
 
         private void setCategoryIcon(String iconUrl) {
+
             //categoryIcon = imageView;
             //categoryIcon = itemView.findViewById(R.id.category_icon);
             // categoryIcon.setImageResource(id);
-            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.ffinallogo)).into(categoryIcon);
+            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(categoryIcon);
 
         }
 
@@ -85,18 +86,18 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             } else {
                 nextClass = ViewAllActivity.class;
             }
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
-                    Intent categoryIntent = new Intent(itemView.getContext(), nextClass);
-                    categoryIntent.putExtra("displayName", displayName);
-                    categoryIntent.putExtra("collectionName", collectionName);
-                    itemView.getContext().startActivity(categoryIntent);
+                        //Intent categoryIntent = new Intent(itemView.getContext(), CategoryActivity.class);
+                        Intent categoryIntent = new Intent(itemView.getContext(), nextClass);
+                        categoryIntent.putExtra("displayName", displayName);
+                        categoryIntent.putExtra("collectionName", collectionName);
+                        itemView.getContext().startActivity(categoryIntent);
                 }
             });
+
         }
-    }
 
-
-}
+    }}

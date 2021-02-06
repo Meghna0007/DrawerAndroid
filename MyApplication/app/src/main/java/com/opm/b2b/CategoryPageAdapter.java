@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 
 import android.widget.ImageView;
@@ -251,7 +252,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
 
         private void setStripAd(String resource, String color) {
             // stripAdImage.setImageResource(resource);
-            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.mj)).into(stripAdImage);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(stripAdImage);
             System.out.println("color " + color);
             try {
                 stripAdContainer.setBackgroundColor(Color.parseColor(color));
@@ -319,54 +320,55 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
         public GridProductViewholder(@NonNull View itemView) {
 
             super(itemView);
-            container__=itemView.findViewById(R.id.container__);
+            container__ = itemView.findViewById(R.id.container__);
             gridLayoutTitle = itemView.findViewById(R.id.grid_product_layout_title);
             gridLayoutButton = itemView.findViewById(R.id.grid_product_layout_Button);
-            gridProductLayout=itemView.findViewById(R.id.gridLayout);
+            gridProductLayout = itemView.findViewById(R.id.gridLayout);
 
         }
 
-        private void setGridProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title,String color) {
+        private void setGridProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title, String color) {
             container__.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             gridLayoutTitle.setText(title);
 
-            for(int x=0;x<4;x++){
-                ImageView productImage= gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Image);
-                TextView productTitle=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_title);
-                TextView productDescription=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Description);
-                TextView productPrice=gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Price);
-                Glide.with(itemView.getContext()).load(horizonantleProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.drawable.mj)).into(productImage);
+            for (int x = 0; x < 4; x++) {
+                ImageView productImage = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Image);
+                TextView productTitle = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_title);
+                TextView productDescription = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Description);
+                TextView productPrice = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Price);
+                Glide.with(itemView.getContext()).load(horizonantleProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
 
                 productTitle.setText(horizonantleProductScrollModelList.get(x).getProductTitle());
                 productDescription.setText(horizonantleProductScrollModelList.get(x).getProductdescription());
-                productPrice.setText("Rs."+horizonantleProductScrollModelList.get(x).getProductprice()+"/-");
+                productPrice.setText("Rs." + horizonantleProductScrollModelList.get(x).getProductprice() + "/-");
 
                 gridProductLayout.getChildAt(x).setBackgroundColor(Color.parseColor("#ffffff"));
-
-                gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent productDetailsIntent=new Intent(itemView.getContext(),ProductDetailsActivity.class);
-                        itemView.getContext().startActivity(productDetailsIntent);
-                    }
-                });
-            }
-
-            gridLayoutButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ViewAllActivity.horizonantleProductScrollModelList=horizonantleProductScrollModelList;
-                    Intent viewAllIntent=new Intent(itemView.getContext(),ViewAllActivity.class);
-                    viewAllIntent.putExtra("layout_code",1);
-                    //TODO this is a sample data ..actually there should be deal of day collection that shud be passed here
-                    viewAllIntent.putExtra("displayName",title);
-                    viewAllIntent.putExtra("collectionName","Rice");
-                    itemView.getContext().startActivity(viewAllIntent);
+                if (!title.equals("")) {
+                    gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent productDetailsIntent = new Intent(itemView.getContext(), ProductDetailsActivity.class);
+                            itemView.getContext().startActivity(productDetailsIntent);
+                        }
+                    });
                 }
-            });
+                if (!title.equals("")) {
+                    gridLayoutButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ViewAllActivity.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
+                            Intent viewAllIntent = new Intent(itemView.getContext(), ViewAllActivity.class);
+                            viewAllIntent.putExtra("layout_code", 1);
+                            //TODO this is a sample data ..actually there should be deal of day collection that shud be passed here
+                            viewAllIntent.putExtra("displayName", title);
+                            viewAllIntent.putExtra("collectionName", "Rice");
+                            itemView.getContext().startActivity(viewAllIntent);
+                        }
+                    });
+                //}
+            }
         }
-    }
-}
+    }}}
 
 
 

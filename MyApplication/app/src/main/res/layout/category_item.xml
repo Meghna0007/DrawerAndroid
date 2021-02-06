@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="ECLAIR"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/foods" />
+        app:srcCompat="@drawable/fksmall" />
 
     <TextView
         android:id="@+id/category_name"

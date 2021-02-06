@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private ViewPager productDetailsViewPager;
     private TabLayout productDetailsTabLayout;
     private Button buyNowBtn;
+    private LinearLayout addtoCartBtn;
 
     private FirebaseFirestore firebaseFirestore;
     private TextView productOnlyDescriptionBody;
@@ -60,7 +62,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
         ProductTitle=findViewById(R.id.ProductTitle);
         ProductPrice=findViewById(R.id.main_price);
         CuttedPrice=findViewById(R.id.cutted_price);
-
         ProductImageViewPager = findViewById(R.id.product_images_lviewpager);
         viewpagerIndicate = findViewById(R.id.viewPager_indicater);
 
@@ -70,6 +71,8 @@ productOnlyDescriptionBody=findViewById(R.id.product_detailsBody);
         productDetailsTabLayout = findViewById(R.id.product_details_tablayout);
         productDetailsTabLabscontainer=findViewById(R.id.product_details_tabs_container);
         productDetailsOnlycontainer=findViewById(R.id.product_detailsContainer);
+        addtoCartBtn = findViewById(R.id.AddToCart);
+
         firebaseFirestore=FirebaseFirestore.getInstance();
        List<String>productImages=new ArrayList<>();
         firebaseFirestore.collection("PRODUCTS").document("MVECkQALPZ5imJDzopTn")
@@ -173,6 +176,13 @@ productOnlyDescriptionBody=findViewById(R.id.product_detailsBody);
                 startActivity(deliveryIntent);
             }
         });
+        addtoCartBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //////add to cart
+            }
+        });
+
     }
 
 

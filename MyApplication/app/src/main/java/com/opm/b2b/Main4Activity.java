@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.opm.b2b.ui.home.AllCategoriesFragment;
 import com.google.android.material.navigation.NavigationView;
+import static com.opm.b2b.DBqueries.currentUser;
 
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int ALLCATEGORY_FRAGMENT = 0;
@@ -59,9 +60,9 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         Toolbar toolbar = findViewById(R.id.toolbar);
         actionBarLogo = findViewById(R.id.actionbar_logo);
         setSupportActionBar(toolbar);
-     //   getSupportActionBar().setDisplayShowTitleEnabled(true);
+        //   getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-       // getSupportActionBar().setTitle("OPM  B2B");
+        // getSupportActionBar().setTitle("OPM  B2B");
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
 
@@ -101,9 +102,14 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
 
         }
+        if(currentUser == null) {
+            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
+        }else{
+            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
 
+        }
 
-
+    }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
        /* mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -113,7 +119,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
        /* NavController navController = Navigation.findNavController(this, R.id.container);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);*/
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -197,35 +203,37 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(currentUser !=null) {
+            int id = item.getItemId();
 
-        if (id == R.id.all_categories) {
-            // getSupportActionBar().setDisplayShowTitleEnabled(false);
-            actionBarLogo.setVisibility(View.VISIBLE);
-            invalidateOptionsMenu();
-            setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
-            // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
+            if (id == R.id.all_categories) {
+                // getSupportActionBar().setDisplayShowTitleEnabled(false);
+                actionBarLogo.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+                // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
             /*setFragment(new AllCategoriesFragment());
             return true;*/
-        } else if (id == R.id.my_orders) {
-            gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
-        } else if (id == R.id.my_cart) {
-            gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+            } else if (id == R.id.my_orders) {
+                gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
+            } else if (id == R.id.my_cart) {
+                gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
 
-        } else if (id == R.id.my_account) {
-            gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
-        } else if (id == R.id.my_wishlist) {
-            gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
+            } else if (id == R.id.my_account) {
+                gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
+            } else if (id == R.id.my_wishlist) {
+                gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
 
 
-        } else if (id == R.id.policies) {
+            } else if (id == R.id.policies) {
 
-        } else if (id == R.id.about_us) {
+            } else if (id == R.id.about_us) {
 
-        } else if (id == R.id.sign_out) {
+            } else if (id == R.id.sign_out) {
 
+            }
         }
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
 
         //   setFragment(new AllCategoriesFragment());
