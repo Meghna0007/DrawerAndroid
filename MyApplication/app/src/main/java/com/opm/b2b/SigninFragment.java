@@ -59,6 +59,7 @@ public class SigninFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
     private Button signInBtn;
+    public  static  boolean disableCloseBtn=false;
 
     /**
      * Use this factory method to create a new instance of
@@ -100,6 +101,7 @@ public class SigninFragment extends Fragment {
         password = view.findViewById(R.id.signin_password);
         firebaseAuth = FirebaseAuth.getInstance();
         signInBtn = view.findViewById(R.id.login);
+
 
         return view;
     }
@@ -163,15 +165,11 @@ public class SigninFragment extends Fragment {
             }
         });
 
-    }
-
-    private void setFragment(Fragment fragment) {
+    }private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(parentFrameLayout.getId(), fragment);
         fragmentTransaction.commit();
-    }
-
-    private void checkInputs() {
+    }private void checkInputs() {
         if (!TextUtils.isEmpty(email.getText())) {
             if (!TextUtils.isEmpty(password.getText())) {
                 signInBtn.setEnabled(true);
@@ -185,11 +183,9 @@ public class SigninFragment extends Fragment {
             signInBtn.setTextColor(Color.WHITE);
         }
     }
-
     private void checkEmailAndPassword() {
         if (email.getText().toString().matches(emailPattern)) {
             if (password.length() >= 6) {
-
                 signInBtn.setEnabled(false);
                 signInBtn.setTextColor(Color.BLACK);
                 firebaseAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
@@ -212,12 +208,10 @@ public class SigninFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "Incorrect email or password!", Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private void mainIntent() {
-        Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
+         Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
         startActivity(mainIntent);
         getActivity().finish();
     }

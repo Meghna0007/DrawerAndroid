@@ -19,8 +19,7 @@ import java.util.List;
 
 
    public class DBqueries {
-       public static FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
-       public static FirebaseUser currentUser=firebaseAuth.getCurrentUser();
+
        public static FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
        public static List<CategoryModel> categoryModelList=new ArrayList<>();
        public static List<List<CategoryPageModel>>lists=new ArrayList<>();
@@ -71,7 +70,8 @@ import java.util.List;
                             List<HorizonantleProductScrollModel>horizonantleProductScrollModelList=new ArrayList<>();
                             long no_of_products = (long) documentSnapshot.get("no_of_products");
                             for (long x = 1; x < no_of_products+1; x++) {
-                                horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(documentSnapshot.get("product_id_" + x).toString()
+                                horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(
+                                        documentSnapshot.get("product_id_" + x).toString()
                                         ,documentSnapshot.get("product_image_" + x).toString()
                                         ,documentSnapshot.get("product_title_" + x).toString()
                                         ,documentSnapshot.get("product_subtitle_" + x).toString()
@@ -94,7 +94,7 @@ import java.util.List;
                             long no_of_products = (long) documentSnapshot.get("no_of_products");
                             for (long x = 1; x < no_of_products+1; x++) {
 
-                                        GridLayoutModelList.add(new HorizonantleProductScrollModel(
+                                GridLayoutModelList.add(new HorizonantleProductScrollModel(
                                         documentSnapshot.get("product_id_" + x).toString(),
                                         documentSnapshot.get("product_image_" + x).toString(),
                                         documentSnapshot.get("product_title_" + x).toString(),

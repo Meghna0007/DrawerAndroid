@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import com.opm.b2b.CategoryModel;
 import com.opm.b2b.CategoryPageAdapter;
 import com.opm.b2b.CategoryPageModel;
 import com.opm.b2b.HorizonantleProductScrollModel;
+import com.opm.b2b.Main4Activity;
 import com.opm.b2b.R;
 import com.opm.b2b.SliderModel;
 
@@ -115,6 +117,7 @@ public class AllCategoriesFragment extends Fragment {
         networkInfo=connectivityManager.getActiveNetworkInfo();
 
         if(networkInfo !=null && networkInfo.isConnected()==true){
+            Main4Activity.drawer.setDrawerLockMode(0);
             noInternetConnection.setVisibility(View.GONE);
             retryBtn.setVisibility(View.GONE);
             categoryRecyclerView.setVisibility(View.VISIBLE);
@@ -139,6 +142,8 @@ public class AllCategoriesFragment extends Fragment {
 
 
         }else {
+            Main4Activity.drawer.setDrawerLockMode(1);
+
             categoryRecyclerView.setVisibility(View.GONE);
             homePageRecyclerView.setVisibility(View.GONE);
             Glide.with(this).load(R.drawable.no_interneet).into(noInternetConnection);
@@ -172,6 +177,8 @@ public class AllCategoriesFragment extends Fragment {
         lists.clear();
         loadedCategoriesNames.clear();
         if(networkInfo !=null && networkInfo.isConnected()==true) {
+            Main4Activity.drawer.setDrawerLockMode(0);
+
             noInternetConnection.setVisibility(View.GONE);
             retryBtn.setVisibility(View.GONE);
 
@@ -189,6 +196,9 @@ public class AllCategoriesFragment extends Fragment {
             loadFragmentData(homePageRecyclerView,getContext(),0,"Fmcg");
 
         }else {
+            Main4Activity.drawer.setDrawerLockMode(1);
+
+            Toast.makeText(getContext(),"No Internet Connection!",Toast.LENGTH_SHORT).show();
             categoryRecyclerView.setVisibility(View.GONE);
             homePageRecyclerView.setVisibility(View.GONE);
             Glide.with(getContext()).load(R.drawable.no_interneet).into(noInternetConnection);

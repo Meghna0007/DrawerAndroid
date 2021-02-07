@@ -63,6 +63,8 @@ public class SignupFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
 
+    public static boolean disableCloseBtn = false;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -274,5 +276,10 @@ public class SignupFragment extends Fragment {
             email.setError("Invalid Email!");
         }
 
+    }
+    private  void mainIntent(){
+        Intent mainIntent=new Intent(getActivity(),Main4Activity.class);
+        startActivity(mainIntent);
+        getActivity().finish();
     }
 }

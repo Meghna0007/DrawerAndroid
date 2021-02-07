@@ -1,6 +1,8 @@
 package com.opm.b2b;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -8,6 +10,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -24,11 +28,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import static com.opm.b2b.RegisterActivity.setSignUpFragment;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.opm.b2b.ui.home.AllCategoriesFragment;
 import com.google.android.material.navigation.NavigationView;
-import static com.opm.b2b.DBqueries.currentUser;
+
+
 
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final int ALLCATEGORY_FRAGMENT = 0;
@@ -38,12 +45,15 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private static final int WISHLIST_FRAGMENT=4;
     public static Boolean showCart=false;
     private AppBarConfiguration mAppBarConfiguration;
+    private FirebaseUser currentUser;
     private RecyclerView recyclerView;
     private FrameLayout frameLayout;
     private ImageView noInternetConnection;
     private ImageView actionBarLogo;
     private static int currentFragment = -1;
     private NavigationView navigationView;
+    private Dialog signinDialog;
+    public static DrawerLayout drawer;
 
     //public static boolean isCartFragmentOpened = false;
 
@@ -64,7 +74,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setTitle("OPM  B2B");
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+         drawer = findViewById(R.id.drawer_layout);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -102,6 +112,37 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
 
         }
+
+        signinDialog=new Dialog(Main4Activity.this);
+        signinDialog.setContentView(R.layout.signin_dialog);
+        signinDialog.setCancelable(true);
+        signinDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        Button dialogCompleteProfileBtn=signinDialog.findViewById(R.id.CompleteYourProfile_button);
+        Button dialogSignup=signinDialog.findViewById(R.id.Signup_button);
+
+        Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
+
+
+        dialogCompleteProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signinDialog.dismiss();
+                setSignUpFragment=false;
+                startActivity(registerIntent);
+            }
+        });
+        dialogSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signinDialog.dismiss();
+                setSignUpFragment=true;
+                startActivity(registerIntent);
+            }
+        });
+    }
+    protected void onStart(){
+        super.onStart();
+        currentUser= FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser == null) {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
         }else{
@@ -160,7 +201,11 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
         if (id == R.id.action_cart) {
             //isCartFragmentOpened = true;
-            gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+           if(currentUser==null) {
+               signinDialog.show();
+           }else {
+               gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+           }
             return true;
         } else if (id == R.id.main_search_icon) {
             //todo: search
@@ -204,7 +249,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if(currentUser !=null) {
+        if (currentUser != null) {
             int id = item.getItemId();
 
             if (id == R.id.all_categories) {
@@ -231,13 +276,20 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             } else if (id == R.id.about_us) {
 
             } else if (id == R.id.sign_out) {
+                FirebaseAuth.getInstance().signOut();
+                Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
+                startActivity(registerIntent);
+                finish();
 
             }
+            drawerLayout.closeDrawer(GravityCompat.START);
+            return true;
+        } else {
+            drawerLayout.closeDrawer(GravityCompat.START);
+            signinDialog.show();
+            return false;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
 
-        //   setFragment(new AllCategoriesFragment());
-        return true;
     }
 
     private void setFragment(Fragment fragment, int fragmentNo) {
