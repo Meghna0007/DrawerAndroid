@@ -1,4 +1,5 @@
  package com.opm.b2b;
+import android.app.Dialog;
 import android.content.Context;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -25,7 +26,7 @@ import java.util.List;
        public static List<CategoryModel> categoryModelList=new ArrayList<>();
        public static List<List<CategoryPageModel>>lists=new ArrayList<>();
        public static List<String>loadedCategoriesNames=new ArrayList<>();
-       public static List<String>wishlist=new ArrayList<>();
+       public static List<String> wishlist=new ArrayList<>();
 
        public static void loadCategories(RecyclerView categoryRecyclerView, Context context){
                  firebaseFirestore.collection("CATEGORIES").orderBy("index")
