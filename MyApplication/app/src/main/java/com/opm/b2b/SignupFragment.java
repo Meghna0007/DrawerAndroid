@@ -241,25 +241,38 @@ public class SignupFragment extends Fragment {
                                     Map<Object, String> userdata = new HashMap<>();
                                     userdata.put("email", email.getText().toString());
 
-                                    firebaseFirestore.collection("USERS")
-                                            .add(userdata)
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentReference> task) {
-                                                    if (task.isSuccessful()) {
-                                                        Intent mainIntent = new Intent(getActivity(), OtpActivity.class);
-                                                        startActivity(mainIntent);
-                                                        getActivity().finish();
-                                                    } else {
-                                                        signUpBtn.setEnabled(true);
-                                                        signUpBtn.setTextColor(Color.BLACK);
-                                                        String error = task.getException().getMessage();
-                                                        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                                                    }
+                                    firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
+                                            .set(userdata)
+                                           .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                               @Override
+                                               public void onComplete(@NonNull Task<Void> task) {
+                                                   if (task.isSuccessful()) {
+                                                       Map<String,Object> listSize = new HashMap<>();
+                                                       listSize.put("list_size",0);
+                                                       firebaseFirestore.collection("USERS").document(firebaseAuth.getUid()).collection("USER_DATA").document("MY_WISHLIST")
+                                                               .set(listSize).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                           @Override
+                                                           public void onComplete(@NonNull Task<Void> task) {
+                                                             if(task.isSuccessful()){
+                                                                 Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
+                                                                 startActivity(mainIntent);
+                                                                 getActivity().finish();
+                                                             }else{
+                                                                 signUpBtn.setEnabled(true);
+                                                                 signUpBtn.setTextColor(Color.BLACK);
+                                                                 String error = task.getException().getMessage();
+                                                                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                             }
+                                                           }
+                                                       });
 
-                                                }
-                                            });
+                                                   } else {
+                                                       String error = task.getException().getMessage();
+                                                       Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                   }
 
+                                               }
+                                           });
                                 } else {
                                     signUpBtn.setEnabled(true);
                                     signUpBtn.setTextColor(Color.BLACK);

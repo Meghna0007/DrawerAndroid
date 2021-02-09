@@ -367,7 +367,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
                             itemView.getContext().startActivity(viewAllIntent);
                         }
                     });
-                //}
+
             }
         }
     }}}

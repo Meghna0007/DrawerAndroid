@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -80,6 +81,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         productDetailsOnlycontainer = findViewById(R.id.product_detailsContainer);
         addtoCartBtn = findViewById(R.id.AddToCart);
 
+        currentUser= FirebaseAuth.getInstance().getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
         List<String> productImages = new ArrayList<>();
         firebaseFirestore.collection("PRODUCTS").document(getIntent().getStringExtra("product_id_"))
@@ -128,6 +130,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     productDetailsViewPager.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(), productDetailsTabLayout.getTabCount(), productDescription, productOtherDetails, productSpecificationModelList));
 
+                    if(DBqueries.wishlist.size()==0){
+                        DBqueries.loadWishlist(ProductDetailsActivity.this);
+                    }
 
                 } else {
                     String error = task.getException().getMessage();
