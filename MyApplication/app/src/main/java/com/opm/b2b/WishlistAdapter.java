@@ -103,6 +103,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             productWeight.setText(ProductWeight);
             if (wishlist) {
                 deleteBtn.setVisibility(View.VISIBLE);
+                product_quantity.setVisibility(View.GONE);
+
             } else {
                 deleteBtn.setVisibility(View.GONE);
                 product_quantity.setVisibility(View.VISIBLE);

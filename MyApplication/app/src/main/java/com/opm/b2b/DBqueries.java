@@ -185,7 +185,7 @@ import java.util.Map;
                    String error=task.getException().getMessage();
                    Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
                }
-               ProductDetailsActivity.addtoWishlistBtn.setEnabled(true);
+               ProductDetailsActivity.addtoWishlistBtn.setEnabled(false);
            }
        });
    }
