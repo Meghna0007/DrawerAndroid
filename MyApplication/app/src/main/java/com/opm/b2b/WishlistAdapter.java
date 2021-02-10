@@ -45,7 +45,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String ProductWeight=wishlistModelList.get(position).getProductWeight();
         String ProductperPiece=wishlistModelList.get(position).getPerPiece();
 
-        holder.setData(resource, title, productPrice, cuttedPrice,ProductperPiece,ProductsetofPiece ,ProductWeight);
+        holder.setData(resource, title, productPrice, cuttedPrice,ProductperPiece,ProductsetofPiece ,ProductWeight,position);
 
 
 
@@ -83,17 +83,18 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
 
-        private void setCategoryIcon(String iconUrl) {
+      /*  private void setCategoryIcon(String iconUrl) {
             //categoryIcon = imageView;
             //categoryIcon = itemView.findViewById(R.id.category_icon);
             // categoryIcon.setImageResource(id);
-            Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.mipmap.opm_launcher)).into(productImage);
 
-        }
+        }*/
 
-        private void setData(String resource, String title, String price, String cuttedPriceValue, String ProductperPiece,String ProductsetofPiece ,String ProductWeight) {
+        private void setData(String resource, String title, String price, String cuttedPriceValue, String ProductperPiece,String ProductsetofPiece ,String ProductWeight,int index) {
             //productImage.setImageResource(resource);
-            setCategoryIcon(resource);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
+
+          //  setCategoryIcon(resource);
             productTitle.setText(title);
             productPrice.setText(price);
             cuttedPrice.setText(cuttedPriceValue);
@@ -109,7 +110,9 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(itemView.getContext(), "Delete", Toast.LENGTH_SHORT).show();
+                        deleteBtn.setEnabled(false);
+                        DBqueries.removeFromWishlist(index,itemView.getContext());
+                       // Toast.makeText(itemView.getContext(), "Delete", Toast.LENGTH_SHORT).show();
                     }
                 });
 

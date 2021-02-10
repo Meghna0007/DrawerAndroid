@@ -90,7 +90,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //loadingDialog.show();
+        loadingDialog.show();
         //////////////Loading Dialog
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -144,12 +144,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                     if (currentUser != null) {
                         if (DBqueries.wishlist.size() == 0) {
-                            DBqueries.loadWishlist(ProductDetailsActivity.this);
+                            DBqueries.loadWishlist(ProductDetailsActivity.this,loadingDialog,false);
                         } else {
                             loadingDialog.dismiss();
                         }
 
 
+                    }else {
+                        loadingDialog.dismiss();
                     }
 
 
@@ -177,14 +179,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 if (currentUser == null) {
                     signinDialog.show();
                 } else {
-                    //  addtoWishlistBtn.setEnabled(false);
+                      addtoWishlistBtn.setEnabled(false);
                     if (ALREADY_ADDED_TO_WISHLIST) {
-                        ALREADY_ADDED_TO_WISHLIST = false;
-
-                         //int index = DBqueries.wishlist.indexOf(productId);
-                        //DBqueries.removeFromWishlist(index, ProductDetailsActivity.this);
+                        int index = DBqueries.wishlist.indexOf(productId);
+                        DBqueries.removeFromWishlist(index, ProductDetailsActivity.this);
                         addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
                     } else {
+                        addtoWishlistBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
 
                         Map<String, Object> addProduct = new HashMap<>();
                         addProduct.put("product_id_" + String.valueOf(DBqueries.wishlist.size()), productId);
@@ -203,14 +204,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
-                                                /*if (DBqueries.wishlist.size() != 0) {
-                                                    DBqueries.wishlist.add(new WishlistModel(documentSnapshot.get("product_image_1").toString(),
+                                                if (DBqueries.wishlistModelList.size() != 0) {
+                                                    DBqueries.wishlistModelList.add(new WishlistModel(documentSnapshot.get("product_image_1").toString(),
                                                             documentSnapshot.get("product_title").toString(),
                                                             documentSnapshot.get("cuttedPrice").toString(),
                                                             documentSnapshot.get("product_price").toString(),
                                                             documentSnapshot.get("setPiece_").toString(),
                                                             documentSnapshot.get("perPiece_").toString(),
-                                                            documentSnapshot.get("productWeight_").toString()));*/
+                                                            documentSnapshot.get("productWeight_").toString()));
+                                                }
                                                 ALREADY_ADDED_TO_WISHLIST = true;
                                                 addtoWishlistBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
                                                 DBqueries.wishlist.add(productId);
@@ -316,7 +318,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         currentUser=FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser!=null) {
             if (DBqueries.wishlist.size() == 0) {
-                DBqueries.loadWishlist(ProductDetailsActivity.this);
+                DBqueries.loadWishlist(ProductDetailsActivity.this,loadingDialog,false);
             } else {
                 loadingDialog.dismiss();
             }

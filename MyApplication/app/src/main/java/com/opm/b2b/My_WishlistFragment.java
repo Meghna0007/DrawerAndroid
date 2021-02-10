@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -33,6 +34,8 @@ public class My_WishlistFragment extends Fragment {
         // Required empty public constructor
     }
 private RecyclerView wishlist_RecyclerView;
+    private Dialog loadingDialog;
+    public static WishlistAdapter wishlistAdapter;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -66,12 +69,21 @@ private RecyclerView wishlist_RecyclerView;
         // Inflate the layout for this fragment
 
         View view= inflater.inflate(R.layout.fragment_my__wishlist, container, false);
+
+        //////////////Loading Dialog
+        loadingDialog = new Dialog(getContext());
+        loadingDialog.setContentView(R.layout.loading_progress_dialog);
+        loadingDialog.setCancelable(false);
+        loadingDialog.getWindow().setBackgroundDrawable(getContext().getDrawable(R.drawable.slider_background));
+        loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialog.show();
+        //////////////Loading Dialog
         wishlist_RecyclerView=view.findViewById(R.id.wishlistRecyclerView);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         wishlist_RecyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WishlistModel> wishlistModelList = new ArrayList<>();
+      //  List<WishlistModel> wishlistModelList = new ArrayList<>();
         /*wishlistModelList.add(new WishlistModel(R.drawable.product, "Maggi", "12", "11", "Cash On Delivery"));
         wishlistModelList.add(new WishlistModel(R.drawable.product, "Noodles", "13", "11", "Cash On Delivery"));
         wishlistModelList.add(new WishlistModel(R.drawable.product, "Pasta", "14", "11", "Cash On Delivery"));
@@ -82,8 +94,13 @@ private RecyclerView wishlist_RecyclerView;
         wishlistModelList.add(new WishlistModel(R.drawable.product, "Maggi", "12", "11", "Cash On Delivery"));
         wishlistModelList.add(new WishlistModel(R.drawable.product, "Noodles", "13", "11", "Cash On Delivery"));
         wishlistModelList.add(new WishlistModel(R.drawable.product, "Pasta", "14", "11", "Cash On Delivery"));*/
-
-        WishlistAdapter wishlistAdapter = new WishlistAdapter(wishlistModelList,true);
+if(DBqueries.wishlistModelList.size()==0){
+    DBqueries.wishlist.clear();
+    DBqueries.loadWishlist(getContext(),loadingDialog,true);
+}else{
+    loadingDialog.dismiss();
+}
+         wishlistAdapter = new WishlistAdapter(DBqueries.wishlistModelList,true);
         wishlist_RecyclerView.setAdapter(wishlistAdapter);
         wishlistAdapter.notifyDataSetChanged();
 
