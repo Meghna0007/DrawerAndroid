@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -56,11 +60,12 @@ public class CartAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (cartItemModelList.get(position).getType()) {
             case CartItemModel.CART_ITEM:
-                int resource = cartItemModelList.get(position).getProductImage();
+                String productId=cartItemModelList.get(position).getProductId();
+                String resource = cartItemModelList.get(position).getProductImage();
                 String title = cartItemModelList.get(position).getProductTitle();
                 String productPrice = cartItemModelList.get(position).getProductPrice();
                 String cuttedPrice = cartItemModelList.get(position).getCuttedPrice();
-                ((CartItemViewholder) holder).setItemDetails(resource, title, productPrice, cuttedPrice);
+                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position);
 
                 break;
             case CartItemModel.TOTAL_AMOUNT:
@@ -84,7 +89,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     }
 
     class CartItemViewholder extends RecyclerView.ViewHolder {
-
+        private LinearLayout remove_item_icon;
         private ImageView productImage;
         private TextView productTitle;
         private TextView productPrice;
@@ -93,6 +98,7 @@ public class CartAdapter extends RecyclerView.Adapter {
 
         public CartItemViewholder(@NonNull View itemView) {
             super(itemView);
+            remove_item_icon=itemView.findViewById(R.id.remove_item_icon);
             productImage = itemView.findViewById(R.id.product_image);
             productTitle = itemView.findViewById(R.id.product_title);
             productPrice = itemView.findViewById(R.id.product_price);
@@ -100,12 +106,21 @@ public class CartAdapter extends RecyclerView.Adapter {
             productQuantity = itemView.findViewById(R.id.product_quantity);
         }
 
-        private void setItemDetails(int resource, String title, String productPriceText, String cuttedPriceText) {
-            productImage.setImageResource(resource);
-            productTitle.setText(title);
+        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position) {
+           // productImage.setImageResource(resource);
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
+        productTitle.setText(title);
             productPrice.setText(productPriceText);
             cuttedPrice.setText(cuttedPriceText);
-
+            remove_item_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!ProductDetailsActivity.running_cart_query){
+                        ProductDetailsActivity.running_cart_query=true;
+                        DBqueries.removeFromCart(position,itemView.getContext());
+                    }
+                }
+            });
             productQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

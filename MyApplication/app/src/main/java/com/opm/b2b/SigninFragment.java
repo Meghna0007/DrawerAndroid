@@ -161,6 +161,7 @@ public class SigninFragment extends Fragment {
         signInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 checkEmailAndPassword();
             }
         });

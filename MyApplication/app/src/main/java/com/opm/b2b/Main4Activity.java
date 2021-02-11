@@ -277,9 +277,11 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
             } else if (id == R.id.sign_out) {
                 FirebaseAuth.getInstance().signOut();
+                DBqueries.clearData();
                 Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
                 startActivity(registerIntent);
                 finish();
+
 
             }
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -293,12 +295,12 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     }
 
     private void setFragment(Fragment fragment, int fragmentNo) {
-        if (fragmentNo != currentFragment) {
+       // if (fragmentNo != currentFragment) {
             currentFragment = fragmentNo;
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(frameLayout.getId(), fragment);
             fragmentTransaction.commit();
-        }
+       // }
     }
 
 

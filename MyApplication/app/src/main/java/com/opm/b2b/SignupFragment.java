@@ -24,10 +24,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -247,24 +250,47 @@ public class SignupFragment extends Fragment {
                                                @Override
                                                public void onComplete(@NonNull Task<Void> task) {
                                                    if (task.isSuccessful()) {
-                                                       Map<String,Object> listSize = new HashMap<>();
-                                                       listSize.put("list_size",0);
-                                                       firebaseFirestore.collection("USERS").document(firebaseAuth.getUid()).collection("USER_DATA").document("MY_WISHLIST")
-                                                               .set(listSize).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                           @Override
-                                                           public void onComplete(@NonNull Task<Void> task) {
-                                                             if(task.isSuccessful()){
-                                                                 Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
-                                                                 startActivity(mainIntent);
-                                                                 getActivity().finish();
-                                                             }else{
-                                                                 signUpBtn.setEnabled(true);
-                                                                 signUpBtn.setTextColor(Color.BLACK);
-                                                                 String error = task.getException().getMessage();
-                                                                 Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                     CollectionReference userDataReference = firebaseFirestore.collection("USERS").document(firebaseAuth.getUid()).collection("USER_DATA");
+
+                                                      //////Maps
+                                                       Map<String,Object> wishlistMap = new HashMap<>();
+                                                       wishlistMap.put("list_size",(long) 0);
+
+                                                       Map<String,Object> cartMap = new HashMap<>();
+                                                       cartMap.put("list_size",(long) 0);
+//////////////////////////////////////////////////////Maps
+                                                       List<String> documentNames=new ArrayList<>();
+                                                       documentNames.add("MY_WISHLIST");
+                                                       documentNames.add("MY_CART");
+
+                                                     List<Map<String,Object>>documentFields=new ArrayList<>();
+                                                     documentFields.add(wishlistMap);
+                                                     documentFields.add(cartMap);
+
+                                                     for(int x=0;x<documentNames.size();x++){
+
+                                                         int finalX = x;
+                                                         userDataReference.document(documentNames.get(x))
+                                                                 .set(documentFields.get(x)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                             @Override
+                                                             public void onComplete(@NonNull Task<Void> task) {
+                                                                 if(task.isSuccessful()){
+                                                                     if (finalX == documentNames.size() -1){
+                                                                         Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
+                                                                         startActivity(mainIntent);
+                                                                         getActivity().finish();
+                                                                     }
+
+                                                                 }else{
+                                                                     signUpBtn.setEnabled(true);
+                                                                     signUpBtn.setTextColor(Color.BLACK);
+                                                                     String error = task.getException().getMessage();
+                                                                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                                 }
+
                                                              }
-                                                           }
-                                                       });
+                                                         });
+                                                     }
 
                                                    } else {
                                                        String error = task.getException().getMessage();

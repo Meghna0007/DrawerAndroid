@@ -101,7 +101,7 @@ public class ViewAllActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot documentSnapshot :task.getResult()){
-                        wishlistModels.add(new WishlistModel(documentSnapshot.get("icon").toString(),documentSnapshot.get("productTitle").toString(), documentSnapshot.get("productPrice").toString(),
+                        wishlistModels.add(new WishlistModel(documentSnapshot.get("product_id_").toString(),documentSnapshot.get("icon").toString(),documentSnapshot.get("productTitle").toString(), documentSnapshot.get("productPrice").toString(),
                                 documentSnapshot.get("cuttedPrice").toString(), documentSnapshot.get("productWeight").toString(), documentSnapshot.get("setPiece").toString(), documentSnapshot.get("perPiece").toString()));
                     }
                     wishlistAdapter.notifyDataSetChanged();

@@ -9,8 +9,8 @@ public class WishlistModel {
     private String productWeight;
     private String setOfPiece;
     private String perPiece;
-
-    public WishlistModel(String productImage, String productTitle, String productPrice, String cuttedPrice, String productWeight ,String setOfPiece,String perPiece) {
+    private String productId;
+    public WishlistModel(String productId,String productImage, String productTitle, String productPrice, String cuttedPrice, String productWeight ,String setOfPiece,String perPiece) {
         this.productImage = productImage;
         this.productTitle = productTitle;
         this.productPrice = productPrice;
@@ -18,6 +18,7 @@ public class WishlistModel {
         this.productWeight =productWeight;
         this.setOfPiece=setOfPiece;
         this.perPiece=perPiece;
+        this.productId=productId;
     }
 
     public String getProductImage() {
@@ -82,5 +83,13 @@ public class WishlistModel {
 
     public void setPerPiece(String perPiece) {
         this.perPiece = perPiece;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

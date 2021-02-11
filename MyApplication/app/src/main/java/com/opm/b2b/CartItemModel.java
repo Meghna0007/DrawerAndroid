@@ -17,36 +17,48 @@ public class CartItemModel {
     }
 
     ///////////////////cartitem
-    private int productImage;
-    private int productQuantity;
+    private String productId;
+    private String productImage;
+    private Long productQuantity;
     private String productTitle;
     private String productPrice;
     private String cuttedPrice;
 
-    public CartItemModel(int type, int productImage, int productQuantity, String productTitle, String productPrice, String cuttedPrice) {
+    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice) {
         this.type = type;
+        this.productId=productId;
         this.productImage = productImage;
-        this.productQuantity = productQuantity;
+       this.productQuantity = productQuantity;
         this.productTitle = productTitle;
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
     }
 
-    public int getProductImage() {
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductImage() {
         return productImage;
     }
 
-    public void setProductImage(int productImage) {
+    public void setProductImage(String productImage) {
         this.productImage = productImage;
     }
 
-    public int getProductQuantity() {
+  public Long getProductQuantity() {
         return productQuantity;
     }
 
-    public void setProductQuantity(int productQuantity) {
+
+    public void setProductQuantity(Long productQuantity) {
         this.productQuantity = productQuantity;
     }
+
 
     public String getProductTitle() {
         return productTitle;
