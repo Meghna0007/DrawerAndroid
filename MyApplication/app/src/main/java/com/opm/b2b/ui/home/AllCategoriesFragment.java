@@ -56,6 +56,7 @@ public class AllCategoriesFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_all_categories, container, false);
 
         swipeRefreshLayout = root.findViewById(R.id.refresh_layout);
+
         noInternetConnection = root.findViewById(R.id.no_internet_connection);
         homePageRecyclerView = root.findViewById(R.id.home_page_recylerView);
         categoryRecyclerView = root.findViewById(R.id.all_categories_recyclerview);

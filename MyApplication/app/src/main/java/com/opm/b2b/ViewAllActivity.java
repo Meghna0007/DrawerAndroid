@@ -23,6 +23,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import static com.opm.b2b.DBqueries.getStringValue;
 
 public class ViewAllActivity extends AppCompatActivity {
 
@@ -99,10 +100,18 @@ public class ViewAllActivity extends AppCompatActivity {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
            @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot documentSnapshot :task.getResult()){
-                        wishlistModels.add(new WishlistModel(documentSnapshot.get("product_id_").toString(),documentSnapshot.get("icon").toString(),documentSnapshot.get("productTitle").toString(), documentSnapshot.get("productPrice").toString(),
-                                documentSnapshot.get("cuttedPrice").toString(), documentSnapshot.get("productWeight").toString(), documentSnapshot.get("setPiece").toString(), documentSnapshot.get("perPiece").toString()));
+
+                        wishlistModels.add(new WishlistModel(DBqueries.getStringValue(documentSnapshot.get("product_id")),
+                                DBqueries.getStringValue(documentSnapshot.get("icon")),
+                                DBqueries.getStringValue(documentSnapshot.get("productTitle")),
+                                getStringValue(documentSnapshot.get("productPrice")),
+                                getStringValue(documentSnapshot.get("cuttedPrice")),
+                                getStringValue(documentSnapshot.get("productWeight")),
+                                getStringValue(documentSnapshot.get("setPiece")),
+                                getStringValue(documentSnapshot.get("perPiece"))));
                     }
                     wishlistAdapter.notifyDataSetChanged();
 

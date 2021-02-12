@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.opm.b2b.ui.home.AllCategoriesFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +53,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     public static FloatingActionButton addtoWishlistBtn;
     public static boolean ALREADY_ADDED_TO_WISHLIST = false;
     public static boolean ALREADY_ADDED_TO_CART = false;
-
+    private  TextView badgeCount;
     private ConstraintLayout productDetailsOnlycontainer;
     private ConstraintLayout productDetailsTabLabscontainer;
     private List<ProductSpecificationModel> productSpecificationModelList = new ArrayList<>();
@@ -59,6 +63,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private TabLayout productDetailsTabLayout;
     private Button buyNowBtn;
     private LinearLayout addtoCartBtn;
+    public static MenuItem cartItem;
     private Dialog signinDialog;
     private FirebaseFirestore firebaseFirestore;
     private TextView productOnlyDescriptionBody;
@@ -147,9 +152,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productDetailsViewPager.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(), productDetailsTabLayout.getTabCount(), productDescription, productOtherDetails, productSpecificationModelList));
 
                     if (currentUser != null) {
-                        if (DBqueries.cartList.size() == 0) {
-                            DBqueries.loadCartList(ProductDetailsActivity.this, false, loadingDialog);
-                        }
+                     if(DBqueries.cartList.size()==0){
+                         DBqueries.loadCartList(ProductDetailsActivity.this,false,loadingDialog,badgeCount);
+                     }
                         if (DBqueries.wishlist.size() == 0) {
                             DBqueries.loadWishlist(ProductDetailsActivity.this, loadingDialog, false);
                         } else {
@@ -164,7 +169,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         ALREADY_ADDED_TO_CART = true;
                         // addtoCartBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
                     } else {
-                        addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
+                       // addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
                         ALREADY_ADDED_TO_CART = false;
                     }
 
@@ -311,14 +316,11 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                         ALREADY_ADDED_TO_CART = true;
                                         DBqueries.cartList.add(productId);
                                         Toast.makeText(ProductDetailsActivity.this, "Added to Cart successfully!", Toast.LENGTH_SHORT).show();
-
-                                        // addtoWishlistBtn.setEnabled(true);
+                                        invalidateOptionsMenu();
                                         running_cart_query = false;
-                                        // onComplete closed
-                                        // onCompleteListener closed
+
                                     } // if task success closed
                                     else {
-                                        //  addtoWishlistBtn.setEnabled(true);
                                         running_cart_query = false;
                                         String error = task.getException().getMessage();
                                         Toast.makeText(ProductDetailsActivity.this, error, Toast.LENGTH_SHORT).show();
@@ -367,9 +369,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onStart();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            if (DBqueries.cartList.size() == 0) {
-                DBqueries.loadCartList(ProductDetailsActivity.this, false, loadingDialog);
-            }
+
             if (DBqueries.wishlist.size() == 0) {
                 DBqueries.loadWishlist(ProductDetailsActivity.this, loadingDialog, false);
             } else {
@@ -381,9 +381,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
         if (DBqueries.cartList.contains(productId)) {
             ALREADY_ADDED_TO_CART = true;
-            // addtoCartBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
         } else {
-            //addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
             ALREADY_ADDED_TO_CART = false;
         }
         if (DBqueries.wishlist.contains(productId)) {
@@ -394,14 +392,47 @@ public class ProductDetailsActivity extends AppCompatActivity {
             addtoWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
             ALREADY_ADDED_TO_WISHLIST = false;
         }
+        invalidateOptionsMenu();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.search_and_cart_icon, menu);
-        return true;
-    }
+         cartItem =menu.findItem(R.id.action_settings);
+         cartItem.setActionView(R.layout.badge_layout);
+         ImageView badgeIcon = cartItem.getActionView().findViewById(R.id.badge_icon);
+         badgeIcon.setImageResource(R.drawable.cart);
+         badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
+
+                if(currentUser!=null){
+                    if (DBqueries.cartList.size() == 0) {
+                        DBqueries.loadCartList(ProductDetailsActivity.this, false, loadingDialog,badgeCount);
+                    }else {
+                        badgeCount.setVisibility(View.VISIBLE);
+
+                        if (DBqueries.cartList.size() < 99) {
+                            badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
+                        } else {
+                            badgeCount.setText("99");
+                        }
+                    }
+            }
+            cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentUser == null) {
+                        signinDialog.show();
+                    } else {
+                        Intent cartIntent = new Intent(ProductDetailsActivity.this, Main4Activity.class);
+                        showCart = true;
+                        Main4Activity.currentFragment = Main4Activity.ALLCATEGORY_FRAGMENT;
+                        startActivity(cartIntent);
+                    }
+
+                } });
+                return true;
+            }
 
 
     @Override
@@ -429,5 +460,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent cartIntent = new Intent(ProductDetailsActivity.this, Main4Activity.class);
+        Main4Activity.currentFragment = Main4Activity.ALLCATEGORY_FRAGMENT;
+        startActivity(cartIntent);
+           }
 
 }

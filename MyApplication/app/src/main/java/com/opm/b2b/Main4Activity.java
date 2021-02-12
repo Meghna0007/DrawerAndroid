@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.opm.b2b.ProductDetailsActivity.cartItem;
 import static com.opm.b2b.RegisterActivity.setSignUpFragment;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +41,7 @@ import com.google.android.material.navigation.NavigationView;
 
 
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final int ALLCATEGORY_FRAGMENT = 0;
+    public static final int ALLCATEGORY_FRAGMENT = 0;
     private static final int CART_FRAGMENT = 1;
     private static final int ORDERS_FRAGMENT = 2;
     private static final int ACCOUNT_FRAGMENT=3;
@@ -50,10 +53,11 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private FrameLayout frameLayout;
     private ImageView noInternetConnection;
     private ImageView actionBarLogo;
-    private static int currentFragment = -1;
+    public static int currentFragment = -1;
     private NavigationView navigationView;
     private Dialog signinDialog;
     public static DrawerLayout drawer;
+    private TextView badgeCount;
 
     //public static boolean isCartFragmentOpened = false;
 
@@ -74,6 +78,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         // getSupportActionBar().setTitle("OPM  B2B");
 
+        currentFragment = ALLCATEGORY_FRAGMENT;
          drawer = findViewById(R.id.drawer_layout);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -149,7 +154,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
 
         }
-
+ invalidateOptionsMenu();
     }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -184,13 +189,48 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         if (currentFragment == ALLCATEGORY_FRAGMENT) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            //getSupportActionBar().setTitle("OPM  B2B");
             getMenuInflater().inflate(R.menu.main4, menu);
 
+            MenuItem cartItem = menu.findItem(R.id.action_cart);
+            cartItem.setActionView(R.layout.badge_layout);
+            ImageView badgeIcon = cartItem.getActionView().findViewById(R.id.badge_icon);
+            badgeIcon.setImageResource(R.drawable.cart);
+            badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
+            if (currentUser != null) {
+                if (DBqueries.cartList.size() == 0) {
+                    DBqueries.loadCartList(Main4Activity.this, false, new Dialog(Main4Activity.this), badgeCount);
+
+                    if (DBqueries.cartList.size() == 0) {
+                        badgeCount.setVisibility(View.GONE);
+                    }
+                } else {
+                    if (DBqueries.cartList.size() > 0)
+                        badgeCount.setVisibility(View.VISIBLE);
+                }
+                if (DBqueries.cartList.size() > 0 && DBqueries.cartList.size() < 99) {
+                    badgeCount.setText(String.valueOf(DBqueries.cartList.size()));
+                } else if (DBqueries.cartList.size() > 0 && DBqueries.cartList.size() >= 99) {
+                    {
+                        badgeCount.setText("99");
+                    }
+                }
+            }
+
+            cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentUser == null) {
+                        signinDialog.show();
+                    } else {
+                        gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+                    }
+
+                }
+            });
         }
+
         return true;
     }
 

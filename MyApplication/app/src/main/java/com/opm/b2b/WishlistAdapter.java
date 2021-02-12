@@ -114,7 +114,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                     @Override
                     public void onClick(View v) {
                       //  deleteBtn.setEnabled(false);
-                        if ( ProductDetailsActivity.running_wishlist_query) {
+                        if (!ProductDetailsActivity.running_wishlist_query) {
                             ProductDetailsActivity.running_wishlist_query = true;
                             DBqueries.removeFromWishlist(index, itemView.getContext());
                         }

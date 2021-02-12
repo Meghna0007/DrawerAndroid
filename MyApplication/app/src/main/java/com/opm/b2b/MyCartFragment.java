@@ -3,17 +3,23 @@ package com.opm.b2b;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.opm.b2b.ui.home.AllCategoriesFragment;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.opm.b2b.Main4Activity.ALLCATEGORY_FRAGMENT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,16 +92,16 @@ public class MyCartFragment extends Fragment {
         cartItemRecyclerView.setLayoutManager(layoutManager);
         if(DBqueries.cartItemModelList.size()==0){
             DBqueries.cartList.clear();
-            DBqueries.loadCartList(getContext(),true,loadingDialog);
+            DBqueries.loadCartList(getContext(),true,loadingDialog,new TextView(getContext()));
         }else{
             loadingDialog.dismiss();
         }
-      //  List<CartItemModel> cartItemModelList = new ArrayList<>();
 
 
-         cartAdapter = new CartAdapter(DBqueries.cartItemModelList);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList);
         cartItemRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
+
 
        continueBtn.setOnClickListener(new View.OnClickListener() {
            @Override
