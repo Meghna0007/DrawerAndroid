@@ -29,6 +29,8 @@ public class FMCGActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
                 categoryIntent.putExtra("collectionName" , "Biscuits and Rusk");
+                categoryIntent.putExtra("displayName" , "Biscuits and Rusk");
+                categoryIntent.putExtra("fmcg" , "true");
                 startActivity(categoryIntent);
                 finish();
             }
@@ -40,6 +42,8 @@ public class FMCGActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
                 categoryIntent.putExtra("collectionName" , "Namkeen");
+                categoryIntent.putExtra("displayName" , "Namkeen");
+                categoryIntent.putExtra("fmcg" , "true");
                 startActivity(categoryIntent);
                 finish();
             }
@@ -51,6 +55,8 @@ public class FMCGActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
                 categoryIntent.putExtra("collectionName" , "Drinks and Juices");
+                categoryIntent.putExtra("displayName" , "Drinks and Juices");
+                categoryIntent.putExtra("fmcg" , "true");
                 startActivity(categoryIntent);
                 finish();
             }
@@ -62,6 +68,8 @@ public class FMCGActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent categoryIntent = new Intent(FMCGActivity.this, ViewAllActivity.class);
                 categoryIntent.putExtra("collectionName" , "Noodles and Pasta");
+                categoryIntent.putExtra("displayName" , "Noodles and Pasta");
+                categoryIntent.putExtra("fmcg" , "true");
                 startActivity(categoryIntent);
                 finish();
             }

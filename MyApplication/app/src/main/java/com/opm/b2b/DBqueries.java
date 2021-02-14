@@ -226,7 +226,7 @@ public class DBqueries {
                     String error = task.getException().getMessage();
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                 }
-                wishlist.add(index, removeProductId);
+                //wishlist.add(index, removeProductId);
                 ProductDetailsActivity.running_wishlist_query = false;
             }
         });

@@ -33,6 +33,7 @@ public class ViewAllActivity extends AppCompatActivity {
     public static List<WishlistModel> wishlistModelList;
     public static List<HorizonantleProductScrollModel> horizonantleProductScrollModelList;
     private WishlistAdapter wishlistAdapter;
+    private String fmcg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class ViewAllActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String collectionName = intent.getStringExtra("collectionName");
         String displayName = intent.getStringExtra("displayName");
+        fmcg = intent.getStringExtra("fmcg");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,9 +88,16 @@ public class ViewAllActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            if (fmcg != null && fmcg.equals("true")) {
+                finish();
+                Intent categoryIntent = new Intent(ViewAllActivity.this, FMCGActivity.class);
+                startActivity(categoryIntent);
+            } else {
+                finish();
+            }
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
