@@ -105,6 +105,10 @@ public class ProductDetailsActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         List<String> productImages = new ArrayList<>();
         productId = getIntent().getStringExtra("product_id_");
+        //Shubhani code for showing default product id in all products ..To be removed later
+        if (productId == null || productId.equals("")) {
+            productId = "MVECkQALPZ5imJDzopTn";
+        }
         firebaseFirestore.collection("PRODUCTS").document(productId)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
