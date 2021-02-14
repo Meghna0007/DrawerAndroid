@@ -59,7 +59,7 @@ public class SignupFragment extends Fragment {
     private EditText email;
     private EditText password;
     private EditText confirmPassword;
-
+    private  EditText etPhoneNumber;
     private Button signUpBtn;
 
     private FirebaseAuth firebaseAuth;
@@ -108,7 +108,7 @@ public class SignupFragment extends Fragment {
         password = view.findViewById(R.id.sign_up_password);
         confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
         signUpBtn = view.findViewById(R.id.sign_up_btn);
-
+        etPhoneNumber = view.findViewById(R.id._phone_number);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         return view;
@@ -243,6 +243,7 @@ public class SignupFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     Map<Object, String> userdata = new HashMap<>();
                                     userdata.put("email", email.getText().toString());
+                                    userdata.put("phoneNumber", etPhoneNumber.getText().toString());
 
                                     firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
                                             .set(userdata)
@@ -317,7 +318,7 @@ public class SignupFragment extends Fragment {
 
     }
     private  void mainIntent(){
-        Intent mainIntent=new Intent(getActivity(),Main4Activity.class);
+        Intent mainIntent=new Intent(getActivity(),OtpActivity.class);
         startActivity(mainIntent);
         getActivity().finish();
     }
