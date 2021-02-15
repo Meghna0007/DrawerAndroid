@@ -103,15 +103,16 @@
                     android:inputType="number"
                     android:textColor="@color/blue" />
 
-                <EditText
+                <Spinner
+                    android:id="@+id/stateSpinner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
-                    android:hint="State *"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/blue" />
+                    android:background="@drawable/border_background"
+                    android:backgroundTint="@color/RecylerView"
+                    />
             </LinearLayout>
 
             <EditText

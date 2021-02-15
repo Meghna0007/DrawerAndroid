@@ -2,6 +2,7 @@ package com.opm.b2b;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.view.View;
@@ -29,7 +30,6 @@ import java.util.Map;
 
 
 public class DBqueries {
-
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public static List<CategoryModel> categoryModelList = new ArrayList<>();
     public static List<List<CategoryPageModel>> lists = new ArrayList<>();
@@ -39,8 +39,10 @@ public class DBqueries {
     public static List<String> cartList = new ArrayList<>();
     public static List<CartItemModel> cartItemModelList = new ArrayList<>();
     public static Integer cartListCount = cartList.size();
+    public static List<AddressModel>
 
     public static void loadCategories(RecyclerView categoryRecyclerView, Context context) {
+
         categoryModelList.clear();
         firebaseFirestore.collection("CATEGORIES").orderBy("index")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -239,9 +241,13 @@ public class DBqueries {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
-                   // Object wishListSize = task.getResult().get("list_size");
+                    Object wishListSize = task.getResult().get("list_size");
+                        long wishlistSizeInt = 0;
+                        if (wishListSize != null) {
+                            wishlistSizeInt = (long) wishListSize;
+                        }
 
-                        for (long x = 0; x < (long) task.getResult().get("list_size"); x++) {
+                        for (long x = 0; x < wishlistSizeInt; x++) {
                             cartList.add(task.getResult().get("product_id_" + x).toString());
 
                             if (DBqueries.cartList.contains(ProductDetailsActivity.productId)) {
@@ -337,6 +343,30 @@ public class DBqueries {
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                 }
                 ProductDetailsActivity.running_cart_query = false;
+            }
+        });
+    }
+    public static void loadAddresses(final Context context,Dialog loadingDialog){
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .collection("USER_DATA").document("MY_ADDRESSES").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                   Intent deliveryIntent;
+
+                    if (task.getResult().get("list_size") == 0){
+                         deliveryIntent=new Intent(context,AddAddressActivity.class);
+
+                    }else {
+                        deliveryIntent=new Intent(context,DeliveryActivity.class);
+                    }
+                    context.startActivity(deliveryIntent);
+
+                }else {
+                    String error = task.getException().getMessage();
+                    Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                }
+                loadingDialog.dismiss();
             }
         });
     }

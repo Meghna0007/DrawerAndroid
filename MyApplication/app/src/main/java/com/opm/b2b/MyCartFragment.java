@@ -45,6 +45,7 @@ public class MyCartFragment extends Fragment {
     private Button continueBtn;
     private Dialog loadingDialog;
     public static CartAdapter cartAdapter;
+    private TextView totalAmount;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -87,6 +88,9 @@ public class MyCartFragment extends Fragment {
         //////////////Loading Dialog
         cartItemRecyclerView = view.findViewById(R.id.cart_items_recylerview);
         continueBtn = view.findViewById(R.id.cart_continue_btn);
+        totalAmount=view.findViewById(R.id.total_cart_Amount);
+
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         cartItemRecyclerView.setLayoutManager(layoutManager);
@@ -98,7 +102,7 @@ public class MyCartFragment extends Fragment {
         }
 
 
-        cartAdapter = new CartAdapter(DBqueries.cartItemModelList);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount);
         cartItemRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 
@@ -106,8 +110,8 @@ public class MyCartFragment extends Fragment {
        continueBtn.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent deliveryIntent=new Intent(getContext(),AddAddressActivity.class);
-               getContext().startActivity(deliveryIntent);
+              loadingDialog.show();
+              DBqueries.loadAddresses(getContext(),loadingDialog);
            }
        });
 

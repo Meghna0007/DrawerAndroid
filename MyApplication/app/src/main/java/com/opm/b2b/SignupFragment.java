@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,8 +23,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,14 +64,26 @@ public class SignupFragment extends Fragment {
     private EditText email;
     private EditText password;
     private EditText confirmPassword;
-    private  EditText etPhoneNumber;
+
     private Button signUpBtn;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    //////OTP
+    Button btnGenerateOTP, btnSignIn;
 
+    EditText etPhoneNumber, etOTP;
+
+    String phoneNumber, otp;
+
+    FirebaseAuth auth;
+    PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
+    private String verificationCode;
+//////////OTP
     public static boolean disableCloseBtn = false;
+
+    private boolean isOtpValidated=false;
 
     /**
      * Use this factory method to create a new instance of
@@ -108,16 +125,55 @@ public class SignupFragment extends Fragment {
         password = view.findViewById(R.id.sign_up_password);
         confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
         signUpBtn = view.findViewById(R.id.sign_up_btn);
-        etPhoneNumber = view.findViewById(R.id._phone_number);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        //////////OTP
+        btnGenerateOTP = view.findViewById(R.id.btn_generate_otp);
+        btnSignIn = view.findViewById(R.id.btn_sign_in);
+
+
+        etPhoneNumber = view.findViewById(R.id._phone_number);
+        etOTP = view.findViewById(R.id.et_otp);
+        ////////OTP
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ////////////////OTP
+        ///findViews();
 
+        StartFirebaseLogin();
+
+        btnGenerateOTP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneNumber = etPhoneNumber.getText().toString();
+                if (!phoneNumber.startsWith("+")) {
+                    phoneNumber = "+91" + phoneNumber;
+                }
+
+                PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                        phoneNumber,                     // Phone number to verify
+                        60,                           // Timeout duration
+                        TimeUnit.SECONDS,                // Unit of timeout,
+                        getActivity(),// Activity (for callback binding)
+                        mCallback);                      // OnVerificationStateChangedCallbacks
+            }
+        });
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                otp = etOTP.getText().toString();
+
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
+
+                SigninWithPhone(credential);
+            }
+        });
+////////////////////OTP
         alreadyHaveAnAccount.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -212,7 +268,8 @@ public class SignupFragment extends Fragment {
 
         if (!TextUtils.isEmpty(email.getText())) {
             if (!TextUtils.isEmpty(password.getText()) && password.getText().length() >= 6) {
-                if (!TextUtils.isEmpty(confirmPassword.getText()) && confirmPassword.getText().toString().equals(password.getText().toString())) {
+                if (!TextUtils.isEmpty(confirmPassword.getText()) && confirmPassword.getText().toString().equals(password.getText().toString())
+                && isOtpValidated) {
                     signUpBtn.setEnabled(true);
                     signUpBtn.setTextColor(Color.BLACK);
                 } else {
@@ -230,12 +287,20 @@ public class SignupFragment extends Fragment {
 
     }
 
+    private void enableSignUpButton() {
+        if (email.getText().toString().matches(emailPattern)) {
+            if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
+                signUpBtn.setEnabled(true);
+                signUpBtn.setTextColor(Color.WHITE);
+            }
+        }
+    }
     private void checkEmailAndPassword() {
 
         if (email.getText().toString().matches(emailPattern)) {
-            if (password.getText().toString().equals(confirmPassword.getText().toString())) {
-                signUpBtn.setEnabled(false);
-                signUpBtn.setTextColor(Color.BLACK);
+            if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
+                signUpBtn.setEnabled(true);
+                signUpBtn.setTextColor(Color.WHITE);
                 firebaseAuth.createUserWithEmailAndPassword(email.getText().toString().toString(), password.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -259,14 +324,19 @@ public class SignupFragment extends Fragment {
 
                                                        Map<String,Object> cartMap = new HashMap<>();
                                                        cartMap.put("list_size",(long) 0);
+
+                                                       Map<String,Object> myAddressesMap = new HashMap<>();
+                                                       myAddressesMap.put("list_size",(long) 0);
 //////////////////////////////////////////////////////Maps
                                                        List<String> documentNames=new ArrayList<>();
                                                        documentNames.add("MY_WISHLIST");
                                                        documentNames.add("MY_CART");
+                                                       documentNames.add("MY_ADDRESSES");
 
                                                      List<Map<String,Object>>documentFields=new ArrayList<>();
                                                      documentFields.add(wishlistMap);
                                                      documentFields.add(cartMap);
+                                                       documentFields.add(myAddressesMap);
 
                                                      for(int x=0;x<documentNames.size();x++){
 
@@ -283,7 +353,7 @@ public class SignupFragment extends Fragment {
                                                                      }
 
                                                                  }else{
-                                                                     signUpBtn.setEnabled(true);
+                                                                     signUpBtn.setEnabled(false);
                                                                      signUpBtn.setTextColor(Color.BLACK);
                                                                      String error = task.getException().getMessage();
                                                                      Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
@@ -301,7 +371,7 @@ public class SignupFragment extends Fragment {
                                                }
                                            });
                                 } else {
-                                    signUpBtn.setEnabled(true);
+                                    signUpBtn.setEnabled(false);
                                     signUpBtn.setTextColor(Color.BLACK);
                                     String error = task.getException().getMessage();
                                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
@@ -309,7 +379,7 @@ public class SignupFragment extends Fragment {
                             }
                         });
             } else {
-                confirmPassword.setError("Password doesn't matched!");
+                confirmPassword.setError("Password doesn't match!");
             }
 
         } else {
@@ -318,8 +388,51 @@ public class SignupFragment extends Fragment {
 
     }
     private  void mainIntent(){
-        Intent mainIntent=new Intent(getActivity(),OtpActivity.class);
+        Intent mainIntent=new Intent(getActivity(),Main4Activity.class);
         startActivity(mainIntent);
         getActivity().finish();
     }
+    ////////////OTP
+    private void SigninWithPhone(PhoneAuthCredential credential) {
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "OTP Validated", Toast.LENGTH_SHORT).show();
+                            isOtpValidated = true;
+                            enableSignUpButton();
+                            //checkEmailAndPassword();
+                        } else {
+                            Toast.makeText(getContext(), "Incorrect OTP", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
+    private void StartFirebaseLogin() {
+
+        auth = FirebaseAuth.getInstance();
+        mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                //Toast.makeText(getContext(), "verification completed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                Toast.makeText(getContext(), "verification failed. " + e.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                verificationCode = s;
+                Toast.makeText(getContext(), "Code sent", Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+    //////////OTP
 }

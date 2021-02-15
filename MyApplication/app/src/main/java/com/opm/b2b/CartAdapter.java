@@ -21,9 +21,11 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter {
 
     List<CartItemModel> cartItemModelList;
+    private TextView cartTotalAmount;
 
-    public CartAdapter(List<CartItemModel> cartItemModelList) {
+    public CartAdapter(List<CartItemModel> cartItemModelList,TextView cartTotalAmount) {
         this.cartItemModelList = cartItemModelList;
+        this.cartTotalAmount=cartTotalAmount;
     }
 
     @Override
@@ -201,6 +203,7 @@ public class CartAdapter extends RecyclerView.Adapter {
                 deliveryPrice.setText("Rs."+deliveryPriceText+"/-");
             }
             totalAmount.setText("Rs."+totalAmountText+"/-");
+            cartTotalAmount.setText("Rs."+totalAmountText+"/-");
             savedAmount.setText("You saved Rs."+saveAmountText+"/- on this order.");
 
 

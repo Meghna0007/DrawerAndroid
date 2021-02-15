@@ -21,25 +21,16 @@
 
     <EditText
         android:id="@+id/sign_up_email"
-        android:layout_width="250dp"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="55dp"
         android:ems="10"
         android:autoSizeMaxTextSize="16dp"
-        android:hint="Enter Email here "
+        android:hint="Enter Email here... "
         android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/_phone_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="100dp"
-        android:hint="Enter Mobile Number here..." />
+
 
     <EditText
         android:id="@+id/sign_up_password"
@@ -63,6 +54,79 @@
         android:layout_marginStart="60dp"
         android:hint="Re-Type Password"
         android:inputType="numberPassword" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="70dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:hint="Mobile No."
+            android:inputType="number"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:ems="10"
+            android:autoSizeMaxTextSize="16dp"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/et_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeMaxTextSize="16dp"
+            android:autoSizeMinTextSize="16dp"
+            android:clickable="false"
+            android:layout_weight="2"
+            android:hint="OTP"
+            android:inputType="number"
+            android:textColor="@color/white" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="70dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_generate_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="Generate"
+            android:textAllCaps="false"
+            android:textColor="@color/blue" />
+
+
+
+        <Button
+            android:id="@+id/btn_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="Submit"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAllCaps="false"
+            android:textColor="@color/blue" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/sign_up_btn"
@@ -73,6 +137,7 @@
         android:enabled="false"
         android:background="@color/blue"
         android:text="Submit"
+        android:visibility="visible"
         android:textColor="@color/transparent_white_50" />
 
     <TextView

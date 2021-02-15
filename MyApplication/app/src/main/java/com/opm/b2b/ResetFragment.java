@@ -213,7 +213,7 @@ public class ResetFragment extends Fragment {
             resetPasswordBtn.setTextColor(Color.BLACK);
         } else {
             resetPasswordBtn.setEnabled(true);
-            resetPasswordBtn.setTextColor(Color.BLUE);
+            resetPasswordBtn.setTextColor(Color.WHITE);
         }
     }
 
