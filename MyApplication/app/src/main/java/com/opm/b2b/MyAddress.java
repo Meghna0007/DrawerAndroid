@@ -97,7 +97,7 @@ private Dialog loadingDialog;
                     previousAddresses = DBqueries.selectedAddresss;
 
                     FirebaseFirestore.getInstance().collection("USERS").document(FirebaseAuth.getInstance().getUid())
-                            .collection("USERS_DATA").document("MY_ADDRESSES")
+                            .collection("USER_DATA").document("MY_ADDRESSES")
                             .update(updateSelection).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

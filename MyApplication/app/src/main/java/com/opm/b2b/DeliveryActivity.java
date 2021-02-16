@@ -20,7 +20,7 @@ public class DeliveryActivity extends AppCompatActivity {
 private RecyclerView deliveryRecyclerView;
 private Button changeOrAddNewAddressBtn;
 private TextView totalAmount;
-
+public  static List<CartItemModel> cartItemModelList;
 private TextView fullname;
 private TextView fullAddress;
 private TextView pincode;
@@ -52,7 +52,7 @@ private TextView pincode;
         //cartItemModelList.add(new CartItemModel(0, R.drawable.product, 1, "Grapes", "Rs.499/-", "Rs.600/-"));
        // cartItemModelList.add(new CartItemModel(1, "Price (3 items)", "Rs.599/-", "Free", "Rs.100/-", "Rs.499"));
 
-        CartAdapter cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,false);
+        CartAdapter cartAdapter = new CartAdapter(cartItemModelList,totalAmount,false);
         deliveryRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 

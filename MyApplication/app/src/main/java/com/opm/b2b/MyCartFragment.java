@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.opm.b2b.Main4Activity.ALLCATEGORY_FRAGMENT;
+import static com.opm.b2b.Main4Activity.drawer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,7 +98,7 @@ public class MyCartFragment extends Fragment {
         cartItemRecyclerView.setLayoutManager(layoutManager);
         if(DBqueries.cartItemModelList.size()==0){
             DBqueries.cartList.clear();
-            DBqueries.loadCartList(getContext(),true,loadingDialog,new TextView(getContext()));
+            DBqueries.loadCartList(getContext(),true,loadingDialog,new TextView(getContext()),totalAmount);
         }else{
             if (DBqueries.cartItemModelList.get(DBqueries.cartItemModelList.size() -1).getType()==CartItemModel.TOTAL_AMOUNT){
                 LinearLayout parent =(LinearLayout) totalAmount.getParent().getParent();
@@ -115,8 +116,24 @@ public class MyCartFragment extends Fragment {
        continueBtn.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               DeliveryActivity.cartItemModelList=new ArrayList<>();
+               for (int x=0;x<DBqueries.cartItemModelList.size();x++){
+                   CartItemModel cartItemModel=DBqueries.cartItemModelList.get(x);
+                   if (cartItemModel.isInStock()){
+
+                       DeliveryActivity.cartItemModelList.add(cartItemModel);
+                   }
+               }
+               DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+
               loadingDialog.show();
-              DBqueries.loadAddresses(getContext(),loadingDialog);
+              if (DBqueries.addressesModelList.size()==0) {
+                  DBqueries.loadAddresses(getContext(), loadingDialog);
+              }else{
+                  loadingDialog.dismiss();
+                  Intent deliveryIntent = new Intent(getContext(), DeliveryActivity.class);
+                  startActivity(deliveryIntent);
+              }
            }
        });
 

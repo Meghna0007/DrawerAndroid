@@ -205,7 +205,7 @@ private  AppBarLayout.LayoutParams params;
             badgeCount = cartItem.getActionView().findViewById(R.id.badge_count);
             if (currentUser != null) {
                 if (DBqueries.cartList.size() == 0) {
-                    DBqueries.loadCartList(Main4Activity.this, false, new Dialog(Main4Activity.this), badgeCount);
+                    DBqueries.loadCartList(Main4Activity.this, false, new Dialog(Main4Activity.this), badgeCount,new TextView(Main4Activity.this));
 
                     if (DBqueries.cartList.size() == 0) {
                         badgeCount.setVisibility(View.GONE);

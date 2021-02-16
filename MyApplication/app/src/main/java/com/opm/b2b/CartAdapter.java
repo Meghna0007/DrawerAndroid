@@ -1,6 +1,8 @@
 package com.opm.b2b;
 
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +71,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                 String title = cartItemModelList.get(position).getProductTitle();
                 String productPrice = cartItemModelList.get(position).getProductPrice();
                 String cuttedPrice = cartItemModelList.get(position).getCuttedPrice();
-                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position);
+                boolean inStock=cartItemModelList.get(position).isInStock();
+                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock);
 
                 break;
             case CartItemModel.TOTAL_AMOUNT:
@@ -79,7 +82,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                 int totalAmount;
                 int savedAmount=0;
                 for (int x=0;x<cartItemModelList.size();x++){
-                    if(cartItemModelList.get(x).getType()==CartItemModel.CART_ITEM){
+                    if(cartItemModelList.get(x).getType()==CartItemModel.CART_ITEM && cartItemModelList.get(x).isInStock()){
+
                         totalItems++;
                         totalItemPrice=totalItemPrice + Integer.parseInt(cartItemModelList.get(x).getProductPrice());
                     }
@@ -131,27 +135,16 @@ public class CartAdapter extends RecyclerView.Adapter {
             productQuantity = itemView.findViewById(R.id.product_quantity);
         }
 
-        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position) {
+        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock) {
            // productImage.setImageResource(resource);
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
         productTitle.setText(title);
-            productPrice.setText(productPriceText);
-            cuttedPrice.setText(cuttedPriceText);
 
-            if (showDelteBtn){
-                remove_item_icon.setVisibility(View.VISIBLE);
-            }else{
-                remove_item_icon.setVisibility(View.GONE);
-            }
-            remove_item_icon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(!ProductDetailsActivity.running_cart_query){
-                        ProductDetailsActivity.running_cart_query=true;
-                        DBqueries.removeFromCart(position,itemView.getContext());
-                    }
-                }
-            });
+        if(inStock) {
+            productPrice.setText("Rs."+productPriceText+"/-");
+            productPrice.setTextColor(Color.parseColor("#000000"));
+            cuttedPrice.setText("Rs."+cuttedPriceText+"/-");
+
             productQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -179,6 +172,28 @@ public class CartAdapter extends RecyclerView.Adapter {
                     quantityDialog.show();
                 }
             });
+        }else {
+            productPrice.setText("Out of Stock");
+            productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+            cuttedPrice.setText("");
+
+           productQuantity.setVisibility(View.INVISIBLE);
+        }
+            if (showDelteBtn){
+                remove_item_icon.setVisibility(View.VISIBLE);
+            }else{
+                remove_item_icon.setVisibility(View.GONE);
+            }
+            remove_item_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(!ProductDetailsActivity.running_cart_query){
+                        ProductDetailsActivity.running_cart_query=true;
+                        DBqueries.removeFromCart(position,itemView.getContext(),cartTotalAmount);
+                    }
+                }
+            });
+
         }
     }
 
