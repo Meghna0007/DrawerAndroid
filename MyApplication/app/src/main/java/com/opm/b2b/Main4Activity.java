@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.opm.b2b.ProductDetailsActivity.cartItem;
 import static com.opm.b2b.RegisterActivity.setSignUpFragment;
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.opm.b2b.ui.home.AllCategoriesFragment;
@@ -58,7 +59,8 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private Dialog signinDialog;
     public static DrawerLayout drawer;
     private TextView badgeCount;
-
+private int scrollFlags;
+private  AppBarLayout.LayoutParams params;
     //public static boolean isCartFragmentOpened = false;
 
 
@@ -79,6 +81,9 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         // getSupportActionBar().setTitle("OPM  B2B");
 
         currentFragment = ALLCATEGORY_FRAGMENT;
+
+       params=(AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+        scrollFlags= params.getScrollFlags();
          drawer = findViewById(R.id.drawer_layout);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -277,57 +282,67 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
         getSupportActionBar().setTitle(title);
         invalidateOptionsMenu();
         setFragment(fragment, fragmentNo);
-        if (fragmentNo == CART_FRAGMENT) {
+        if (fragmentNo == CART_FRAGMENT||showCart) {
             navigationView.getMenu().getItem(2).setChecked(true);
             navigationView.getMenu().getItem(0).setChecked(false);
+            params.setScrollFlags(0);
 
+        }else {
+            params.setScrollFlags(scrollFlags);
         }
 
 
     }
-
+MenuItem menuItem;
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+menuItem=item;
         if (currentUser != null) {
-            int id = item.getItemId();
+            drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    int id = menuItem.getItemId();
 
-            if (id == R.id.all_categories) {
-                // getSupportActionBar().setDisplayShowTitleEnabled(false);
-                actionBarLogo.setVisibility(View.VISIBLE);
-                invalidateOptionsMenu();
-                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
-                // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
+                    if (id == R.id.all_categories) {
+                        // getSupportActionBar().setDisplayShowTitleEnabled(false);
+                        actionBarLogo.setVisibility(View.VISIBLE);
+                        invalidateOptionsMenu();
+                        setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+                        // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
             /*setFragment(new AllCategoriesFragment());
             return true;*/
-            } else if (id == R.id.my_orders) {
-                gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
-            } else if (id == R.id.my_cart) {
-                gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+                    } else if (id == R.id.my_orders) {
+                        gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
+                    } else if (id == R.id.my_cart) {
+                        gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
 
-            } else if (id == R.id.my_account) {
-                gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
-            } else if (id == R.id.my_wishlist) {
-                gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
-
-
-            } else if (id == R.id.policies) {
-
-            } else if (id == R.id.about_us) {
-
-            } else if (id == R.id.sign_out) {
-                FirebaseAuth.getInstance().signOut();
-                DBqueries.clearData();
-                Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
-                startActivity(registerIntent);
-                finish();
+                    } else if (id == R.id.my_account) {
+                        gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
+                    } else if (id == R.id.my_wishlist) {
+                        gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
 
 
-            }
-            drawerLayout.closeDrawer(GravityCompat.START);
+                    } else if (id == R.id.policies) {
+
+                    } else if (id == R.id.about_us) {
+
+                    } else if (id == R.id.sign_out) {
+                        FirebaseAuth.getInstance().signOut();
+                        DBqueries.clearData();
+                        Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
+                        startActivity(registerIntent);
+                        finish();
+
+
+                    }
+                }
+            });
+
             return true;
         } else {
-            drawerLayout.closeDrawer(GravityCompat.START);
             signinDialog.show();
             return false;
         }

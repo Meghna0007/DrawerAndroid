@@ -39,7 +39,8 @@ public class DBqueries {
     public static List<String> cartList = new ArrayList<>();
     public static List<CartItemModel> cartItemModelList = new ArrayList<>();
     public static Integer cartListCount = cartList.size();
-    public static List<AddressModel>
+    public static List<AddressesModel>addressesModelList=new ArrayList<>();
+    public static int selectedAddresss =-1;
 
     public static void loadCategories(RecyclerView categoryRecyclerView, Context context) {
 
@@ -236,7 +237,8 @@ public class DBqueries {
 
     public static void loadCartList(final Context context, final boolean loadProductData, final Dialog dialog, final TextView badgeCount) {
         cartList.clear();
-        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_CART")
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .collection("USER_DATA").document("MY_CART")
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -302,8 +304,6 @@ public class DBqueries {
                         } else if (DBqueries.cartList.size() >= 99)  {
                             badgeCount.setText("99");
                         }
-
-                    // if wishlist size not null if closed
                 } else {
                     String error = task.getException().getMessage();
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -347,6 +347,7 @@ public class DBqueries {
         });
     }
     public static void loadAddresses(final Context context,Dialog loadingDialog){
+        addressesModelList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_DATA").document("MY_ADDRESSES").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -354,11 +355,26 @@ public class DBqueries {
                 if (task.isSuccessful()){
                    Intent deliveryIntent;
 
-                    if (task.getResult().get("list_size") == 0){
+                   Object listSize = task.getResult().get("list_size");
+                   long listSizeLong = 0;
+                   if (listSize != null) {
+                       listSizeLong = (long) listSize;
+                   }
+                    if (listSizeLong == 0){
                          deliveryIntent=new Intent(context,AddAddressActivity.class);
-
+                        deliveryIntent.putExtra("INTENT","deliveryIntent");
                     }else {
+                        for(long x=1;x<(long)task.getResult().get("list_size")+1;x++){
+                            addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
+                                    task.getResult().get("address_"+x).toString(),
+                                    task.getResult().get("pincode_"+x).toString(),
+                                    (boolean)task.getResult().get("selected_"+x)));
+                            if((boolean)task.getResult().get("selected_"+x)){
+                                selectedAddresss=Integer.parseInt(String.valueOf(x - 1));
+                            }
+                        }
                         deliveryIntent=new Intent(context,DeliveryActivity.class);
+
                     }
                     context.startActivity(deliveryIntent);
 

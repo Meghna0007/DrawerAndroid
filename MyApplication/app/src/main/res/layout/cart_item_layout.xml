@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:elevation="5dp"
     android:layout_width="match_parent"
@@ -12,6 +13,8 @@
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/remove_item_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/beauty" />
@@ -33,16 +36,12 @@
         android:id="@+id/product_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="16dp"
         android:text="Rs.499/-"
         android:textColor="@color/black"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.812"
-        app:layout_constraintStart_toEndOf="@+id/product_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/remove_item_icon"
+        app:layout_constraintStart_toEndOf="@+id/product_image" />
 
     <TextView
         android:id="@+id/cuutted_price"
@@ -50,7 +49,8 @@
         android:layout_height="wrap_content"
         android:text="Rs.600/-"
         app:layout_constraintBottom_toBottomOf="@+id/product_price"
-        app:layout_constraintEnd_toStartOf="@+id/product_price" />
+        app:layout_constraintStart_toEndOf="@+id/product_price"
+        app:layout_constraintTop_toTopOf="@+id/product_price" />
 
     <View
         android:id="@+id/price_cutted_divider"
@@ -58,7 +58,7 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="@+id/cuutted_price"
-        app:layout_constraintEnd_toStartOf="@+id/product_price"
+        app:layout_constraintEnd_toEndOf="@+id/cuutted_price"
         app:layout_constraintStart_toStartOf="@+id/cuutted_price"
         app:layout_constraintTop_toTopOf="@+id/cuutted_price" />
 
@@ -66,17 +66,18 @@
         android:id="@+id/product_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16sp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/b2"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/border_background"
         android:backgroundTint="@color/transparent_white"
         android:drawableEnd="@drawable/drop_down"
         android:drawablePadding="3dp"
         android:padding="3dp"
         android:text="Qty: 1"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="@+id/product_price"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/product_image"
         app:layout_constraintTop_toBottomOf="@+id/product_title" />
 
@@ -84,20 +85,21 @@
         android:id="@+id/remove_item_icon"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/white"
+        android:layout_marginTop="16dp"
 
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/product_quantity">
+        app:layout_constraintTop_toBottomOf="@+id/product_image">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove item"
-            android:gravity="center"
+            android:drawableStart="@drawable/ic_baseline_delete_24"
             android:drawablePadding="4dp"
-            android:drawableStart="@drawable/ic_baseline_delete_24" />
+            android:gravity="center"
+            android:text="Remove item" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

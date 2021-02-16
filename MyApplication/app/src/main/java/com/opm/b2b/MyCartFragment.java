@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -98,11 +99,15 @@ public class MyCartFragment extends Fragment {
             DBqueries.cartList.clear();
             DBqueries.loadCartList(getContext(),true,loadingDialog,new TextView(getContext()));
         }else{
+            if (DBqueries.cartItemModelList.get(DBqueries.cartItemModelList.size() -1).getType()==CartItemModel.TOTAL_AMOUNT){
+                LinearLayout parent =(LinearLayout) totalAmount.getParent().getParent();
+                parent.setVisibility(View.VISIBLE);
+            }
             loadingDialog.dismiss();
         }
 
 
-        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount);
+        cartAdapter = new CartAdapter(DBqueries.cartItemModelList,totalAmount,true);
         cartItemRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 

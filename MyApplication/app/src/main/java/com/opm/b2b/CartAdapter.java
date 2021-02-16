@@ -22,10 +22,12 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     List<CartItemModel> cartItemModelList;
     private TextView cartTotalAmount;
+    private boolean showDelteBtn;
 
-    public CartAdapter(List<CartItemModel> cartItemModelList,TextView cartTotalAmount) {
+    public CartAdapter(List<CartItemModel> cartItemModelList,TextView cartTotalAmount,boolean showDelteBtn) {
         this.cartItemModelList = cartItemModelList;
         this.cartTotalAmount=cartTotalAmount;
+        this.showDelteBtn=showDelteBtn;
     }
 
     @Override
@@ -135,6 +137,12 @@ public class CartAdapter extends RecyclerView.Adapter {
         productTitle.setText(title);
             productPrice.setText(productPriceText);
             cuttedPrice.setText(cuttedPriceText);
+
+            if (showDelteBtn){
+                remove_item_icon.setVisibility(View.VISIBLE);
+            }else{
+                remove_item_icon.setVisibility(View.GONE);
+            }
             remove_item_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -205,6 +213,15 @@ public class CartAdapter extends RecyclerView.Adapter {
             totalAmount.setText("Rs."+totalAmountText+"/-");
             cartTotalAmount.setText("Rs."+totalAmountText+"/-");
             savedAmount.setText("You saved Rs."+saveAmountText+"/- on this order.");
+            LinearLayout parent =(LinearLayout)cartTotalAmount.getParent().getParent();
+
+            if (totalItemPriceText==0){
+                DBqueries.cartItemModelList.remove(DBqueries.cartItemModelList.size() -1);
+                parent.setVisibility(View.GONE);
+            }else {
+                parent.setVisibility(View.VISIBLE);
+
+            }
 
 
         }
