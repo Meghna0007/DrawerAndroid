@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -61,6 +62,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private TextView badgeCount;
 private int scrollFlags;
 private  AppBarLayout.LayoutParams params;
+public static Activity main4Activity;
     //public static boolean isCartFragmentOpened = false;
 
 
@@ -110,6 +112,7 @@ private  AppBarLayout.LayoutParams params;
         frameLayout = findViewById(R.id.main_framelayout);
 
         if (showCart) {
+            main4Activity=this;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             gotoFragment("My Cart", new MyCartFragment(), -2);
@@ -257,6 +260,7 @@ private  AppBarLayout.LayoutParams params;
             return true;
         }else if(id== android.R.id.home){
             if(showCart){
+                main4Activity=null;
                 showCart=false;
                 finish();
                 return true;
@@ -380,7 +384,9 @@ menuItem=item;
             if (currentFragment == ALLCATEGORY_FRAGMENT) {
                 currentFragment= -1;
                 super.onBackPressed();
-            } else   if (showCart) {
+            } else
+                if (showCart) {
+                    main4Activity=null;
                 showCart=false;
                 finish();
 

@@ -29,8 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddAddressActivity extends AppCompatActivity {
- private Button saveBtn;
- private EditText city;
+
+    private Button saveBtn;
+    private EditText city;
     private EditText locality;
     private EditText flatNo;
     private EditText pincode;
@@ -39,8 +40,7 @@ public class AddAddressActivity extends AppCompatActivity {
     private EditText mobileNo;
     private EditText alternateMobileNo;
     private Spinner stateSpinner;
-private Dialog loadingDialog;
-
+    private Dialog loadingDialog;
     private  String selectedState;
     private String [] stateList;
 
@@ -61,8 +61,8 @@ private Dialog loadingDialog;
         loadingDialog.setCancelable(false);
         loadingDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.slider_background));
         loadingDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         //////////////Loading Dialog
+
         stateList=getResources().getStringArray(R.array.india_states);
         city=findViewById(R.id.city);
         locality=findViewById(R.id.locality);
@@ -74,12 +74,11 @@ private Dialog loadingDialog;
         alternateMobileNo=findViewById(R.id.alternateMobileNo_);
         stateSpinner=findViewById(R.id.stateSpinner);
         saveBtn=findViewById(R.id.saveBtn);
-
         ArrayAdapter spinnerAdapter=new ArrayAdapter(this, android.R.layout.simple_spinner_item,stateList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         stateSpinner.setAdapter(spinnerAdapter);
         stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedState=stateList[position];
@@ -90,8 +89,6 @@ private Dialog loadingDialog;
 
             }
         });
-
-
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,11 +105,13 @@ private Dialog loadingDialog;
                                         Map<String,Object> addAddress=new HashMap();
                                         addAddress.put("list_size",(long)DBqueries.addressesModelList.size()+1);
                                         if (TextUtils.isEmpty(alternateMobileNo.getText())) {
-                                            addAddress.put("fullname_" + String.valueOf((long) DBqueries.addressesModelList.size() + 1), name.getText().toString() + "-" + mobileNo.getText().toString());
+                                            addAddress.put("mobile_no_" + String.valueOf((long) DBqueries.addressesModelList.size() + 1),  mobileNo.getText().toString());
                                         }else{
-                                            addAddress.put("fullname_" + String.valueOf((long) DBqueries.addressesModelList.size() + 1), name.getText().toString() + "-" + mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString());
+                                            addAddress.put("mobile_no_" + String.valueOf((long) DBqueries.addressesModelList.size() + 1),  mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString());
 
                                         }
+                                        addAddress.put("fullname_" + String.valueOf((long) DBqueries.addressesModelList.size() + 1), name.getText().toString());
+
                                         addAddress.put("address_"+String.valueOf((long)DBqueries.addressesModelList.size()+1),fullAddress);
                                         addAddress.put("pincode_"+String.valueOf((long)DBqueries.addressesModelList.size()+1),pincode.getText().toString());
                                         addAddress.put("selected_"+String.valueOf((long)DBqueries.addressesModelList.size()+1),true);
@@ -123,7 +122,8 @@ private Dialog loadingDialog;
                                         FirebaseFirestore.getInstance().collection("USERS")
                                                 .document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA")
                                                 .document("MY_ADDRESSES")
-                                        .update(addAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                .update(addAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()){
@@ -132,13 +132,12 @@ private Dialog loadingDialog;
                                                     }
                                                     if (TextUtils.isEmpty(alternateMobileNo.getText())) {
                                                         DBqueries.addressesModelList.add(new AddressesModel(name.getText()
-                                                                .toString() + "-" + mobileNo.getText().toString(), pincode.getText().toString()
-                                                                , fullAddress, true));
+                                                                .toString() , pincode.getText().toString()
+                                                                , fullAddress, true, mobileNo.getText().toString()));
                                                     }else{
                                                         DBqueries.addressesModelList.add(new AddressesModel(name.getText()
-                                                                .toString() + "-" + mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString(),
-                                                                pincode.getText().toString()
-                                                                , fullAddress, true));
+                                                                .toString(), pincode.getText().toString()
+                                                                , fullAddress, true,mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString()));
 
                                                     }
 
@@ -158,42 +157,26 @@ private Dialog loadingDialog;
                                                loadingDialog.dismiss();
                                             }
                                         });
-
                                     }else{
                                         mobileNo.requestFocus();
                                         Toast.makeText(AddAddressActivity.this,"Please provide valid Number",Toast.LENGTH_SHORT).show();
                                     }
-
-
                                 }else{
                                     name.requestFocus();
                                 }
-
-
                             }else{
                                 pincode.requestFocus();
                                 Toast.makeText(AddAddressActivity.this,"Please provide valid pincode",Toast.LENGTH_SHORT).show();
                             }
-
-
                         }else{
                             flatNo.requestFocus();
                         }
-
-
                     }else{
                         locality.requestFocus();
                     }
-
                 }else{
                     city.requestFocus();
                 }
-
-
-
-
-
-
             }
         });
     }

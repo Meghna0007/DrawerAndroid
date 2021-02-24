@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -42,6 +43,7 @@ import static com.opm.b2b.Main4Activity.showCart;
 import static com.opm.b2b.RegisterActivity.setSignUpFragment;
 
 public class ProductDetailsActivity extends AppCompatActivity {
+    public static Activity productDetailsActivity;
     public static boolean running_wishlist_query = false;
     public static boolean running_cart_query = false;
     private ViewPager ProductImageViewPager;
@@ -220,8 +222,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                                                            documentSnapshot.get("product_title").toString(),
                                                                            documentSnapshot.get("cuttedPrice").toString(),
                                                                            documentSnapshot.get("product_price").toString(),
-                                                                           (boolean)documentSnapshot.get("in_stock")
-                                                                   ));
+                                                                           (boolean)documentSnapshot.get("in_stock")));
                                                        }
 
                                                        ALREADY_ADDED_TO_CART = true;
@@ -291,14 +292,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         if (DBqueries.wishlistModelList.size() != 0) {
-                                                DBqueries.wishlistModelList.add(new WishlistModel(productId,
+                                                /*DBqueries.wishlistModelList.add(new WishlistModel(productId,
                                                         documentSnapshot.get("product_image_1").toString(),
                                                         documentSnapshot.get("product_title").toString(),
                                                         documentSnapshot.get("cuttedPrice").toString(),
                                                         documentSnapshot.get("product_price").toString(),
                                                         documentSnapshot.get("setPiece_").toString(),
                                                         documentSnapshot.get("perPiece_").toString(),
-                                                        documentSnapshot.get("productWeight_").toString()));
+                                                        documentSnapshot.get("productWeight_").toString()));*/
                                             }
                                             ALREADY_ADDED_TO_WISHLIST = true;
                                             addtoWishlistBtn.setSupportImageTintList(getResources().getColorStateList(R.color.red));
@@ -340,13 +341,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
         buyNowBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingDialog.show();
                 if (currentUser == null) {
 
                     signinDialog.show();
 
                 } else {
-                    DeliveryActivity.cartItemModelList.clear();
+                    DeliveryActivity.fromCart=false;
+                    loadingDialog.show();
+
+                    productDetailsActivity=ProductDetailsActivity.this;
                     DeliveryActivity.cartItemModelList=new ArrayList<>();
                     DeliveryActivity.cartItemModelList.add(new CartItemModel
                             (CartItemModel.CART_ITEM, productId,
@@ -476,7 +479,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-
+          productDetailsActivity=null;
             finish();
             return true;
         } else if (id == R.id.main_search_icon) {
@@ -498,7 +501,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
+        productDetailsActivity=null;
+        super.onBackPressed();
         Intent cartIntent = new Intent(ProductDetailsActivity.this, Main4Activity.class);
         Main4Activity.currentFragment = Main4Activity.ALLCATEGORY_FRAGMENT;
         startActivity(cartIntent);

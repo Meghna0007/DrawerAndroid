@@ -1,6 +1,7 @@
 package com.opm.b2b;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String ProductsetofPiece=wishlistModelList.get(position).getSetOfPiece();
         String ProductWeight=wishlistModelList.get(position).getProductWeight();
         String ProductperPiece=wishlistModelList.get(position).getPerPiece();
-
-        holder.setData(productId,resource, title, productPrice, cuttedPrice,ProductperPiece,ProductsetofPiece ,ProductWeight,position);
+        boolean inStock=wishlistModelList.get(position).isInStock();
+        holder.setData(productId,resource, title, productPrice, cuttedPrice,ProductperPiece,ProductsetofPiece ,ProductWeight,position,inStock);
 
 
 
@@ -91,17 +92,33 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }*/
 
-        private void setData(String productId,String resource, String title, String price, String cuttedPriceValue, String ProductperPiece,String ProductsetofPiece ,String ProductWeight,int index) {
+        private void setData(String productId,String resource, String title, String price, String cuttedPriceValue, String ProductperPiece,String ProductsetofPiece ,String ProductWeight,int index,boolean inStock) {
             //productImage.setImageResource(resource);
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
 
           //  setCategoryIcon(resource);
             productTitle.setText(title);
-            productPrice.setText(price);
-            cuttedPrice.setText(cuttedPriceValue);
-            perPiece.setText(ProductperPiece);
-            setOfPiece.setText(ProductsetofPiece);
-            productWeight.setText(ProductWeight);
+            if (inStock){
+                productPrice.setTextColor(Color.parseColor("#000000"));
+                cuttedPrice.setVisibility(View.VISIBLE);
+                perPiece.setVisibility(View.VISIBLE);
+                setOfPiece.setVisibility(View.VISIBLE);
+                productWeight.setVisibility(View.VISIBLE);
+
+                productPrice.setText(price);
+                cuttedPrice.setText("Rs."+cuttedPriceValue+"/-");
+                perPiece.setText("Rs."+ProductperPiece+"+/-");
+                setOfPiece.setText(ProductsetofPiece);
+                productWeight.setText(ProductWeight);
+            }else {
+                productPrice.setText("Out of Stock");
+                productPrice.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+                cuttedPrice.setVisibility(View.INVISIBLE);
+                perPiece.setVisibility(View.INVISIBLE);
+                setOfPiece.setVisibility(View.INVISIBLE);
+                productWeight.setVisibility(View.INVISIBLE);
+            }
+
             if (wishlist) {
                 deleteBtn.setVisibility(View.VISIBLE);
                 product_quantity.setVisibility(View.GONE);

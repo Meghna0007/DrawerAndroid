@@ -84,6 +84,9 @@ public class ProductSpecificationAdapter extends RecyclerView.Adapter<ProductSpe
 
     @Override
     public int getItemCount() {
+        if (productSpecificationModelList == null) {
+            return 0;
+        }
         return productSpecificationModelList.size();
     }
 

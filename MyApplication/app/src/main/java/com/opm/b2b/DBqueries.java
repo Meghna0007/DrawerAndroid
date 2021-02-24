@@ -109,7 +109,8 @@ public class DBqueries {
                                                 documentSnapshot.get("product_price_" + x).toString(),
                                                 documentSnapshot.get("setPiece_" + x).toString(),
                                                 documentSnapshot.get("perPiece_" + x).toString(),
-                                                documentSnapshot.get("productWeight_" + x).toString()));
+                                                documentSnapshot.get("productWeight_" + x).toString(),
+                                        (boolean)documentSnapshot.get("in_stock_"+x)));
                                     }
                                     lists.get(index).add(new CategoryPageModel(2,
                                             documentSnapshot.get("layout_title").toString()
@@ -184,7 +185,8 @@ public class DBqueries {
                                                     task.getResult().get("product_price").toString(),
                                                     task.getResult().get("setPiece_").toString(),
                                                     task.getResult().get("perPiece_").toString(),
-                                                    task.getResult().get("productWeight_").toString()));
+                                                    task.getResult().get("productWeight_").toString(),
+                                                    task.getResult().getBoolean("in_stock")));
                                             My_WishlistFragment.wishlistAdapter.notifyDataSetChanged();
                                         } else {
                                             String error = task.getException().getMessage();
@@ -338,7 +340,7 @@ public class DBqueries {
                     }
                     if (cartList.size() == 0) {
                         LinearLayout parent =(LinearLayout)cartTotalAmount.getParent().getParent();
-parent.setVisibility(View.GONE);
+                        parent.setVisibility(View.GONE);
                         cartItemModelList.clear();
                     }
                     //ProductDetailsActivity.cartItem.setActionView(null);
@@ -374,7 +376,9 @@ parent.setVisibility(View.GONE);
                             addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
                                     task.getResult().get("address_"+x).toString(),
                                     task.getResult().get("pincode_"+x).toString(),
-                                    (boolean)task.getResult().get("selected_"+x)));
+                                    (boolean)task.getResult().get("selected_"+x),
+                                    getStringValue(task.getResult().get("mobile_no_"+x))));
+
                             if((boolean)task.getResult().get("selected_"+x)){
                                 selectedAddresss=Integer.parseInt(String.valueOf(x - 1));
                             }
@@ -401,6 +405,7 @@ parent.setVisibility(View.GONE);
         wishlistModelList.clear();
         cartList.clear();
         cartItemModelList.clear();
+        addressesModelList.clear();
     }
 
 

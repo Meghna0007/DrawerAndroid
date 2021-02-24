@@ -23,6 +23,7 @@ import com.opm.b2b.CategoryAdapter;;
 import com.opm.b2b.CategoryModel;
 import com.opm.b2b.CategoryPageAdapter;
 import com.opm.b2b.CategoryPageModel;
+import com.opm.b2b.DBqueries;
 import com.opm.b2b.HorizonantleProductScrollModel;
 import com.opm.b2b.Main4Activity;
 import com.opm.b2b.R;
@@ -176,9 +177,10 @@ public class AllCategoriesFragment extends Fragment {
     private void reloadPage() {
 
         networkInfo = connectivityManager.getActiveNetworkInfo();
-        categoryModelList.clear();
+        /*categoryModelList.clear();
         lists.clear();
-        loadedCategoriesNames.clear();
+        loadedCategoriesNames.clear();*/
+        DBqueries.clearData();
         if (networkInfo != null && networkInfo.isConnected() == true) {
             Main4Activity.drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
