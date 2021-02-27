@@ -30,8 +30,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -70,6 +73,7 @@ public class DeliveryActivity extends AppCompatActivity {
    private  boolean allProductsAvailable=true;
    public static boolean getQtyIDs=true;
    private FirebaseFirestore firebaseFirestore;
+   private CartAdapter cartAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +130,7 @@ public class DeliveryActivity extends AppCompatActivity {
         //cartItemModelList.add(new CartItemModel(0, R.drawable.product, 1, "Grapes", "Rs.499/-", "Rs.600/-"));
         // cartItemModelList.add(new CartItemModel(1, "Price (3 items)", "Rs.599/-", "Free", "Rs.100/-", "Rs.499"));
 
-        CartAdapter cartAdapter = new CartAdapter(cartItemModelList, totalAmount, false);
+         cartAdapter = new CartAdapter(cartItemModelList, totalAmount, false);
         deliveryRecyclerView.setAdapter(cartAdapter);
         cartAdapter.notifyDataSetChanged();
 
@@ -206,52 +210,63 @@ public class DeliveryActivity extends AppCompatActivity {
         ///////////accessingQuantity
         if (getQtyIDs) {
             for (int x = 0; x < cartItemModelList.size() - 1; x++) {
-                int finalX = x;
 
+                for (int y=0;y<cartItemModelList.get(x).getProductQuantity();y++){
+                    String quantityDocumentName=UUID.randomUUID().toString().substring(0, 20);
+                    Map<String,Object>timeStamp=new HashMap<>();
+                    timeStamp.put("time", FieldValue.serverTimestamp());
 
-                firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x)
-                        .getProductId()).collection("QUANTITY").orderBy("available", Query.Direction.DESCENDING)
-                        .limit(cartItemModelList.get(x).getProductQuantity()).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-                                        if ((boolean) queryDocumentSnapshot.get("available")) {
+                    int finalX = x;
+                    int finalY = y;
+                    firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x).getProductId())
+                            .collection("QUANTITY").document(quantityDocumentName).set(timeStamp).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                          cartItemModelList.get(finalX).getQtyIDs().add(quantityDocumentName);
 
+                            if (finalY +1==cartItemModelList.get(finalX).getProductQuantity()){
+                                firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(finalX).getProductId())
+                                        .collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING)
+                                        .limit(cartItemModelList.get(finalX).getStockQuantity())
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                     if(task.isSuccessful()){
+                                         List<String>serverQuantity=new ArrayList<>();
+                                         for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
+                                             serverQuantity.add(queryDocumentSnapshot.getId());
+                                         }
+                                         long notAvailableQty=0;
+                                         boolean noLongerAvailable=true;
+                                         for (String qtyId : cartItemModelList.get(finalX).getQtyIDs()){
+                                             if (!serverQuantity.contains(qtyId)){
+                                                 notAvailableQty++;
+                                                 if (noLongerAvailable){
+                                                     cartItemModelList.get(finalX).setInStock(false);
+                                                 }
+                                                 else {
+                                                     cartItemModelList.get(finalX).setQtyError(true);
+                                                     cartItemModelList.get(finalX).setMaxQuantity(notAvailableQty);
+                                                     Toast.makeText(DeliveryActivity.this, "Sorry ! all products may not be available in required quantity...", Toast.LENGTH_SHORT).show();
+                                                 }
+                                                 allProductsAvailable=false;
+                                             }else {
+                                                 noLongerAvailable=false;
+                                             }
 
-                                            firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(finalX)
-                                                    .getProductId()).collection("QUANTITY").document(queryDocumentSnapshot.getId()).update("available", false)
-                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            if (task.isSuccessful()) {
-                                                                cartItemModelList.get(finalX).getQtyIDs().add(queryDocumentSnapshot.getId());
+                                         }
+                                         cartAdapter.notifyDataSetChanged();
 
-
-                                                            } else {
-                                                                /////error
-                                                                String error = task.getException().getMessage();
-                                                                Toast.makeText(DeliveryActivity.this, error, Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-
-
-                                        } else {
-                                            ///////not available
-                                            allProductsAvailable = false;
-                                            Toast.makeText(DeliveryActivity.this, "all products may not be available at required quantity!", Toast.LENGTH_SHORT).show();
-                                            break;
-                                        }
+                                     }else {
+                                         String error = task.getException().getMessage();
+                                         Toast.makeText(DeliveryActivity.this, error, Toast.LENGTH_SHORT).show();
+                                     }
                                     }
-                                } else {
-                                    ////////error
-                                    String error = task.getException().getMessage();
-                                    Toast.makeText(DeliveryActivity.this, error, Toast.LENGTH_SHORT).show();
-                                }
+                                });
                             }
-                        });
+                        }
+                    });
+                }
             }
         }else {
             getQtyIDs=true;
@@ -283,13 +298,22 @@ public class DeliveryActivity extends AppCompatActivity {
           for (int x = 0; x < cartItemModelList.size() - 1; x++) {
             if (!successResponse) {
               for (String qtyID : cartItemModelList.get(x).getQtyIDs()) {
-                firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x)
-                        .getProductId()).collection("QUANTITY").document(qtyID).update("available", true);
+                  int finalX = x;
+                  firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x)
+                        .getProductId()).collection("QUANTITY").document(qtyID).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                           if (qtyID.equals(cartItemModelList.get(finalX).getQtyIDs().get(cartItemModelList.get(finalX).getQtyIDs().size() -1))){
+                               cartItemModelList.get(finalX).getQtyIDs().clear();
+                           }
+                            }
+                        });
 
             }
-        }
-        cartItemModelList.get(x).getQtyIDs().clear();
-
+        }else {
+                cartItemModelList.get(x).getQtyIDs().clear();
+            }
     }
 }
     }
@@ -312,7 +336,8 @@ public class DeliveryActivity extends AppCompatActivity {
         for (int x=0;x < cartItemModelList.size() -1;x++){
             for (String qtyID: cartItemModelList.get(x).getQtyIDs()){
                 firebaseFirestore.collection("PRODUCTS").document(cartItemModelList.get(x)
-                        .getProductId()).collection("QUANTITY").document(qtyID).update("user_ID",FirebaseAuth.getInstance().getUid());
+                        .getProductId()).collection("QUANTITY").document(qtyID)
+                        .update("user_ID",FirebaseAuth.getInstance().getUid());
 
             }
         }

@@ -24,13 +24,15 @@ public class CartItemModel {
     private String productImage;
     private Long productQuantity;
     private Long maxQuantity;
+    private Long stockQuantity;
     private String productTitle;
     private String productPrice;
     private String cuttedPrice;
     private boolean inStock;
     private List<String>qtyIDs;
+    private boolean qtyError;
 
-    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice,boolean inStock,Long maxQuantity) {
+    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice,boolean inStock,Long maxQuantity,Long stockQuantity) {
         this.type = type;
         this.productId=productId;
         this.productImage = productImage;
@@ -41,6 +43,24 @@ public class CartItemModel {
         this.inStock=inStock;
         this.maxQuantity=maxQuantity;
         qtyIDs=new ArrayList<>();
+        this.stockQuantity=stockQuantity;
+        qtyError=false;
+    }
+
+    public boolean isQtyError() {
+        return qtyError;
+    }
+
+    public void setQtyError(boolean qtyError) {
+        this.qtyError = qtyError;
+    }
+
+    public Long getStockQuantity() {
+        return stockQuantity;
+    }
+
+    public void setStockQuantity(Long stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public List<String> getQtyIDs() {

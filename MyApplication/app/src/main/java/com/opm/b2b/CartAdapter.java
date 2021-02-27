@@ -78,8 +78,9 @@ public class CartAdapter extends RecyclerView.Adapter {
                 boolean inStock=cartItemModelList.get(position).isInStock();
                 Long productQuantity =cartItemModelList.get(position).getProductQuantity();
                 Long maxQuantity =cartItemModelList.get(position).getMaxQuantity();
+                boolean  qtyError=cartItemModelList.get(position).isQtyError();
 
-                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock,String.valueOf(productQuantity),maxQuantity);
+                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock,String.valueOf(productQuantity),maxQuantity,qtyError);
 
                 break;
             case CartItemModel.TOTAL_AMOUNT:
@@ -142,7 +143,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             productQuantity = itemView.findViewById(R.id.product_quantity);
         }
 
-        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock,String quantity,Long maxQuantity) {
+        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock,String quantity,Long maxQuantity,boolean qtyError) {
            // productImage.setImageResource(resource);
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
         productTitle.setText(title);
@@ -152,6 +153,18 @@ public class CartAdapter extends RecyclerView.Adapter {
             productPrice.setTextColor(Color.parseColor("#000000"));
             cuttedPrice.setText("Rs."+cuttedPriceText+"/-");
             productQuantity.setText("Qty:"+ quantity);
+
+            if (qtyError){
+                productQuantity.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+                productQuantity.setBackgroundTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
+                productQuantity.setCompoundDrawableTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
+
+            }else {
+                productQuantity.setTextColor(itemView.getContext().getResources().getColor(R.color.black));
+                productQuantity.setBackgroundTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.black)));
+                productQuantity.setCompoundDrawableTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.black)));
+
+            }
             productQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
