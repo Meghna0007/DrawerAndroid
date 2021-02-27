@@ -171,6 +171,8 @@ public class SignupFragment extends Fragment {
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
 
                 SigninWithPhone(credential);
+
+                signOutFromPhone();
             }
         });
 ////////////////////OTP
@@ -301,6 +303,7 @@ public class SignupFragment extends Fragment {
             if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
                 signUpBtn.setEnabled(true);
                 signUpBtn.setTextColor(Color.WHITE);
+
                 firebaseAuth.createUserWithEmailAndPassword(email.getText().toString().toString(), password.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -316,7 +319,8 @@ public class SignupFragment extends Fragment {
                                                @Override
                                                public void onComplete(@NonNull Task<Void> task) {
                                                    if (task.isSuccessful()) {
-                                                     CollectionReference userDataReference = firebaseFirestore.collection("USERS").document(firebaseAuth.getUid()).collection("USER_DATA");
+                                                     CollectionReference userDataReference = firebaseFirestore.collection("USERS")
+                                                             .document(firebaseAuth.getUid()).collection("USER_DATA");
 
                                                       //////Maps
                                                        Map<String,Object> wishlistMap = new HashMap<>();
@@ -394,7 +398,11 @@ public class SignupFragment extends Fragment {
     }
     ////////////OTP
     private void SigninWithPhone(PhoneAuthCredential credential) {
+
+
+
         auth.signInWithCredential(credential)
+        //auth.getCurrentUser().linkWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -433,6 +441,12 @@ public class SignupFragment extends Fragment {
                 Toast.makeText(getContext(), "Code sent", Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    private void signOutFromPhone() {
+
+        FirebaseAuth.getInstance().signOut();
+
     }
     //////////OTP
 }

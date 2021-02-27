@@ -3,6 +3,7 @@ package com.opm.b2b;
 import android.app.Dialog;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -72,7 +76,10 @@ public class CartAdapter extends RecyclerView.Adapter {
                 String productPrice = cartItemModelList.get(position).getProductPrice();
                 String cuttedPrice = cartItemModelList.get(position).getCuttedPrice();
                 boolean inStock=cartItemModelList.get(position).isInStock();
-                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock);
+                Long productQuantity =cartItemModelList.get(position).getProductQuantity();
+                Long maxQuantity =cartItemModelList.get(position).getMaxQuantity();
+
+                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock,String.valueOf(productQuantity),maxQuantity);
 
                 break;
             case CartItemModel.TOTAL_AMOUNT:
@@ -135,7 +142,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             productQuantity = itemView.findViewById(R.id.product_quantity);
         }
 
-        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock) {
+        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock,String quantity,Long maxQuantity) {
            // productImage.setImageResource(resource);
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
         productTitle.setText(title);
@@ -144,7 +151,7 @@ public class CartAdapter extends RecyclerView.Adapter {
             productPrice.setText("Rs."+productPriceText+"/-");
             productPrice.setTextColor(Color.parseColor("#000000"));
             cuttedPrice.setText("Rs."+cuttedPriceText+"/-");
-
+            productQuantity.setText("Qty:"+ quantity);
             productQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -156,6 +163,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                     EditText quantityNo = quantityDialog.findViewById(R.id.Quantity_Number);
                     Button cancelBtn=quantityDialog.findViewById(R.id.cancel_Btn);
                     Button okBtn=quantityDialog.findViewById(R.id.ok_btn);
+
+                    quantityNo.setHint("Max "+ String.valueOf(maxQuantity));
                     cancelBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -165,8 +174,28 @@ public class CartAdapter extends RecyclerView.Adapter {
                     okBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            productQuantity.setText("Qty:"+ quantityNo.getText());
-                            quantityDialog.dismiss();
+                            if (!TextUtils.isEmpty(quantityNo.getText())) {
+                                if (Long.valueOf(quantityNo.getText().toString()) <= maxQuantity && Long.valueOf(quantityNo.getText().toString()) != 0 ) {
+                                    if (itemView.getContext()instanceof Main4Activity){
+                                        DBqueries.cartItemModelList.get(position).setProductQuantity(Long.valueOf(quantityNo.getText().toString()));
+
+                                    }else {
+                                        if (DeliveryActivity.fromCart) {
+                                            DBqueries.cartItemModelList.get(position).setProductQuantity(Long.valueOf(quantityNo.getText().toString()));
+                                        }else{
+                                            DeliveryActivity.cartItemModelList.get(position).setProductQuantity(Long.valueOf(quantityNo.getText().toString()));
+                                        }
+                                    }
+
+                                    productQuantity.setText("Qty:" + quantityNo.getText());
+
+                                }else {
+                                    Toast.makeText(itemView.getContext(), "Max quantity :"+maxQuantity.toString(), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                                quantityDialog.dismiss();
+
                         }
                     });
                     quantityDialog.show();

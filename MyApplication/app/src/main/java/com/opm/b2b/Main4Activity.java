@@ -63,6 +63,7 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
 private int scrollFlags;
 private  AppBarLayout.LayoutParams params;
 public static Activity main4Activity;
+public static boolean resetMain4Activity=false;
     //public static boolean isCartFragmentOpened = false;
 
 
@@ -160,6 +161,14 @@ public static Activity main4Activity;
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
         }else{
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
+
+        }
+        if (resetMain4Activity){
+            actionBarLogo.setVisibility(View.VISIBLE);
+            resetMain4Activity=false;
+            setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+            navigationView.getMenu().getItem(0).setChecked(true);
+
 
         }
  invalidateOptionsMenu();

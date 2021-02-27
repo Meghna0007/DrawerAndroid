@@ -1,5 +1,8 @@
 package com.opm.b2b;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CartItemModel {
 
     public static final int CART_ITEM = 0;
@@ -20,12 +23,14 @@ public class CartItemModel {
     private String productId;
     private String productImage;
     private Long productQuantity;
+    private Long maxQuantity;
     private String productTitle;
     private String productPrice;
     private String cuttedPrice;
     private boolean inStock;
+    private List<String>qtyIDs;
 
-    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice,boolean inStock) {
+    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice,boolean inStock,Long maxQuantity) {
         this.type = type;
         this.productId=productId;
         this.productImage = productImage;
@@ -34,6 +39,24 @@ public class CartItemModel {
         this.productPrice = productPrice;
         this.cuttedPrice = cuttedPrice;
         this.inStock=inStock;
+        this.maxQuantity=maxQuantity;
+        qtyIDs=new ArrayList<>();
+    }
+
+    public List<String> getQtyIDs() {
+        return qtyIDs;
+    }
+
+    public void setQtyIDs(List<String> qtyIDs) {
+        this.qtyIDs = qtyIDs;
+    }
+
+    public Long getMaxQuantity() {
+        return maxQuantity;
+    }
+
+    public void setMaxQuantity(Long maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
 
     public boolean isInStock() {

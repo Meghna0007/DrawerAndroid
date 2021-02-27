@@ -281,7 +281,8 @@ public class DBqueries {
                                                     task.getResult().get("product_title").toString(),
                                                     task.getResult().get("product_price").toString(),
                                                     task.getResult().get("cuttedPrice").toString(),
-                                                    (boolean)task.getResult().get("in_stock")
+                                                    (boolean)task.getResult().get("in_stock"),
+                                                    (long)task.getResult().get("max-quantity")
                                             ));
                                             if (cartList.size() == 1) {
                                                 cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
