@@ -70,10 +70,10 @@ public class DeliveryActivity extends AppCompatActivity {
     public static boolean fromCart;
    private  String order_id;
    public static boolean codOrderConfirmed=false;
-   private  boolean allProductsAvailable=true;
+   public static   boolean allProductsAvailable;
    public static boolean getQtyIDs=true;
    private FirebaseFirestore firebaseFirestore;
-   private CartAdapter cartAdapter;
+   public  static CartAdapter cartAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +117,7 @@ public class DeliveryActivity extends AppCompatActivity {
         //////////////payment Dialog
         firebaseFirestore =FirebaseFirestore.getInstance();
         getQtyIDs=true;
+        allProductsAvailable=true;
         order_id = UUID.randomUUID().toString().substring(0, 28);
 
 
@@ -236,21 +237,22 @@ public class DeliveryActivity extends AppCompatActivity {
                                          for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
                                              serverQuantity.add(queryDocumentSnapshot.getId());
                                          }
-                                         long notAvailableQty=0;
+                                         long availableQty=0;
                                          boolean noLongerAvailable=true;
                                          for (String qtyId : cartItemModelList.get(finalX).getQtyIDs()){
                                              if (!serverQuantity.contains(qtyId)){
-                                                 notAvailableQty++;
+
                                                  if (noLongerAvailable){
                                                      cartItemModelList.get(finalX).setInStock(false);
                                                  }
                                                  else {
                                                      cartItemModelList.get(finalX).setQtyError(true);
-                                                     cartItemModelList.get(finalX).setMaxQuantity(notAvailableQty);
+                                                     cartItemModelList.get(finalX).setMaxQuantity(availableQty);
                                                      Toast.makeText(DeliveryActivity.this, "Sorry ! all products may not be available in required quantity...", Toast.LENGTH_SHORT).show();
                                                  }
                                                  allProductsAvailable=false;
                                              }else {
+                                                availableQty++;
                                                  noLongerAvailable=false;
                                              }
 
