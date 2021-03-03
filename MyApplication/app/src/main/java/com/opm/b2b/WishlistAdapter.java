@@ -107,7 +107,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
                 productPrice.setText(price);
                 cuttedPrice.setText("Rs."+cuttedPriceValue+"/-");
-                perPiece.setText("Rs."+ProductperPiece+"+/-");
+                perPiece.setText("Rs."+ProductperPiece+"/-");
                 setOfPiece.setText(ProductsetofPiece);
                 productWeight.setText(ProductWeight);
             }else {
@@ -121,11 +121,11 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
             if (wishlist) {
                 deleteBtn.setVisibility(View.VISIBLE);
-                product_quantity.setVisibility(View.GONE);
+               /* product_quantity.setVisibility(View.GONE);*/
 
             } else {
                 deleteBtn.setVisibility(View.GONE);
-                product_quantity.setVisibility(View.VISIBLE);
+                /*product_quantity.setVisibility(View.VISIBLE);*/
             }
                 deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -139,12 +139,12 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                     }
                 });
 
-            product_quantity.setOnClickListener(new View.OnClickListener() {
+          /*  product_quantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(itemView.getContext(), "Add To Cart", Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

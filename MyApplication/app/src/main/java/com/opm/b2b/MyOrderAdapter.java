@@ -11,6 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.Date;
 import java.util.List;
 
 public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewholder> {
@@ -28,13 +31,36 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull MyOrderAdapter.Viewholder holder, int position) {
 
-        int resource = myOrderItemModelList.get(position).getProductImage();
+        String resource = myOrderItemModelList.get(position).getProductImage();
         String title = myOrderItemModelList.get(position).getProductTitle();
-        String deliveryStatus = myOrderItemModelList.get(position).getDeliveryStatus();
+        String orderStatus=myOrderItemModelList.get(position).getOrderStatus();
+        Date date;
+        switch (orderStatus){
+            case "Ordered":
+                date=myOrderItemModelList.get(position).getOrderedDate();
+                break;
+            case "Packed":
+                date=myOrderItemModelList.get(position).getPackedDate();
+                break;
+            case "Shipped":
+                date=myOrderItemModelList.get(position).getShippedDate();
+                break;
+            case "Delivered":
+                date=myOrderItemModelList.get(position).getDeliveredDate();
+                break;
+            case "Cancelled":
+                date=myOrderItemModelList.get(position).getCancelledDate();
+                break;
+            default:
+                date=myOrderItemModelList.get(position).getCancelledDate();
 
-        holder.setData(resource, title, deliveryStatus);
+
+        }
+
+
+        holder.setData(resource, title,orderStatus,date);
 
     }
 
@@ -45,7 +71,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
 
     public class Viewholder extends RecyclerView.ViewHolder {
         private ImageView productImage;
-        private ImageView deliveryIndicator;
+        private ImageView orderIndicator;
         private TextView productTitle;
         private TextView deliveryStatus;
 
@@ -53,10 +79,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
         public Viewholder(@NonNull View itemView) {
             super(itemView);
             productImage = itemView.findViewById(R.id.Order_Image);
-            deliveryIndicator = itemView.findViewById(R.id.order_indicator);
+            orderIndicator = itemView.findViewById(R.id.order_indicator);
             productTitle = itemView.findViewById(R.id.Order_title);
             deliveryStatus = itemView.findViewById(R.id.order_delivered_date);
-            deliveryIndicator = itemView.findViewById(R.id.order_indicator);
+            orderIndicator = itemView.findViewById(R.id.order_indicator);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,16 +93,18 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
 
         }
 
-        private void setData(int resource, String title, String deliveryDate) {
-            productImage.setImageResource(resource);
-            if (deliveryDate.equals("Cancelled")) {
-                deliveryIndicator.setImageTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
+        private void setData(String resource, String title, String orderStatus,Date date) {
+            Glide.with(itemView.getContext()).load(resource).into(productImage);
+            productTitle.setText(title);
+            if (orderStatus.equals("Cancelled")) {
+                orderIndicator.setImageTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
             } else {
-                deliveryIndicator.setImageTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.successGreen)));
+                orderIndicator.setImageTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.successGreen)));
 
             }
-            productTitle.setText(title);
-            deliveryStatus.setText(deliveryDate);
+
+            deliveryStatus.setText(orderStatus+String.valueOf(date
+            ));
 
         }
     }

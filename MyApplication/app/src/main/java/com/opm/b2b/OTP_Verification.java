@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.service.voice.VoiceInteractionSession;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +49,7 @@ public class OTP_Verification extends AppCompatActivity {
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
     FirebaseAuth auth;
     private String verificationCode;
+    //boolean isCodeSent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +62,7 @@ public class OTP_Verification extends AppCompatActivity {
         userNo = getIntent().getStringExtra("mobileNo");
         userNo = "+91"+userNo;
         phoneNo.setText("Verification code has been sent to  " + userNo);
-
+        //isCodeSent = false;
         StartFirebaseLogin();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 userNo,                     // Phone number to verify
@@ -73,10 +79,31 @@ public class OTP_Verification extends AppCompatActivity {
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
 
                 SigninWithPhone(credential);
-                DeliveryActivity.codOrderConfirmed=true;
+                //DeliveryActivity.codOrderConfirmed=true;
                 finish();
             }
         });
+
+        // email
+        etOTP.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                checkInputs();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
        /* apiKey = "FEuQKyJoB1s78DZNUzAHbp0CMjO3Y59S4mRLTVhxietafwIcvqE8ocyt0WOhQKugIfzqm1HxvGPj2ANX";
 
         Random random =new Random();
@@ -159,6 +186,7 @@ public class OTP_Verification extends AppCompatActivity {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
                 Toast.makeText(OTP_Verification.this, "Code sent", Toast.LENGTH_SHORT).show();
+                //isCodeSent = true;
             }
         };
     }
@@ -174,12 +202,55 @@ public class OTP_Verification extends AppCompatActivity {
                            /* startActivity(new Intent(OTP_Verification.this, Main4Activity.class));
                             finish();*/
                             //checkEmailAndPassword();
-                            Toast.makeText(OTP_Verification.this, " OTP", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(OTP_Verification.this, " OTP", Toast.LENGTH_SHORT).show();
+                            Map<String,Object>updateStatus=new HashMap<>();
+
+                            updateStatus.put("Order Status","Ordered");
+                            String OrderID=getIntent().getStringExtra("OrderID");
+                            FirebaseFirestore.getInstance().collection("ORDERS").document(OrderID).update(updateStatus)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+
+                                                Map<String,Object> userOrder=new HashMap<>();
+                                                userOrder.put("order_id",OrderID);
+                                                FirebaseFirestore.getInstance().collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USERS_ORDERS")
+                                                        .document(OrderID).set(userOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()){
+                                                            DeliveryActivity.codOrderConfirmed=true;
+                                                        }else {
+                                                            Toast.makeText(OTP_Verification.this, "failed to update user's OrderList", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
+
+
+                                            }else {
+                                                Toast.makeText(OTP_Verification.this, "Order Cancelled", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
 
                         } else {
                             Toast.makeText(OTP_Verification.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
+                            DeliveryActivity.codOrderConfirmed=false;
                         }
                     }
                 });
+    }
+
+    private void checkInputs() {
+
+        if (!TextUtils.isEmpty(etOTP.getText())) {
+            verifyButton.setEnabled(true);
+            verifyButton.setTextColor(Color.BLACK);
+        } else {
+            verifyButton.setEnabled(false);
+            //verifyButton.setTextColor(Color.WHITE);
+        }
+
     }
 }

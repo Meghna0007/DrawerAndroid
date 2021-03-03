@@ -84,6 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="buy now"
+            android:visibility="gone"
             android:backgroundTint="@color/red"
             android:stateListAnimator="@null"
             android:textColor="@color/white"

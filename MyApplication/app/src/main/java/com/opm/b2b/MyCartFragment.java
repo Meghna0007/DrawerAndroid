@@ -148,4 +148,12 @@ public class MyCartFragment extends Fragment {
 
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        for(CartItemModel cartItemModel : DBqueries.cartItemModelList){
+            /////////////////
+        }
+    }
 }

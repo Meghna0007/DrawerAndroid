@@ -113,14 +113,16 @@ public class ViewAllActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     for(QueryDocumentSnapshot documentSnapshot :task.getResult()){
 
-                        /*wishlistModels.add(new WishlistModel(DBqueries.getStringValue(documentSnapshot.get("product_id")),
+                        wishlistModels.add(new WishlistModel(DBqueries.getStringValue(documentSnapshot.get("product_id")),
                                 DBqueries.getStringValue(documentSnapshot.get("icon")),
                                 DBqueries.getStringValue(documentSnapshot.get("productTitle")),
                                 getStringValue(documentSnapshot.get("productPrice")),
                                 getStringValue(documentSnapshot.get("cuttedPrice")),
                                 getStringValue(documentSnapshot.get("productWeight")),
                                 getStringValue(documentSnapshot.get("setPiece")),
-                                getStringValue(documentSnapshot.get("perPiece"))));*/
+                                getStringValue(documentSnapshot.get("perPiece")),
+                                        true)
+                                );
                     }
                     wishlistAdapter.notifyDataSetChanged();
 

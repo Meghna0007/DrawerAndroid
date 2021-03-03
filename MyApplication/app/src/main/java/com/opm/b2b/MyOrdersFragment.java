@@ -70,15 +70,16 @@ public class MyOrdersFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myOrdersRecyclerView.setLayoutManager(layoutManager);
-        List<MyOrderItemModel> myOrderItemModelList = new ArrayList<>();
-        myOrderItemModelList.add(new MyOrderItemModel(R.drawable.common_full_open_on_phone, "Pixel 2XL(BlACK)", "Delivered on Mon,15thJan"));
-        myOrderItemModelList.add(new MyOrderItemModel(R.drawable.add, "Pixel 2XL(BlACK)", "Delivered on Mon,15thJan"));
-        myOrderItemModelList.add(new MyOrderItemModel(R.drawable.common_full_open_on_phone, "Pixel 2XL(BlACK)", "Delivered on Mon,15thJan"));
-        myOrderItemModelList.add(new MyOrderItemModel(R.drawable.product, "Pixel 2XL(BlACK)", "Cancelled"));
-        MyOrderAdapter myOrderAdapter = new MyOrderAdapter(myOrderItemModelList);
+
+
+
+          MyOrderAdapter myOrderAdapter = new MyOrderAdapter(DBqueries.myOrderItemModelList);
         myOrdersRecyclerView.setAdapter(myOrderAdapter);
         myOrderAdapter.notifyDataSetChanged();
 
+        if (DBqueries.myOrderItemModelList.size()==0){
+            DBqueries.loadOrders(getContext(),myOrderAdapter);
+        }
 
         return view;
     }

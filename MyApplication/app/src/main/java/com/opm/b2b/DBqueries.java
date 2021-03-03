@@ -25,7 +25,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.opm.b2b.ui.home.AllCategoriesFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ public class DBqueries {
     public static Integer cartListCount = cartList.size();
     public static List<AddressesModel>addressesModelList=new ArrayList<>();
     public static int selectedAddresss =-1;
+    public static List<MyOrderItemModel> myOrderItemModelList=new ArrayList<>();
 
     public static void loadCategories(RecyclerView categoryRecyclerView, Context context) {
 
@@ -469,7 +472,60 @@ public class DBqueries {
             }
         });
     }
+    public static void loadOrders(final Context context,MyOrderAdapter myOrderAdapter){
+       myOrderItemModelList.clear();
+       firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USERS_ORDERS").get()
+               .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                   @Override
+                   public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                  if (task.isSuccessful()){
+                      for (DocumentSnapshot documentSnapshot : task.getResult().getDocuments()){
+                         firebaseFirestore.collection("ORDERS").document(documentSnapshot.getString("order_id")).collection("OrderItems").get()
+                                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                     @Override
+                                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()){
+                                        for (DocumentSnapshot orderItems : task.getResult().getDocuments()) {
 
+                                            MyOrderItemModel myOrderItemModel = new MyOrderItemModel(
+                                                    orderItems.getString("Product Id"),
+                                                    orderItems.getString("Order Status"),
+                                                    orderItems.getString("Address"),
+                                                    orderItems.getString("Cutted Price"),
+                                                    orderItems.getString("Fullname"),
+                                                    orderItems.getDate("Ordered Date"),
+                                                    orderItems.getDate("Packed Date"),
+                                                    orderItems.getDate("Shipped Date"),
+                                                    orderItems.getDate("Delivered Date"),
+                                                    orderItems.getDate("Cancelled Date"),
+
+                                                    orderItems.getString("ORDER ID"),
+                                                    orderItems.getString("Payment Method"),
+                                                    orderItems.getString("PinCode"),
+                                                    orderItems.getString("Product Price"),
+                                                    orderItems.getLong("Product Quantity"),
+                                                    orderItems.getString("User Id"),
+                                                    orderItems.getString("Product Image"),
+                                                    orderItems.getString("Product Title"));
+
+                                            myOrderItemModelList.add(myOrderItemModel);
+                                        }
+                                        myOrderAdapter.notifyDataSetChanged();
+                                    }else {
+                                        String error = task.getException().getMessage();
+                                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+
+                                    }
+                                     }
+                                 });
+                      }
+                  }else {
+                      String error = task.getException().getMessage();
+                      Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                  }
+                   }
+               });
+    }
     public static void clearData() {
         categoryModelList.clear();
         lists.clear();
@@ -489,4 +545,6 @@ public class DBqueries {
             return object.toString();
         }
     }
+
+
 }

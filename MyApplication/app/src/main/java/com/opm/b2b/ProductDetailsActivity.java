@@ -74,7 +74,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     public static String productId;
     private Dialog loadingDialog;
-    private boolean inStock;
+    private boolean inStock=false;
+    private String productOriginalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +122,6 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     documentSnapshot = task.getResult();
 
-
-
                     firebaseFirestore.collection("PRODUCTS").document(productId)
                             .collection("QUANTITY").orderBy("time", Query.Direction.ASCENDING)
                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -138,6 +137,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                                 ProductTitle.setText(documentSnapshot.get("product_title").toString());
                                 ProductPrice.setText("Rs." + documentSnapshot.get("product_price").toString() + "/-");
+                                productOriginalPrice=documentSnapshot.get("product_price").toString();
                                 CuttedPrice.setText("Rs." + documentSnapshot.get("cuttedPrice").toString() + "/-");
 
                                 if ((boolean) documentSnapshot.get("use_tab_layout")) {
@@ -169,16 +169,15 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                 productDetailsViewPager.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(), productDetailsTabLayout.getTabCount(), productDescription, productOtherDetails, productSpecificationModelList));
 
                                 if (currentUser != null) {
-                                    if(DBqueries.cartList.size()==0){
-                                        DBqueries.loadCartList(ProductDetailsActivity.this,false,loadingDialog,badgeCount,new TextView(ProductDetailsActivity.this));
+                                    if (DBqueries.cartList.size() == 0) {
+                                        DBqueries.loadCartList(ProductDetailsActivity.this, false, loadingDialog, badgeCount, new TextView(ProductDetailsActivity.this));
                                     }
                                     if (DBqueries.wishlist.size() == 0) {
                                         DBqueries.loadWishlist(ProductDetailsActivity.this, loadingDialog, false);
-                                    } else {
+                                    }
+                                    if (DBqueries.cartList.size() != 0 && DBqueries.wishlist.size() != 0) {
                                         loadingDialog.dismiss();
                                     }
-
-
                                 } else {
                                     loadingDialog.dismiss();
                                 }
@@ -202,6 +201,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
                                 if (task.getResult().getDocuments().size()<(long)documentSnapshot.get("stock_quantity")){
                                     inStock=true;
+                                    buyNowBtn.setVisibility(View.VISIBLE);
                                     addtoCartBtn.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -336,8 +336,9 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                         Toast.makeText(ProductDetailsActivity.this, error, Toast.LENGTH_SHORT).show();
                                     }
                                     running_wishlist_query = false;
-                                }
-                            });
+                                 }
+                            }
+                            );
                         } // else aready added to wishlist false
                     }   //ALREADY_ADDED_TO_WISHLIST=true;
                 } // else not current user null closed
@@ -433,10 +434,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
         super.onStart();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-
+           /* if (DBqueries.cartList.size() == 0) {
+                DBqueries.loadCartList(ProductDetailsActivity.this, false, loadingDialog, badgeCount, new TextView(ProductDetailsActivity.this));
+            }*/
             if (DBqueries.wishlist.size() == 0) {
                 DBqueries.loadWishlist(ProductDetailsActivity.this, loadingDialog, false);
-            } else {
+            }
+            if (DBqueries.cartList.size() != 0 && DBqueries.wishlist.size() != 0) {
                 loadingDialog.dismiss();
             }
         } else {
