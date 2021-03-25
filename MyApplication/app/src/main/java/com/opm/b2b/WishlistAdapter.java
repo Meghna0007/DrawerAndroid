@@ -19,14 +19,31 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
-
+   private boolean fromSearch;
    private List<WishlistModel> wishlistModelList;
    private Boolean wishlist;
+   private int lastPosition=-1;
+
+    public boolean isFromSearch() {
+        return fromSearch;
+    }
+
+    public void setFromSearch(boolean fromSearch) {
+        this.fromSearch = fromSearch;
+    }
 
     public WishlistAdapter(List<WishlistModel> wishlistModelList, Boolean wishlist) {
 
         this.wishlistModelList = wishlistModelList;
         this.wishlist = wishlist;
+    }
+
+    public List<WishlistModel> getWishlistModelList() {
+        return wishlistModelList;
+    }
+
+    public void setWishlistModelList(List<WishlistModel> wishlistModelList) {
+        this.wishlistModelList = wishlistModelList;
     }
 
     @NonNull
@@ -148,6 +165,9 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (fromSearch){
+                        ProductDetailsActivity.fromSearch=true;
+                    }
                     Intent productDetailsIntent=new Intent(itemView.getContext(),ProductDetailsActivity.class);
                     productDetailsIntent.putExtra("product_id_",productId);
                     itemView.getContext().startActivity(productDetailsIntent);

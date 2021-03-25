@@ -1,16 +1,30 @@
 package com.opm.b2b;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.opm.b2b.DeliveryActivity.SELECT_ADDRESS;
 import static com.opm.b2b.MyAccountFragment.MANAGE_ADDRESS;
@@ -22,12 +36,16 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Viewhold
     private List<AddressesModel>addressesModelList;
     private int MODE;
     private int preSelectedPosition;
+    private boolean refresh=false;
+    private Dialog loadingDialog;
 
 
-    public AddressAdapter(List<AddressesModel> addressesModelList,int MODE) {
+    public AddressAdapter(List<AddressesModel> addressesModelList, int MODE,Dialog loadingDialog) {
         this.addressesModelList = addressesModelList;
         this.MODE=MODE;
         preSelectedPosition = DBqueries.selectedAddresss;
+        this.loadingDialog=loadingDialog;
+
     }
 
     @NonNull
@@ -40,13 +58,18 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Viewhold
 
     @Override
     public void onBindViewHolder(@NonNull Viewholder holder, int position) {
+        String  city=addressesModelList.get(position).getCity();
+        String  locality=addressesModelList.get(position).getLocality();
+        String  flatNo=addressesModelList.get(position).getFlatNo();
+        String  pincode=addressesModelList.get(position).getPincode();
+        String  landmark=addressesModelList.get(position).getLandmark();
+        String  name=addressesModelList.get(position).getName();
+        String  mobileNo=addressesModelList.get(position).getMobileNo();
+        String  alternateMobileNo=addressesModelList.get(position).getAlternateMobileNo();
+        String  state=addressesModelList.get(position).getState();
+      boolean selected=addressesModelList.get(position).getSelected();
 
-        String name = addressesModelList.get(position).getFullname();
-        String mobileNo=addressesModelList.get(position).getMobileNo();
-        String address = addressesModelList.get(position).getAddress();
-        String pincode = addressesModelList.get(position).getPincode();
-        Boolean selected= addressesModelList.get(position).getSelected();
-        holder.setData(name,address ,pincode,selected,position,mobileNo);
+      holder.setData(name,city,pincode,selected,position,mobileNo,alternateMobileNo,flatNo,locality,state,landmark);
     }
 
     @Override
@@ -70,10 +93,21 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Viewhold
             icon=itemView.findViewById(R.id.iconView);
             optionContainer=itemView.findViewById(R.id.option_container);
         }
-        private void setData(String username, String useraddress , String userpincode,Boolean selected, int position,String mobileNo) {
-            fullname.setText(username+" - "+mobileNo);
-            address.setText(useraddress);
+        private void setData(String username, String city , String userpincode,Boolean selected, int position,String mobileNo,String alternateMobileNo,String flatNo,String locality,String state,String landmark) {
+             if (alternateMobileNo.equals("")) {
+                fullname.setText(username + " - " + mobileNo);
+            } else {
+                fullname.setText(username + " - " + mobileNo + " or " + alternateMobileNo);
+
+            }
+             if (landmark.equals("")) {
+                address.setText(flatNo + " " + locality + " " + city + " " + state);
+
+            } else{
+                address.setText(flatNo + " " + locality + " " + landmark + " " + city + " " + state);
+            }
             pincode.setText(userpincode);
+
 
 
             if(MODE==SELECT_ADDRESS){
@@ -100,12 +134,101 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.Viewhold
 
             }else if(MODE== MANAGE_ADDRESS){
                 optionContainer.setVisibility(View.GONE);
+                optionContainer.getChildAt(0).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {/////////////////edit address
+                        Intent addAddressIntent = new Intent(itemView.getContext(), AddAddressActivity.class);
+                        addAddressIntent.putExtra("INTENT", "update_address");
+                        addAddressIntent.putExtra("index",position);
+                        itemView.getContext().startActivity(addAddressIntent);
+                        refresh=false;
+                    }
+                });
+                optionContainer.getChildAt(1).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {/////////////remove address
+                     loadingDialog.show();
+                        Map<String,Object> addresses=new HashMap<>();
+                        int x=0;
+                        int selected=0;
+                        for (int i=0;i< addressesModelList.size();i++){
+                            if (i != position){
+                                x++;
+                                        addresses.put("city_"+x,addressesModelList.get(i).getCity());
+                                        addresses.put("locality_"+x,addressesModelList.get(i).getLocality());
+                                        addresses.put("flat_no_"+x,addressesModelList.get(i).getFlatNo());
+                                        addresses.put("pinCode_"+x,addressesModelList.get(i).getPincode());
+                                        addresses.put("landmark_"+x,addressesModelList.get(i).getLandmark());
+                                        addresses.put("name_"+x,addressesModelList.get(i).getName());
+                                        addresses.put("mobile_no_"+x,addressesModelList.get(i).getMobileNo());
+                                        addresses.put("alternate_mobile_no_"+x,addressesModelList.get(i).getAlternateMobileNo());
+                                        addresses.put("state_"+x,addressesModelList.get(i).getState());
+
+                                        if (addressesModelList.get(position).getSelected()){
+                                            if (position-1>=0){
+                                                if (x==position){
+                                                    addresses.put("selected_"+x,true);
+                                                    selected=x;
+                                                }else {
+                                                    addresses.put("selected_"+x,addressesModelList.get(i).getSelected());
+
+                                                }
+
+                                            }else {
+                                                if (x==1){
+                                                    addresses.put("selected_"+x,true);
+                                                    selected=x;
+
+                                                }else {
+                                                    addresses.put("selected_"+x,addressesModelList.get(i).getSelected());
+
+                                                }
+                                            }
+                                        }else {
+                                            addresses.put("selected_"+x,addressesModelList.get(i).getSelected());
+                                            if (addressesModelList.get(i).getSelected()){
+                                                selected=x;
+                                            }
+                                        }
+                            }
+                        }
+                       addresses.put("list_size",x);
+                        int finalSelected = selected;
+                        FirebaseFirestore.getInstance().collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                                .collection("USER_DATA").document("MY_ADDRESSES").set(addresses)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                   if (task.isSuccessful()){
+                                       DBqueries.addressesModelList.remove(position);
+                                       if (finalSelected != -1) {
+                                           DBqueries.selectedAddresss = finalSelected - 1;
+                                           DBqueries.addressesModelList.get(finalSelected - 1).setSelected(true);
+                                       }else if (DBqueries.addressesModelList.size()==0){
+                                           DBqueries.selectedAddresss=-1;
+                                       }
+                                       notifyDataSetChanged();
+                                   }else {
+                                       String error=task.getException().getMessage();
+                                       Toast.makeText(itemView.getContext(), error, Toast.LENGTH_SHORT).show();
+                                   }
+                                   loadingDialog.dismiss();
+                                    }
+                                });
+
+                        refresh=false;
+                    }
+                });
                 icon.setImageResource(R.drawable.vertical_dot);
                 icon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         optionContainer.setVisibility(View.VISIBLE);
-                        refreshItem(preSelectedPosition,preSelectedPosition);
+                        if (refresh) {
+                            refreshItem(preSelectedPosition, preSelectedPosition);
+                        }else {
+                            refresh=true;
+                        }
                         preSelectedPosition=position;
                     }
                 });

@@ -23,6 +23,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +37,7 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
 
     private List<CategoryPageModel> categoryPageModelList;
     private RecyclerView.RecycledViewPool recycledViewPool;
+    private FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
 
     public CategoryPageAdapter(List<CategoryPageModel> categoryPageModelList) {
         this.categoryPageModelList = categoryPageModelList;
@@ -282,6 +287,44 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
         private void setHorizontalProductLayout(List<HorizonantleProductScrollModel> horizonantleProductScrollModelList, String title,String color,List<WishlistModel>viewAllProductList) {
             container.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             horizontalLayoutTitle.setText(title);
+
+            for (final HorizonantleProductScrollModel model:horizonantleProductScrollModelList) {
+                if (!model.getProductid().isEmpty() && model.getProductTitle().isEmpty()){
+                 firebaseFirestore.collection("PRODUCTS")
+                         .document(model.getProductid())
+                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                     @Override
+                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()){
+                       model.setProductTitle(task.getResult().getString("product_title"));
+                        model.setProductTitle(task.getResult().getString("product_image_1"));
+                        model.setProductTitle(task.getResult().getString("product_price"));
+
+                      WishlistModel wishlistModel=viewAllProductList
+                              .get(horizonantleProductScrollModelList.indexOf(model));
+                      wishlistModel.setProductTitle(task.getResult().getString("product_title"));
+                        wishlistModel.setProductPrice(task.getResult().getString("product_price"));
+                        wishlistModel.setProductImage(task.getResult().getString("product_image_1"));
+                        wishlistModel.setCuttedPrice(task.getResult().getString("cuttedPrice"));
+                        /*wishlistModel.(task.getResult().getBoolean("COD"));*/
+                        wishlistModel.setInStock(task.getResult().getLong("stock_quantity")>0);
+
+                        if (horizonantleProductScrollModelList.indexOf(model)==horizonantleProductScrollModelList.size() -1){
+                            if (horizontalRecylerView.getAdapter()!=null){
+                                horizontalRecylerView.getAdapter().notifyDataSetChanged();
+                            }
+                        }
+
+
+
+
+                    }else {
+                        /////////do nothing
+                    }
+                     }
+                 });
+                }
+            }
             if (horizonantleProductScrollModelList.size() > 8) {
                 horizontalViewAllButton.setVisibility(View.VISIBLE);
 
@@ -331,46 +374,86 @@ public class CategoryPageAdapter extends RecyclerView.Adapter {
             container__.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(color)));
             gridLayoutTitle.setText(title);
 
-            for (int x = 0; x < 4; x++) {
-                ImageView productImage = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Image);
-                TextView productTitle = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_title);
-                TextView productDescription = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Description);
-                TextView productPrice = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Price);
-                Glide.with(itemView.getContext()).load(horizonantleProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
-
-                productTitle.setText(horizonantleProductScrollModelList.get(x).getProductTitle());
-                productDescription.setText(horizonantleProductScrollModelList.get(x).getProductdescription());
-                productPrice.setText("Rs." + horizonantleProductScrollModelList.get(x).getProductprice() + "/-");
-
-                gridProductLayout.getChildAt(x).setBackgroundColor(Color.parseColor("#ffffff"));
-                if (!title.equals("")) {
-                    int finalX = x;
-                    gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+            for (final HorizonantleProductScrollModel model:horizonantleProductScrollModelList) {
+                if (!model.getProductid().isEmpty() && model.getProductTitle().isEmpty()){
+                    firebaseFirestore.collection("PRODUCTS")
+                            .document(model.getProductid())
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onClick(View v) {
-                            Intent productDetailsIntent = new Intent(itemView.getContext(), ProductDetailsActivity.class);
-                            productDetailsIntent.putExtra("product_id_",horizonantleProductScrollModelList.get(finalX).getProductid());
-                            itemView.getContext().startActivity(productDetailsIntent);
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()){
+                                model.setProductTitle(task.getResult().getString("product_title"));
+                                model.setProductTitle(task.getResult().getString("product_image_1"));
+                                model.setProductTitle(task.getResult().getString("product_price"));
+
+
+
+                                if (horizonantleProductScrollModelList.indexOf(model)==horizonantleProductScrollModelList.size() -1){
+                                    setGridData(title,horizonantleProductScrollModelList);
+                                    if (!title.equals("")) {
+                                        gridLayoutButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                ViewAllActivity.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
+                                                Intent viewAllIntent = new Intent(itemView.getContext(), ViewAllActivity.class);
+                                                viewAllIntent.putExtra("layout_code", 1);
+                                                //TODO this is a sample data ..actually there should be deal of day collection that shud be passed here
+                                                viewAllIntent.putExtra("displayName", title);
+                                                viewAllIntent.putExtra("collectionName", "Rice");
+                                                itemView.getContext().startActivity(viewAllIntent);
+                                            }
+                                        });
+
+                                    }
+
+                                }
+
+
+
+
+                            }else {
+                                /////////do nothing
+                            }
                         }
                     });
                 }
-                if (!title.equals("")) {
-                    gridLayoutButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ViewAllActivity.horizonantleProductScrollModelList = horizonantleProductScrollModelList;
-                            Intent viewAllIntent = new Intent(itemView.getContext(), ViewAllActivity.class);
-                            viewAllIntent.putExtra("layout_code", 1);
-                            //TODO this is a sample data ..actually there should be deal of day collection that shud be passed here
-                            viewAllIntent.putExtra("displayName", title);
-                            viewAllIntent.putExtra("collectionName", "Rice");
-                            itemView.getContext().startActivity(viewAllIntent);
-                        }
-                    });
-
             }
+
+
+        setGridData(title,horizonantleProductScrollModelList);
+    }
+    private void setGridData(String title,final List<HorizonantleProductScrollModel> horizonantleProductScrollModelList){
+        for (int x = 0; x < 4; x++) {
+            ImageView productImage = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Image);
+            TextView productTitle = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_title);
+            TextView productDescription = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Description);
+            TextView productPrice = gridProductLayout.getChildAt(x).findViewById(R.id.hS_product_Price);
+            Glide.with(itemView.getContext()).load(horizonantleProductScrollModelList.get(x).getProductImage()).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
+
+            productTitle.setText(horizonantleProductScrollModelList.get(x).getProductTitle());
+            productDescription.setText(horizonantleProductScrollModelList.get(x).getProductdescription());
+            productPrice.setText("Rs." + horizonantleProductScrollModelList.get(x).getProductprice() + "/-");
+
+            gridProductLayout.getChildAt(x).setBackgroundColor(Color.parseColor("#ffffff"));
+            if (!title.equals("")) {
+                int finalX = x;
+                gridProductLayout.getChildAt(x).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent productDetailsIntent = new Intent(itemView.getContext(), ProductDetailsActivity.class);
+                        productDetailsIntent.putExtra("product_id_",horizonantleProductScrollModelList.get(finalX).getProductid());
+                        itemView.getContext().startActivity(productDetailsIntent);
+                    }
+                });
+            }
+
+
         }
-    }}}
+    }
+
+
+
+    }}
 
 
 

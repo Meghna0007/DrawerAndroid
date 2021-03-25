@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -34,12 +36,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.opm.b2b.ProductDetailsActivity.cartItem;
 import static com.opm.b2b.RegisterActivity.setSignUpFragment;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.opm.b2b.ui.home.AllCategoriesFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class Main4Activity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +56,8 @@ public class Main4Activity extends AppCompatActivity implements NavigationView.O
     private static final int ORDERS_FRAGMENT = 2;
     private static final int ACCOUNT_FRAGMENT=3;
     private static final int WISHLIST_FRAGMENT=4;
+    private static final int POLICY_FRAGMENT=5;
+
     public static Boolean showCart=false;
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseUser currentUser;
@@ -64,6 +74,9 @@ private int scrollFlags;
 private  AppBarLayout.LayoutParams params;
 public static Activity main4Activity;
 public static boolean resetMain4Activity=false;
+private CircleImageView profileView,addProfileIcon;
+private TextView fullname,email;
+
     //public static boolean isCartFragmentOpened = false;
 
 
@@ -112,15 +125,23 @@ public static boolean resetMain4Activity=false;
 
         frameLayout = findViewById(R.id.main_framelayout);
 
+        profileView=navigationView.getHeaderView(0).findViewById(R.id.main_profile_image);
+
+        fullname=navigationView.getHeaderView(0).findViewById(R.id.main_fullname);
+
+        email=navigationView.getHeaderView(0).findViewById(R.id.main_email);
+
+        addProfileIcon=navigationView.getHeaderView(0).findViewById(R.id.add_image_icon);
+
+
         if (showCart) {
             main4Activity=this;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             gotoFragment("My Cart", new MyCartFragment(), -2);
 
-        } else {
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        }else {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.addDrawerListener(toggle);
             toggle.syncState();
             setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
@@ -160,6 +181,51 @@ public static boolean resetMain4Activity=false;
         if(currentUser == null) {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
         }else{
+            if (DBqueries.email==null) {
+                FirebaseFirestore.getInstance().collection("USERS").document(currentUser.getUid())
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DBqueries.fullname = task.getResult().getString("fullName");
+                            DBqueries.email = task.getResult().getString("email");
+                            DBqueries.profile = task.getResult().getString("profile");
+                            DBqueries.businessName = task.getResult().getString("BusinessName");
+                            DBqueries.gstNo = task.getResult().getString("GstNo");
+                            DBqueries.panCard = task.getResult().getString("PanCard");
+                            DBqueries.aadharCard = task.getResult().getString("AadharCard");
+
+
+                            fullname.setText(DBqueries.fullname);
+                            email.setText(DBqueries.email);
+                            if (DBqueries.profile.equals("")) {
+                                addProfileIcon.setVisibility(View.VISIBLE);
+                            } else {
+                                addProfileIcon.setVisibility(View.INVISIBLE);
+                                Glide.with(Main4Activity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.drawable.fksmall))
+                                        .into(profileView);
+                            }
+
+
+                        } else {
+                            String error = task.getException().getMessage();
+                            Toast.makeText(Main4Activity.this, error, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }else {
+                fullname.setText(DBqueries.fullname);
+                email.setText(DBqueries.email);
+                if (DBqueries.profile.equals("")) {
+                    profileView.setImageResource(R.drawable.profile_pic);
+                    addProfileIcon.setVisibility(View.VISIBLE);
+                } else {
+                    addProfileIcon.setVisibility(View.INVISIBLE);
+                    Glide.with(Main4Activity.this).load(DBqueries.profile).apply(new RequestOptions().placeholder(R.drawable.fksmall))
+                            .into(profileView);
+                }
+
+            }
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
 
         }
@@ -173,37 +239,30 @@ public static boolean resetMain4Activity=false;
         }
  invalidateOptionsMenu();
     }
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-       /* mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.all_categories, R.id.my_orders, R.id.my_cart, R.id.policies, R.id.about_us)
-                .setDrawerLayout(drawer)
-                .build();
-       /* NavController navController = Navigation.findNavController(this, R.id.container);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);*/
-
-
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.container);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (currentFragment == ALLCATEGORY_FRAGMENT) {
+                currentFragment= -1;
+                super.onBackPressed();
+            } else
+            if (showCart) {
+                main4Activity=null;
+                showCart=false;
+                finish();
 
-    /*@Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        if (currentFragment == ALLCATEGORY_FRAGMENT) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getMenuInflater().inflate(R.menu.main4, menu);
+            } else {
+                actionBarLogo.setVisibility(View.VISIBLE);
+                invalidateOptionsMenu();
+                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
+                navigationView.getMenu().getItem(0).setChecked(true);
+            }
 
         }
-
-        return true;
-
-    }*/
-
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (currentFragment == ALLCATEGORY_FRAGMENT) {
@@ -252,6 +311,13 @@ public static boolean resetMain4Activity=false;
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.container);
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
@@ -261,11 +327,14 @@ public static boolean resetMain4Activity=false;
            if(currentUser==null) {
                signinDialog.show();
            }else {
+
                gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
+
            }
             return true;
         } else if (id == R.id.main_search_icon) {
-            //todo: search
+            Intent searchIntent=new Intent(this,SearchActivity.class);
+            startActivity(searchIntent);
             return true;
         }else if(id== android.R.id.home){
             if(showCart){
@@ -279,7 +348,6 @@ public static boolean resetMain4Activity=false;
 
         return super.onOptionsItemSelected(item);
     }
-
     private void gotoFragment(String title, Fragment fragment, int fragmentNo) {
 
         if (fragmentNo == ALLCATEGORY_FRAGMENT) {
@@ -306,40 +374,32 @@ public static boolean resetMain4Activity=false;
 
 
     }
-MenuItem menuItem;
+    MenuItem menuItem;
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
-menuItem=item;
+        menuItem=item;
         if (currentUser != null) {
             drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
                 @Override
                 public void onDrawerClosed(View drawerView) {
                     super.onDrawerClosed(drawerView);
                     int id = menuItem.getItemId();
-
                     if (id == R.id.all_categories) {
-                        // getSupportActionBar().setDisplayShowTitleEnabled(false);
                         actionBarLogo.setVisibility(View.VISIBLE);
                         invalidateOptionsMenu();
                         setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
-                        // Toast.makeText(getApplicationContext(), "Home Clicked", Toast.LENGTH_SHORT).show();
-            /*setFragment(new AllCategoriesFragment());
-            return true;*/
                     } else if (id == R.id.my_orders) {
                         gotoFragment("My Orders", new MyOrdersFragment(), ORDERS_FRAGMENT);
                     } else if (id == R.id.my_cart) {
                         gotoFragment("My Cart", new MyCartFragment(), CART_FRAGMENT);
-
                     } else if (id == R.id.my_account) {
                         gotoFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
                     } else if (id == R.id.my_wishlist) {
                         gotoFragment("My Wishlist", new My_WishlistFragment(), WISHLIST_FRAGMENT);
-
-
                     } else if (id == R.id.policies) {
-
+                        gotoFragment("My Policies",new PrivacyPolicyFragment(),POLICY_FRAGMENT);
                     } else if (id == R.id.about_us) {
 
                     } else if (id == R.id.sign_out) {
@@ -348,12 +408,10 @@ menuItem=item;
                         Intent registerIntent=new Intent(Main4Activity.this,RegisterActivity.class);
                         startActivity(registerIntent);
                         finish();
-
-
                     }
+                    drawer.removeDrawerListener(this);
                 }
             });
-
             return true;
         } else {
             signinDialog.show();
@@ -361,7 +419,6 @@ menuItem=item;
         }
 
     }
-
     private void setFragment(Fragment fragment, int fragmentNo) {
        // if (fragmentNo != currentFragment) {
             currentFragment = fragmentNo;
@@ -384,28 +441,5 @@ menuItem=item;
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            if (currentFragment == ALLCATEGORY_FRAGMENT) {
-                currentFragment= -1;
-                super.onBackPressed();
-            } else
-                if (showCart) {
-                    main4Activity=null;
-                showCart=false;
-                finish();
 
-            } else {
-                actionBarLogo.setVisibility(View.VISIBLE);
-                invalidateOptionsMenu();
-                setFragment(new AllCategoriesFragment(), ALLCATEGORY_FRAGMENT);
-                navigationView.getMenu().getItem(0).setChecked(true);
-            }
-
-        }
-    }
 }

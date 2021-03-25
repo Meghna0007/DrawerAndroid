@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -13,14 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewholder> {
     private List<MyOrderItemModel> myOrderItemModelList;
+    private Dialog loadingDialog;
 
-    public MyOrderAdapter(List<MyOrderItemModel> myOrderItemModelList) {
+    public MyOrderAdapter(List<MyOrderItemModel> myOrderItemModelList,Dialog loadingDialog) {
         this.myOrderItemModelList = myOrderItemModelList;
+        this.loadingDialog=loadingDialog;
     }
 
     @NonNull
@@ -60,7 +64,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
         }
 
 
-        holder.setData(resource, title,orderStatus,date);
+        holder.setData(resource, title,orderStatus,date,position);
 
     }
 
@@ -83,17 +87,11 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
             productTitle = itemView.findViewById(R.id.Order_title);
             deliveryStatus = itemView.findViewById(R.id.order_delivered_date);
             orderIndicator = itemView.findViewById(R.id.order_indicator);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent orderDetailsIntent=new Intent(itemView.getContext(),OrderDetailsActivity.class);
-                    itemView.getContext().startActivity(orderDetailsIntent);
-                }
-            });
+
 
         }
 
-        private void setData(String resource, String title, String orderStatus,Date date) {
+        private void setData(String resource, String title, String orderStatus,Date date, int position) {
             Glide.with(itemView.getContext()).load(resource).into(productImage);
             productTitle.setText(title);
             if (orderStatus.equals("Cancelled")) {
@@ -102,11 +100,19 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Viewhold
                 orderIndicator.setImageTintList(ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.successGreen)));
 
             }
-
-            deliveryStatus.setText(orderStatus+String.valueOf(date
-            ));
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat(" EEE, dd-MMM-YYYY hh:mm aa");
+            deliveryStatus.setText(orderStatus+String.valueOf(simpleDateFormat.format(date)));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent orderDetailsIntent=new Intent(itemView.getContext(),OrderDetailsActivity.class);
+                    orderDetailsIntent.putExtra("Position",position);
+                    itemView.getContext().startActivity(orderDetailsIntent);
+                }
+            });
 
         }
+
     }
 
 }

@@ -31,12 +31,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static easypay.manager.PaytmAssist.getContext;
 
 public class OTP_Verification extends AppCompatActivity {
 
@@ -74,12 +77,12 @@ public class OTP_Verification extends AppCompatActivity {
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String otp = etOTP.getText().toString();
 
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
-
                 SigninWithPhone(credential);
-                //DeliveryActivity.codOrderConfirmed=true;
+                DeliveryActivity.codOrderConfirmed=true;
                 finish();
             }
         });
@@ -103,7 +106,6 @@ public class OTP_Verification extends AppCompatActivity {
 
             }
         });
-
        /* apiKey = "FEuQKyJoB1s78DZNUzAHbp0CMjO3Y59S4mRLTVhxietafwIcvqE8ocyt0WOhQKugIfzqm1HxvGPj2ANX";
 
         Random random =new Random();
@@ -165,7 +167,6 @@ public class OTP_Verification extends AppCompatActivity {
     }*/
 
     }
-
     private void StartFirebaseLogin() {
 
         auth = FirebaseAuth.getInstance();
@@ -173,7 +174,7 @@ public class OTP_Verification extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                //Toast.makeText(getContext(), "verification completed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(OTP_Verification.this, "verification completed", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -193,9 +194,11 @@ public class OTP_Verification extends AppCompatActivity {
 
     private void SigninWithPhone(PhoneAuthCredential credential) {
 
+
+
         auth.getCurrentUser().linkWithCredential(credential)
         //auth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -204,7 +207,6 @@ public class OTP_Verification extends AppCompatActivity {
                             //checkEmailAndPassword();
                             //Toast.makeText(OTP_Verification.this, " OTP", Toast.LENGTH_SHORT).show();
                             Map<String,Object>updateStatus=new HashMap<>();
-
                             updateStatus.put("Order Status","Ordered");
                             String OrderID=getIntent().getStringExtra("OrderID");
                             FirebaseFirestore.getInstance().collection("ORDERS").document(OrderID).update(updateStatus)
@@ -215,6 +217,8 @@ public class OTP_Verification extends AppCompatActivity {
 
                                                 Map<String,Object> userOrder=new HashMap<>();
                                                 userOrder.put("order_id",OrderID);
+                                                userOrder.put("time", FieldValue.serverTimestamp());
+
                                                 FirebaseFirestore.getInstance().collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USERS_ORDERS")
                                                         .document(OrderID).set(userOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
@@ -249,7 +253,7 @@ public class OTP_Verification extends AppCompatActivity {
             verifyButton.setTextColor(Color.BLACK);
         } else {
             verifyButton.setEnabled(false);
-            //verifyButton.setTextColor(Color.WHITE);
+            verifyButton.setTextColor(Color.WHITE);
         }
 
     }

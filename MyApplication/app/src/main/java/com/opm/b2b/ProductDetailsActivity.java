@@ -76,6 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
     private Dialog loadingDialog;
     private boolean inStock=false;
     private String productOriginalPrice;
+    public static boolean fromSearch=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +230,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                                                                 if (task.isSuccessful()) {
                                                                     if (DBqueries.cartItemModelList.size() != 0) {
                                                                         DBqueries.cartItemModelList.add(0,new CartItemModel
-                                                                                (CartItemModel.CART_ITEM, productId,
+                                                                                (documentSnapshot.getBoolean("COD"),CartItemModel.CART_ITEM, productId,
                                                                                         documentSnapshot.get("product_image_1").toString(),
                                                                                         (long) 1,
                                                                                         documentSnapshot.get("product_title").toString(),
@@ -377,7 +378,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     productDetailsActivity=ProductDetailsActivity.this;
                     DeliveryActivity.cartItemModelList=new ArrayList<>();
                     DeliveryActivity.cartItemModelList.add(new CartItemModel
-                            (CartItemModel.CART_ITEM, productId,
+                            (documentSnapshot.getBoolean("COD"),CartItemModel.CART_ITEM, productId,
                                     documentSnapshot.get("product_image_1").toString(),
                                     (long) 1,
                                     documentSnapshot.get("product_title").toString(),
@@ -391,7 +392,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
 
                     if (DBqueries.addressesModelList.size()==0) {
-                        DBqueries.loadAddresses(ProductDetailsActivity.this, loadingDialog);
+                        DBqueries.loadAddresses(ProductDetailsActivity.this, loadingDialog,true);
                     }else{
                         loadingDialog.dismiss();
                         Intent deliveryIntent = new Intent(ProductDetailsActivity.this, DeliveryActivity.class);
@@ -513,6 +514,12 @@ public class ProductDetailsActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.main_search_icon) {
+            if (fromSearch){
+                finish();
+            }else {
+                Intent searchIntent=new Intent(this,SearchActivity.class);
+                startActivity(searchIntent);
+            }
 
             return true;
         }
@@ -527,6 +534,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fromSearch=false;
     }
 
     @Override

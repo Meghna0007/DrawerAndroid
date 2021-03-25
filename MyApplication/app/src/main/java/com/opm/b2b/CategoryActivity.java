@@ -1,5 +1,6 @@
 package com.opm.b2b;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,7 +78,14 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.main_search_icon) { return true; }
+        if (id == R.id.main_search_icon) {
+            Intent searchIntent=new Intent(this,SearchActivity.class);
+            startActivity(searchIntent);
+            return true;
+        }else if (id == android.R.id.home){
+             finish();
+             return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

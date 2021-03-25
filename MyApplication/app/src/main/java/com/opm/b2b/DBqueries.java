@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -35,6 +36,8 @@ import java.util.Map;
 
 public class DBqueries {
     public static FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public static String email,profile,fullname,businessName,aadharCard,panCard,gstNo;
+
     public static List<CategoryModel> categoryModelList = new ArrayList<>();
     public static List<List<CategoryPageModel>> lists = new ArrayList<>();
     public static List<String> loadedCategoriesNames = new ArrayList<>();
@@ -98,39 +101,31 @@ public class DBqueries {
                                 } else if ((long) documentSnapshot.get("view_type") == 2) {
                                     List<WishlistModel> viewAllProductList = new ArrayList<>();
                                     List<HorizonantleProductScrollModel> horizonantleProductScrollModelList = new ArrayList<>();
-                                    long no_of_products = (long) documentSnapshot.get("no_of_products");
-                                    for (long x = 1; x < no_of_products + 1; x++) {
-                                        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(
-                                                documentSnapshot.get("product_id_" + x).toString()
-                                                , documentSnapshot.get("product_image_" + x).toString()
-                                                , documentSnapshot.get("product_title_" + x).toString()
-                                                , documentSnapshot.get("product_subtitle_" + x).toString()
-                                                , documentSnapshot.get("product_price_" + x).toString()));
+                                    ArrayList<String> productIds= (ArrayList<String>) documentSnapshot.get("products");
 
-                                        viewAllProductList.add(new WishlistModel(documentSnapshot.get("product_id_" + x).toString(), documentSnapshot.get("product_image_" + x).toString(),
-                                                documentSnapshot.get("productTitle_" + x).toString(),
-                                                documentSnapshot.get("cuttedPrice_" + x).toString(),
-                                                documentSnapshot.get("product_price_" + x).toString(),
-                                                documentSnapshot.get("setPiece_" + x).toString(),
-                                                documentSnapshot.get("perPiece_" + x).toString(),
-                                                documentSnapshot.get("productWeight_" + x).toString(),
-                                        (boolean)documentSnapshot.get("in_stock_"+x)));
+                                    for (String productId : productIds) {
+                                        horizonantleProductScrollModelList.add(new HorizonantleProductScrollModel(productId
+                                                , ""
+                                                , ""
+                                                , ""
+                                                , ""));
+
+                                        viewAllProductList.add(new WishlistModel(productId, "", "", "",
+                                                "", "", "", "", false));
                                     }
-                                    lists.get(index).add(new CategoryPageModel(2,
-                                            documentSnapshot.get("layout_title").toString()
-                                            , documentSnapshot.get("layout_background").toString(),
+                                    lists.get(index).add(new CategoryPageModel(2,documentSnapshot.get("layout_title").toString(),
+                                            documentSnapshot.get("layout_background").toString(),
                                             horizonantleProductScrollModelList, viewAllProductList));
                                 } else if ((long) documentSnapshot.get("view_type") == 3) {
                                     List<HorizonantleProductScrollModel> GridLayoutModelList = new ArrayList<>();
-                                    long no_of_products = (long) documentSnapshot.get("no_of_products");
-                                    for (long x = 1; x < no_of_products + 1; x++) {
+                                    ArrayList<String> productIds= (ArrayList<String>) documentSnapshot.get("products");
 
-                                        GridLayoutModelList.add(new HorizonantleProductScrollModel(
-                                                documentSnapshot.get("product_id_" + x).toString(),
-                                                documentSnapshot.get("product_image_" + x).toString(),
-                                                documentSnapshot.get("product_title_" + x).toString(),
-                                                documentSnapshot.get("product_subtitle_" + x).toString(),
-                                                documentSnapshot.get("product_price_" + x).toString()));
+                                    for (String productId : productIds) {
+                                        GridLayoutModelList.add(new HorizonantleProductScrollModel(productId
+                                                , ""
+                                                , ""
+                                                , ""
+                                                , ""));
                                     }
                                     lists.get(index).add(new CategoryPageModel(3,
                                             documentSnapshot.get("layout_title").toString(),
@@ -328,7 +323,7 @@ public class DBqueries {
 
                                                         if (task.getResult().getDocuments().size() < (long)documentSnapshot.get("stock_quantity")) {
 
-                                                            cartItemModelList.add(index,new CartItemModel(CartItemModel.CART_ITEM, productId,
+                                                            cartItemModelList.add(index,new CartItemModel(documentSnapshot.getBoolean("COD"),CartItemModel.CART_ITEM, productId,
                                                                     documentSnapshot.get("product_image_1").toString(),
                                                                     (long) 1,
                                                                     documentSnapshot.get("product_title").toString(),
@@ -339,7 +334,7 @@ public class DBqueries {
                                                                     (long)documentSnapshot.get("stock_quantity")
                                                             ));
                                                         }else{
-                                                            cartItemModelList.add(index,new CartItemModel(CartItemModel.CART_ITEM, productId,
+                                                            cartItemModelList.add(index,new CartItemModel(documentSnapshot.getBoolean("COD"),CartItemModel.CART_ITEM, productId,
                                                                     documentSnapshot.get("product_image_1").toString(),
                                                                     (long) 1,
                                                                     documentSnapshot.get("product_title").toString(),
@@ -430,40 +425,41 @@ public class DBqueries {
             }
         });
     }
-    public static void loadAddresses(final Context context,Dialog loadingDialog){
+    public static void loadAddresses(final Context context,final Dialog loadingDialog,boolean gotoDeliveryActivity){
         addressesModelList.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_DATA").document("MY_ADDRESSES").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
-                   Intent deliveryIntent;
-
-                   Object listSize = task.getResult().get("list_size");
-                   long listSizeLong = 0;
-                   if (listSize != null) {
-                       listSizeLong = (long) listSize;
-                   }
-                    if (listSizeLong == 0){
-                         deliveryIntent=new Intent(context,AddAddressActivity.class);
-                        deliveryIntent.putExtra("INTENT","deliveryIntent");
-                    }else {
+                   Intent deliveryIntent=null;
+                 if ((long) task.getResult().get("list_size")==0){
+                     deliveryIntent=new Intent(context,AddAddressActivity.class);
+                     deliveryIntent.putExtra("INTENT","deliveryIntent");
+                 }else {
                         for(long x=1;x<(long)task.getResult().get("list_size")+1;x++){
-                            addressesModelList.add(new AddressesModel(task.getResult().get("fullname_"+x).toString(),
-                                    task.getResult().get("address_"+x).toString(),
-                                    task.getResult().get("pincode_"+x).toString(),
-                                    (boolean)task.getResult().get("selected_"+x),
-                                    getStringValue(task.getResult().get("mobile_no_"+x))));
+                            addressesModelList.add(new AddressesModel(task.getResult().getBoolean("selected_"+x),
+                                    task.getResult().getString("city_"+x),
+                                    task.getResult().getString("locality_"+x),
+                                    task.getResult().getString("flat_no_"+x),
+                                    task.getResult().getString("pinCode_"+x),
+                                    task.getResult().getString("landmark_"+x),
+                                    task.getResult().getString("name_"+x),
+                                    task.getResult().getString("mobile_no_"+x),
+                                    task.getResult().getString("alternate_mobile_no_"+x),
+                                    task.getResult().getString("state_"+x)));
 
                             if((boolean)task.getResult().get("selected_"+x)){
                                 selectedAddresss=Integer.parseInt(String.valueOf(x - 1));
                             }
                         }
-                        deliveryIntent=new Intent(context,DeliveryActivity.class);
-
+                        if (gotoDeliveryActivity) {
+                            deliveryIntent = new Intent(context, DeliveryActivity.class);
+                        }
                     }
-                    context.startActivity(deliveryIntent);
-
+                    if (gotoDeliveryActivity) {
+                        context.startActivity(deliveryIntent);
+                    }
                 }else {
                     String error = task.getException().getMessage();
                     Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
@@ -472,9 +468,9 @@ public class DBqueries {
             }
         });
     }
-    public static void loadOrders(final Context context,MyOrderAdapter myOrderAdapter){
+    public static void loadOrders(final Context context, @Nullable final MyOrderAdapter myOrderAdapter, Dialog loadingDialog){
        myOrderItemModelList.clear();
-       firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USERS_ORDERS").get()
+       firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USERS_ORDERS").orderBy("time", Query.Direction.DESCENDING).get()
                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                    @Override
                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -492,12 +488,12 @@ public class DBqueries {
                                                     orderItems.getString("Order Status"),
                                                     orderItems.getString("Address"),
                                                     orderItems.getString("Cutted Price"),
-                                                    orderItems.getString("Fullname"),
-                                                    orderItems.getDate("Ordered Date"),
-                                                    orderItems.getDate("Packed Date"),
-                                                    orderItems.getDate("Shipped Date"),
-                                                    orderItems.getDate("Delivered Date"),
-                                                    orderItems.getDate("Cancelled Date"),
+                                                    orderItems.getString("FullName"),
+                                                    orderItems.getDate("Ordered date"),
+                                                    orderItems.getDate("Packed date"),
+                                                    orderItems.getDate("Shipped date"),
+                                                    orderItems.getDate("Delivered date"),
+                                                    orderItems.getDate("Cancelled diate"),
 
                                                     orderItems.getString("ORDER ID"),
                                                     orderItems.getString("Payment Method"),
@@ -506,20 +502,27 @@ public class DBqueries {
                                                     orderItems.getLong("Product Quantity"),
                                                     orderItems.getString("User Id"),
                                                     orderItems.getString("Product Image"),
-                                                    orderItems.getString("Product Title"));
+                                                    orderItems.getString("Product Title"),
+                                                    orderItems.getString("Delivery Price"),
+                                                    orderItems.getBoolean("Cancellation requested"));
 
                                             myOrderItemModelList.add(myOrderItemModel);
                                         }
-                                        myOrderAdapter.notifyDataSetChanged();
+                                        if (myOrderAdapter != null) {
+                                            myOrderAdapter.notifyDataSetChanged();
+                                        }
                                     }else {
                                         String error = task.getException().getMessage();
                                         Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
 
                                     }
+
                                      }
                                  });
                       }
+                      loadingDialog.dismiss();
                   }else {
+                      loadingDialog.dismiss();
                       String error = task.getException().getMessage();
                       Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
                   }
@@ -535,6 +538,7 @@ public class DBqueries {
         cartList.clear();
         cartItemModelList.clear();
         addressesModelList.clear();
+        myOrderItemModelList.clear();
     }
 
 

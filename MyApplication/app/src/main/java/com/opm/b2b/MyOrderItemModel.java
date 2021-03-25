@@ -22,11 +22,13 @@ public class MyOrderItemModel {
     private String productPrice;
     private Long productQuantity;
     private String userId;
+    private String deliveryPrice;
+    private boolean cancellationRequested;
 
     public MyOrderItemModel(String productId, String orderStatus, String address, String cuttedPrice, String fullName, Date
             orderedDate, Date packedDate, Date shippedDate, Date deliveredDate, Date cancelledDate, String orderID,
                             String paymentMethod, String pinCode, String productPrice, Long productQuantity, String userId,String productImage,
-                            String productTitle) {
+                            String productTitle,String deliveryPrice,boolean cancellationRequested) {
 
         this.productImage=productImage;
         this.productTitle=productTitle;
@@ -46,6 +48,24 @@ public class MyOrderItemModel {
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
         this.userId = userId;
+        this.deliveryPrice=deliveryPrice;
+        this.cancellationRequested=cancellationRequested;
+    }
+
+    public boolean isCancellationRequested() {
+        return cancellationRequested;
+    }
+
+    public void setCancellationRequested(boolean cancellationRequested) {
+        this.cancellationRequested = cancellationRequested;
+    }
+
+    public String getDeliveryPrice() {
+        return deliveryPrice;
+    }
+
+    public void setDeliveryPrice(String deliveryPrice) {
+        this.deliveryPrice = deliveryPrice;
     }
 
     public String getProductId() {

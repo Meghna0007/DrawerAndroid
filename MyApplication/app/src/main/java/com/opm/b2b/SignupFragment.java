@@ -32,6 +32,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,23 +61,18 @@ public class SignupFragment extends Fragment {
 
     private TextView alreadyHaveAnAccount;
     private FrameLayout parentFrameLayout;
-
-    private EditText email;
-    private EditText password;
-    private EditText confirmPassword;
-
+    private EditText email,fullname,password,confirmPassword,businessName,aadharCard,panCard,gstNo;
     private Button signUpBtn;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
+    private String gstPattern="^[0-9]{2}[A-Z]{5}[0-9]{4}"
+            + "[A-Z]{1}[1-9A-Z]{1}"
+            + "Z[0-9A-Z]{1}$";
     //////OTP
     Button btnGenerateOTP, btnSignIn;
-
     EditText etPhoneNumber, etOTP;
-
     String phoneNumber, otp;
-
     FirebaseAuth auth;
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback;
     private String verificationCode;
@@ -120,18 +116,20 @@ public class SignupFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
         alreadyHaveAnAccount = view.findViewById(R.id.alreadyHaveAnAccount);
         parentFrameLayout = getActivity().findViewById(R.id.register_framelayout);
-
         email = view.findViewById(R.id.sign_up_email);
+        fullname=view.findViewById(R.id.ffulname);
         password = view.findViewById(R.id.sign_up_password);
         confirmPassword = view.findViewById(R.id.sign_up_confirm_password);
         signUpBtn = view.findViewById(R.id.sign_up_btn);
+        businessName = view.findViewById(R.id.BusinessName);
+        aadharCard=view.findViewById(R.id.AadharNo);
+        panCard=view.findViewById(R.id.PanNo);
+        gstNo=view.findViewById(R.id.GstNo);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         //////////OTP
         btnGenerateOTP = view.findViewById(R.id.btn_generate_otp);
         btnSignIn = view.findViewById(R.id.btn_sign_in);
-
-
         etPhoneNumber = view.findViewById(R.id._phone_number);
         etOTP = view.findViewById(R.id.et_otp);
         ////////OTP
@@ -143,9 +141,7 @@ public class SignupFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ////////////////OTP
         ///findViews();
-
         StartFirebaseLogin();
-
         btnGenerateOTP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,7 +149,6 @@ public class SignupFragment extends Fragment {
                 if (!phoneNumber.startsWith("+")) {
                     phoneNumber = "+91" + phoneNumber;
                 }
-
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         phoneNumber,                     // Phone number to verify
                         60,                           // Timeout duration
@@ -162,105 +157,152 @@ public class SignupFragment extends Fragment {
                         mCallback);                      // OnVerificationStateChangedCallbacks
             }
         });
-
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 otp = etOTP.getText().toString();
 
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationCode, otp);
-
                 SigninWithPhone(credential);
-
                 signOutFromPhone();
             }
         });
-////////////////////OTP
+        ////////////////////OTP
         alreadyHaveAnAccount.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 setFragment(new SigninFragment());
             }
-
-        });
-
-        // email
-        email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkInputs();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        //password
-        password.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkInputs();
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        //confirm password listener
-        confirmPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                checkInputs();
-
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
         });
         signUpBtn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
 
-
                 checkEmailAndPassword();
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkInputs();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        fullname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+     checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkInputs();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        confirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkInputs();
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        gstNo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        businessName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+        checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        aadharCard.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+               checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        panCard.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+          checkInputs();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
 
             }
         });
 
     }
-
-
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_from_left,R.anim.slideout_from_right);
         fragmentTransaction.replace(parentFrameLayout.getId(), fragment);
         fragmentTransaction.commit();
     }
@@ -268,12 +310,27 @@ public class SignupFragment extends Fragment {
 
     private void checkInputs() {
 
-        if (!TextUtils.isEmpty(email.getText())) {
-            if (!TextUtils.isEmpty(password.getText()) && password.getText().length() >= 6) {
-                if (!TextUtils.isEmpty(confirmPassword.getText()) && confirmPassword.getText().toString().equals(password.getText().toString())
-                && isOtpValidated) {
-                    signUpBtn.setEnabled(true);
-                    signUpBtn.setTextColor(Color.BLACK);
+        if (!TextUtils.isEmpty(gstNo.getText())) {
+            if (!TextUtils.isEmpty(email.getText())) {
+                if (!TextUtils.isEmpty(fullname.getText())) {
+                    if (!TextUtils.isEmpty(businessName.getText())) {
+                        if (!TextUtils.isEmpty(password.getText()) && password.getText().length() >= 6) {
+                            if (!TextUtils.isEmpty(confirmPassword.getText()) && confirmPassword.getText().toString().equals(password.getText().toString())
+                                    && isOtpValidated) {
+                                signUpBtn.setEnabled(true);
+                                signUpBtn.setTextColor(Color.WHITE);
+                            } else {
+                                signUpBtn.setEnabled(false);
+                                signUpBtn.setTextColor(Color.BLACK);
+                            }
+                        } else {
+                            signUpBtn.setEnabled(false);
+                            signUpBtn.setTextColor(Color.BLACK);
+                        }
+                    } else {
+                        signUpBtn.setEnabled(false);
+                        signUpBtn.setTextColor(Color.BLACK);
+                    }
                 } else {
                     signUpBtn.setEnabled(false);
                     signUpBtn.setTextColor(Color.BLACK);
@@ -282,108 +339,118 @@ public class SignupFragment extends Fragment {
                 signUpBtn.setEnabled(false);
                 signUpBtn.setTextColor(Color.BLACK);
             }
-        } else {
-            signUpBtn.setEnabled(false);
-            signUpBtn.setTextColor(Color.BLACK);
         }
+
 
     }
 
     private void enableSignUpButton() {
         if (email.getText().toString().matches(emailPattern)) {
-            if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
-                signUpBtn.setEnabled(true);
-                signUpBtn.setTextColor(Color.WHITE);
+            if (gstNo.getText().toString().matches(gstPattern)) {
+                if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
+                    signUpBtn.setEnabled(true);
+                    signUpBtn.setTextColor(Color.WHITE);
+                }
             }
         }
     }
     private void checkEmailAndPassword() {
 
         if (email.getText().toString().matches(emailPattern)) {
-            if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
-                signUpBtn.setEnabled(true);
-                signUpBtn.setTextColor(Color.WHITE);
+            if (gstNo.getText().toString().matches(gstPattern)) {
+                if (password.getText().toString().equals(confirmPassword.getText().toString()) && isOtpValidated) {
+                    signUpBtn.setEnabled(true);
+                    signUpBtn.setTextColor(Color.WHITE);
 
-                firebaseAuth.createUserWithEmailAndPassword(email.getText().toString().toString(), password.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Map<Object, String> userdata = new HashMap<>();
-                                    userdata.put("email", email.getText().toString());
-                                    userdata.put("phoneNumber", etPhoneNumber.getText().toString());
+                    firebaseAuth.createUserWithEmailAndPassword(email.getText().toString().toString(), password.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        Map<Object, String> userdata = new HashMap<>();
+                                        userdata.put("fullName", fullname.getText().toString());
+                                        userdata.put("AadharNo", aadharCard.getText().toString());
+                                        userdata.put("PanCard", panCard.getText().toString());
+                                        userdata.put("BusinessName", businessName.getText().toString());
+                                        userdata.put("GstNo", gstNo.getText().toString());
+                                        userdata.put("email", email.getText().toString());
+                                        userdata.put("phoneNumber", etPhoneNumber.getText().toString());
+                                        userdata.put("profile", "");
 
-                                    firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
-                                            .set(userdata)
-                                           .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                               @Override
-                                               public void onComplete(@NonNull Task<Void> task) {
-                                                   if (task.isSuccessful()) {
-                                                     CollectionReference userDataReference = firebaseFirestore.collection("USERS")
-                                                             .document(firebaseAuth.getUid()).collection("USER_DATA");
+                                        firebaseFirestore.collection("USERS").document(firebaseAuth.getUid())
+                                                .set(userdata)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            CollectionReference userDataReference = firebaseFirestore.collection("USERS")
+                                                                    .document(firebaseAuth.getUid()).collection("USER_DATA");
 
-                                                      //////Maps
-                                                       Map<String,Object> wishlistMap = new HashMap<>();
-                                                       wishlistMap.put("list_size",(long) 0);
+                                                            //////Maps
+                                                            Map<String, Object> wishlistMap = new HashMap<>();
+                                                            wishlistMap.put("list_size", (long) 0);
 
-                                                       Map<String,Object> cartMap = new HashMap<>();
-                                                       cartMap.put("list_size",(long) 0);
+                                                            Map<String, Object> cartMap = new HashMap<>();
+                                                            cartMap.put("list_size", (long) 0);
 
-                                                       Map<String,Object> myAddressesMap = new HashMap<>();
-                                                       myAddressesMap.put("list_size",(long) 0);
+                                                            Map<String, Object> myAddressesMap = new HashMap<>();
+                                                            myAddressesMap.put("list_size", (long) 0);
 //////////////////////////////////////////////////////Maps
-                                                       List<String> documentNames=new ArrayList<>();
-                                                       documentNames.add("MY_WISHLIST");
-                                                       documentNames.add("MY_CART");
-                                                       documentNames.add("MY_ADDRESSES");
+                                                            List<String> documentNames = new ArrayList<>();
+                                                            documentNames.add("MY_WISHLIST");
+                                                            documentNames.add("MY_CART");
+                                                            documentNames.add("MY_ADDRESSES");
 
-                                                     List<Map<String,Object>>documentFields=new ArrayList<>();
-                                                     documentFields.add(wishlistMap);
-                                                     documentFields.add(cartMap);
-                                                       documentFields.add(myAddressesMap);
+                                                            List<Map<String, Object>> documentFields = new ArrayList<>();
+                                                            documentFields.add(wishlistMap);
+                                                            documentFields.add(cartMap);
+                                                            documentFields.add(myAddressesMap);
 
-                                                     for(int x=0;x<documentNames.size();x++){
+                                                            for (int x = 0; x < documentNames.size(); x++) {
 
-                                                         int finalX = x;
-                                                         userDataReference.document(documentNames.get(x))
-                                                                 .set(documentFields.get(x)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                             @Override
-                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                 if(task.isSuccessful()){
-                                                                     if (finalX == documentNames.size() -1){
-                                                                         Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
-                                                                         startActivity(mainIntent);
-                                                                         getActivity().finish();
-                                                                     }
+                                                                int finalX = x;
+                                                                userDataReference.document(documentNames.get(x))
+                                                                        .set(documentFields.get(x)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            if (finalX == documentNames.size() - 1) {
+                                                                                Intent mainIntent = new Intent(getActivity(), Main4Activity.class);
+                                                                                startActivity(mainIntent);
+                                                                                getActivity().finish();
+                                                                            }
 
-                                                                 }else{
-                                                                     signUpBtn.setEnabled(false);
-                                                                     signUpBtn.setTextColor(Color.BLACK);
-                                                                     String error = task.getException().getMessage();
-                                                                     Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                                                                 }
+                                                                        } else {
+                                                                            signUpBtn.setEnabled(false);
+                                                                            signUpBtn.setTextColor(Color.BLACK);
+                                                                            String error = task.getException().getMessage();
+                                                                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                                        }
 
-                                                             }
-                                                         });
-                                                     }
+                                                                    }
+                                                                });
+                                                            }
 
-                                                   } else {
-                                                       String error = task.getException().getMessage();
-                                                       Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
-                                                   }
+                                                        } else {
+                                                            String error = task.getException().getMessage();
+                                                            Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                        }
 
-                                               }
-                                           });
-                                } else {
-                                    signUpBtn.setEnabled(false);
-                                    signUpBtn.setTextColor(Color.BLACK);
-                                    String error = task.getException().getMessage();
-                                    Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    } else {
+                                        signUpBtn.setEnabled(false);
+                                        signUpBtn.setTextColor(Color.BLACK);
+                                        String error = task.getException().getMessage();
+                                        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-            } else {
-                confirmPassword.setError("Password doesn't match!");
+                            });
+                } else {
+                    confirmPassword.setError("Password doesn't matched!");
+                }
+            }else {
+                gstNo.setError("Enter valid Gst Number");
             }
 
         } else {
@@ -439,14 +506,10 @@ public class SignupFragment extends Fragment {
                 super.onCodeSent(s, forceResendingToken);
                 verificationCode = s;
                 Toast.makeText(getContext(), "Code sent", Toast.LENGTH_SHORT).show();
-            }
-        };
-    }
-
-    private void signOutFromPhone() {
+            }}; }private void signOutFromPhone() {
 
         FirebaseAuth.getInstance().signOut();
 
     }
-    //////////OTP
+
 }

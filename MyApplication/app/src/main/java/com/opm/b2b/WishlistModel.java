@@ -1,5 +1,7 @@
 package com.opm.b2b;
 
+import java.util.ArrayList;
+
 public class WishlistModel {
     private String productImage;
     private String productTitle;
@@ -11,6 +13,7 @@ public class WishlistModel {
     private String perPiece;
     private String productId;
     private boolean inStock;
+    private ArrayList<String>tags;
     public WishlistModel(String productId,String productImage, String productTitle, String productPrice, String cuttedPrice, String productWeight ,String setOfPiece,String perPiece,boolean inStock) {
         this.productImage = productImage;
         this.productTitle = productTitle;
@@ -21,6 +24,14 @@ public class WishlistModel {
         this.perPiece=perPiece;
         this.productId=productId;
         this.inStock=inStock;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
     }
 
     public boolean isInStock() {

@@ -102,4 +102,16 @@
             android:gravity="center"
             android:text="Remove item" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/codIndicator"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/product_price"
+        app:layout_constraintEnd_toEndOf="@+id/product_price"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/product_price"
+        app:layout_constraintTop_toBottomOf="@+id/product_title"
+        app:srcCompat="@drawable/codd" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -42,6 +42,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     private TextView cartTotalAmount;
     private boolean showDelteBtn;
 
+
     public CartAdapter(List<CartItemModel> cartItemModelList,TextView cartTotalAmount,boolean showDelteBtn) {
         this.cartItemModelList = cartItemModelList;
         this.cartTotalAmount=cartTotalAmount;
@@ -93,7 +94,8 @@ public class CartAdapter extends RecyclerView.Adapter {
                 boolean  qtyError=cartItemModelList.get(position).isQtyError();
                 List<String>qtyIds=cartItemModelList.get(position).getQtyIDs();
                 long stockQty=cartItemModelList.get(position).getStockQuantity();
-                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock,String.valueOf(productQuantity),maxQuantity,qtyError,qtyIds,stockQty);
+                boolean COD=cartItemModelList.get(position).isCOD();
+                ((CartItemViewholder) holder).setItemDetails(productId,resource, title, productPrice, cuttedPrice,position,inStock,String.valueOf(productQuantity),maxQuantity,qtyError,qtyIds,stockQty,COD);
 
                 break;
             case CartItemModel.TOTAL_AMOUNT:
@@ -157,6 +159,7 @@ public class CartAdapter extends RecyclerView.Adapter {
         private TextView productPrice;
         private TextView cuttedPrice;
         private TextView productQuantity;
+        private ImageView codIndicator;
 
         public CartItemViewholder(@NonNull View itemView) {
             super(itemView);
@@ -166,13 +169,18 @@ public class CartAdapter extends RecyclerView.Adapter {
             productPrice = itemView.findViewById(R.id.product_price);
             cuttedPrice = itemView.findViewById(R.id.cuutted_price);
             productQuantity = itemView.findViewById(R.id.product_quantity);
+            codIndicator=itemView.findViewById(R.id.codIndicator);
         }
 
-        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock,String quantity,Long maxQuantity,boolean qtyError,List<String> qtyIds,long stockQty) {
+        private void setItemDetails(String productId,String resource, String title, String productPriceText, String cuttedPriceText,int position,boolean inStock,String quantity,Long maxQuantity,boolean qtyError,List<String> qtyIds,long stockQty,boolean COD) {
            // productImage.setImageResource(resource);
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.fksmall)).into(productImage);
         productTitle.setText(title);
-
+        if (COD){
+            codIndicator.setVisibility(View.VISIBLE);
+        }else{
+            codIndicator.setVisibility(View.INVISIBLE);
+        }
         if(inStock) {
             productPrice.setText("Rs."+productPriceText+"/-");
             productPrice.setTextColor(Color.parseColor("#000000"));

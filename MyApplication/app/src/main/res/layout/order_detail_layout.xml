@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
-    android:elevation="3dp"
+    android:layout_height="match_parent"
     android:layout_marginTop="4dp"
     android:layout_marginBottom="4dp"
-    android:layout_height="wrap_content">
+    android:background="@color/white"
+    android:elevation="3dp">
 
     <ImageView
         android:id="@+id/product_Image"
@@ -84,8 +84,8 @@
         android:layout_height="3dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:progress="0"
         android:backgroundTint="@color/RecylerView"
+        android:progress="0"
         android:progressTint="@color/successGreen"
         android:rotation="90"
         android:transformPivotX="0dp"
@@ -110,8 +110,8 @@
         android:layout_height="3dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:progress="0"
         android:backgroundTint="@color/RecylerView"
+        android:progress="0"
         android:progressTint="@color/successGreen"
         android:rotation="90"
         android:transformPivotX="0dp"
@@ -124,10 +124,10 @@
         android:layout_height="15dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="52dp"
-        app:tint="@color/RecylerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Packed_Indicator"
-        app:srcCompat="@drawable/selected_dot" />
+        app:srcCompat="@drawable/selected_dot"
+        app:tint="@color/RecylerView" />
 
     <ProgressBar
         android:id="@+id/Shiping_Delivered_Progress"
@@ -136,8 +136,8 @@
         android:layout_height="3dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:progress="0"
         android:backgroundTint="@color/RecylerView"
+        android:progress="0"
         android:progressTint="@color/successGreen"
         android:rotation="90"
         android:transformPivotX="0dp"
@@ -185,8 +185,10 @@
         android:id="@+id/Shipping_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="Shipped"
+        android:textColor="@color/black"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/Shipping_Indicator"
         app:layout_constraintTop_toTopOf="@+id/Shipping_Indicator" />
 
@@ -194,8 +196,10 @@
         android:id="@+id/DeliveredTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:text="Delivered"
+        android:textColor="@color/black"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/delivered_Indictor"
         app:layout_constraintTop_toTopOf="@+id/delivered_Indictor" />
 
@@ -203,99 +207,140 @@
         android:id="@+id/Ordered_Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Mon ,12 JAN"
         android:textSize="12sp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Order_Packed_Progress"
+        app:layout_constraintBottom_toBottomOf="@+id/Ordered_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.152"
         app:layout_constraintStart_toEndOf="@+id/Order_Packed_Progress"
-        app:layout_constraintTop_toTopOf="@+id/Order_Packed_Progress" />
+        app:layout_constraintTop_toTopOf="@+id/Ordered_title"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/Ordered_Body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="10sp"
-        android:textColor="@color/black"
         android:text="Your Order has been placed"
-        app:layout_constraintStart_toStartOf="@id/Order_Packed_Progress"
-        app:layout_constraintTop_toBottomOf="@id/Order_Packed_Progress" />
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/Ordered_Date"
+        app:layout_constraintStart_toEndOf="@+id/Ordered_indicator"
+        app:layout_constraintTop_toBottomOf="@+id/Ordered_title" />
 
     <TextView
         android:id="@+id/Packed_Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Mon ,12 JAN"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/Packed_Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.171"
         app:layout_constraintStart_toEndOf="@+id/Packed_Title"
-        app:layout_constraintTop_toTopOf="@+id/Packed_Title" />
+        app:layout_constraintTop_toTopOf="@+id/Packed_Title"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/Packed_Body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="10sp"
+        android:text="Your Order has been packed"
         android:textColor="@color/black"
-        android:text="Your Order has been placed"
-        app:layout_constraintStart_toStartOf="@id/Packed_Title"
-        app:layout_constraintTop_toBottomOf="@id/Packed_Title" />
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/Packed_Date"
+        app:layout_constraintStart_toEndOf="@+id/Packed_Indicator"
+        app:layout_constraintTop_toBottomOf="@+id/Packed_Title" />
+
     <TextView
         android:id="@+id/Shipping_Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Mon ,12 JAN"
         android:textSize="12sp"
-        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/Shipping_Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toEndOf="@+id/Shipping_Title"
-        app:layout_constraintTop_toTopOf="@+id/Shipping_Title" />
+        app:layout_constraintTop_toTopOf="@+id/Shipping_Title"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/Shipping_Body"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="8dp"
-        android:textSize="10sp"
-        android:textColor="@color/black"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
         android:text="Your Order has been shipped"
-        app:layout_constraintStart_toStartOf="@id/Shipping_Title"
-        app:layout_constraintTop_toBottomOf="@id/Shipping_Title" />
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/Shipping_Date"
+        app:layout_constraintStart_toEndOf="@+id/Shipping_Indicator"
+        app:layout_constraintTop_toBottomOf="@+id/Shipping_Title" />
+
     <TextView
         android:id="@+id/DeliveredDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
         android:text="Mon ,12 JAN"
         android:textSize="12sp"
-        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/DeliveredTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.132"
         app:layout_constraintStart_toEndOf="@+id/DeliveredTitle"
-        app:layout_constraintTop_toTopOf="@+id/DeliveredTitle" />
+        app:layout_constraintTop_toTopOf="@+id/DeliveredTitle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/DeliveredBody"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="10sp"
-        android:textColor="@color/black"
         android:text="Your Order has been delivered"
-        app:layout_constraintStart_toStartOf="@+id/DeliveredTitle"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/DeliveredDate"
+        app:layout_constraintStart_toEndOf="@+id/delivered_Indictor"
         app:layout_constraintTop_toBottomOf="@+id/DeliveredTitle" />
 
     <View
         android:id="@+id/divider10"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="24dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/DeliveredBody"
         tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Cancel order"
+        android:textAllCaps="false"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        android:stateListAnimator="@null"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

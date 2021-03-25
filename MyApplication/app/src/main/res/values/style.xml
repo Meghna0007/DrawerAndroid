@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        &lt;!&ndash; Primary brand color. &ndash;&gt;
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryVariant">@color/blue</item>
+        &lt;!&ndash;<item name="colorOnPrimary">@color/red</item>&ndash;&gt;
+
+    </style>-->
     <style name="RedProgressBar" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/red</item>
@@ -8,6 +15,8 @@
         <item name="colorOnPrimary">@color/red</item>
 
     </style>
+
+
     <style name="PaytmTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/red</item>

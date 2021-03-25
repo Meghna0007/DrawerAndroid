@@ -31,8 +31,17 @@ public class CartItemModel {
     private boolean inStock;
     private List<String>qtyIDs;
     private boolean qtyError;
+    private boolean COD;
 
-    public CartItemModel(int type,String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice,boolean inStock,Long maxQuantity,Long stockQuantity) {
+    public boolean isCOD() {
+        return COD;
+    }
+
+    public void setCOD(boolean COD) {
+        this.COD = COD;
+    }
+
+    public CartItemModel(boolean COD, int type, String productId, String productImage, Long productQuantity, String productTitle, String productPrice, String cuttedPrice, boolean inStock, Long maxQuantity, Long stockQuantity) {
         this.type = type;
         this.productId=productId;
         this.productImage = productImage;
@@ -45,6 +54,8 @@ public class CartItemModel {
         qtyIDs=new ArrayList<>();
         this.stockQuantity=stockQuantity;
         qtyError=false;
+        this.COD=COD;
+
     }
 
     public boolean isQtyError() {
